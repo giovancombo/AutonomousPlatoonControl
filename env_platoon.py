@@ -1,139 +1,152 @@
 import numpy as np
 
+
 class EnvPlatoon:
-    def __init__(self, num_vehicles, vehicles_len, T, num_timesteps, tau, h, ep_max, ep_max_nominal, ev_min,
-                 ev_max, ev_max_nominal, acc_min, acc_max, u_min, u_max, a, b, c, reward_threshold,
-                 lambd, gamma, r, min_safe_distance, collision_penalty):
-    
+    def __init__(self, num_vehicles, vehicles_length, num_timesteps, T, h, tau, ep_max, ep_max_nominal,
+                 ev_max, ev_max_nominal, acc_min, acc_max, u_min, u_max, a, b, c, reward_threshold, lambd,
+                 env_gamma, r, leader_min_speed, leader_max_speed, min_safe_distance, collision_penalty):
+        
         assert r > min_safe_distance, "Standstill distance must be greater than minimum safe distance"
         assert ep_max > 0, "Maximum position gap must be positive"
 
+        # Environment parameters
         self.num_vehicles = num_vehicles
-        self.vehicles_len = vehicles_len
-        self.T = T
-        self.num_timesteps = num_timesteps
-        self.tau = tau
-        self.h = h
-        self.ep_max = ep_max
+        self.vehicles_length = vehicles_length          # Length of each vehicle
+        self.num_timesteps = num_timesteps              # Number of timesteps in a single episode
+        self.T = T                                      # Duration of a timestep
+        self.h = h                                      # Constant time gap: time follower vehicle needs to reach preceding vehicle driving at constant speed
+        self.tau = tau                                  # Time constant for acceleration dynamics
+
+        # State and action limits
+        self.ep_max = ep_max                            # Position gap limit
         self.ep_max_nominal = ep_max_nominal
-        self.ev_min = ev_min
-        self.ev_max = ev_max
+        self.ev_max = ev_max                            # Velocity gap limit
         self.ev_max_nominal = ev_max_nominal
-        self.acc_min = acc_min
-        self.acc_max = acc_max
-        self.u_min = u_min
-        self.u_max = u_max
-        self.a = a
-        self.b = b
-        self.c = c
-        self.reward_threshold = reward_threshold
-        self.lambd = lambd
-        self.gamma = gamma
-        self.r = r
-        self.min_safe_distance = min_safe_distance
-        self.collision_penalty = collision_penalty
+        self.acc_min, self.acc_max = acc_min, acc_max   # Acceleration limits
+        self.u_min, self.u_max = u_min, u_max           # Action limits
 
+        # Reward parameters
+        self.a = a                                      # Weight for position gap reward
+        self.b = b                                      # Weight for velocity reward
+        self.c = c                                      # Weight for jerk reward
+        self.reward_threshold = reward_threshold        # Threshold for switching between absolute and quadratic reward
+        self.lambd = lambd                              # Weight for quadratic reward
+        self.env_gamma = env_gamma                      # Discount factor for cumulative reward
+
+        # Safety parameters
+        self.r = r                                      # Standstill distance between vehicles (distance at which vehicles should stop)
+        self.leader_min_speed = leader_min_speed / 3.6  # Minimum speed of the leader vehicle
+        self.leader_max_speed = leader_max_speed / 3.6  # Maximum speed of the leader vehicle
+        self.min_safe_distance = min_safe_distance      # Minimum safe distance between vehicles
+        self.collision_penalty = collision_penalty      # Penalty for collision
+
+        # State variables
         self.state = None
-        self.leader_actions = None
+        self.leader_actions = None                      # Leader actions for the current episode
         self.current_timestep = 0
-
         self.rewards = []
 
     def reset(self, leader_actions):
-        initial_velocity = np.random.uniform(self.ev_min, self.ev_max)
-        initial_desired_distance = self.r + self.h * initial_velocity
-        self.ep_min = self.min_safe_distance - initial_desired_distance
+        leader_initial_velocity = np.random.uniform(self.leader_min_speed, self.leader_max_speed)
+        initial_ev = np.random.uniform(-self.ev_max, self.ev_max)
+        agent_initial_velocity = leader_initial_velocity - initial_ev
         
-        self.state = np.array([
-            np.random.uniform(self.ep_min, self.ep_max),
-            np.random.uniform(self.ev_min, self.ev_max),
-            np.random.uniform(self.acc_min, self.acc_max)
-        ], dtype=np.float32)
+        initial_desired_distance = self.r + self.h * agent_initial_velocity + self.vehicles_length
+        initial_ep = np.random.uniform(-self.ep_max, self.ep_max)
+        initial_actual_distance = initial_desired_distance + initial_ep
+        
+        initial_acc = np.random.uniform(self.acc_min, self.acc_max)
 
-        # ES: leader_actions = np.random.uniform(self.acc_min, self.acc_max, self.num_timesteps)
+        #print(f"Leader initial velocity: {leader_initial_velocity}")
+        #print(f"Initial velocity gap, initial_ev: {initial_ev}")
+        #print(f"Agent initial velocity: {agent_initial_velocity}")
+        #print(f"Initial desired distance: {initial_desired_distance}")
+        #print(f"Initial position error, initial_ep: {initial_ep}")
+        #print(f"Actual initial distance: {initial_actual_distance}")
+        
+        self.state = np.array([initial_ep, initial_ev, initial_acc], dtype = np.float32)
+        self.leader_velocity = leader_initial_velocity
+        self.agent_velocity = agent_initial_velocity
+        self.desired_distance = initial_desired_distance
+        self.actual_distance = initial_actual_distance
+        self.collision_step = None
+
         self.leader_actions = leader_actions
         self.current_timestep = 0
+        self.leader_acc = leader_actions[self.current_timestep]
         self.rewards = []
 
         return self.state
-    
 
     def step(self, action):
-        action = np.clip(action, self.u_min, self.u_max)
-        prev_ep, prev_ev, prev_acc = self.state
-        leader_action = self.leader_actions[self.current_timestep]
+        self.leader_acc = (1 - (self.T / self.tau)) * self.leader_acc + (self.T / self.tau) * self.leader_actions[self.current_timestep]
 
         # State transition
+        prev_ep, prev_ev, prev_acc = self.state
         next_ep = prev_ep + self.T * prev_ev - self.h * self.T * prev_acc
-        next_ev = prev_ev - self.T * prev_acc + self.T * leader_action
+        next_ev = prev_ev - self.T * prev_acc + self.T * self.leader_acc
         next_acc = (1 - (self.T / self.tau)) * prev_acc + (self.T / self.tau) * action
 
-        current_velocity = prev_ev + self.T * leader_action
-        desired_distance = self.r + self.h * current_velocity
-        actual_distance = desired_distance - next_ep
+        self.leader_velocity += self.T * self.leader_acc
+        self.agent_velocity = self.leader_velocity - next_ev
+        self.desired_distance = self.r + self.h * self.agent_velocity + self.vehicles_length
+        self.actual_distance = self.desired_distance - next_ep
 
-        if actual_distance <= self.min_safe_distance:
-            reward = self.collision_penalty
-            done = True
+        #print(f"next_ep: {next_ep}")
+        #print(f"next_ev: {next_ev}")
+        #print(f"next_acc: {next_acc}")
+        #print(f"next_agent_velocity: {self.agent_velocity}")
+        #print(f"next_leader_velocity: {self.leader_velocity}")
+        #print(f"desired_distance: {self.desired_distance}")
+        #print(f"actual_distance: {self.actual_distance}")
+
+        if self.actual_distance < self.min_safe_distance + self.vehicles_length:
+            collision_penalty = self.collision_penalty * (self.actual_distance - self.min_safe_distance - self.vehicles_length)
+            reward = self.compute_reward(action, next_ep, next_ev, prev_acc) - collision_penalty
+            if self.collision_step is None:    
+                self.collision_step = self.current_timestep
         else:
-            reward = self.compute_reward(action, next_ep, next_ev, next_acc, prev_acc)
-            self.current_timestep += 1
-            done = self.current_timestep >= self.num_timesteps    
-        self.rewards.append(reward)
-
+            reward = self.compute_reward(action, next_ep, next_ev, prev_acc)
+        
         self.current_timestep += 1
         done = self.current_timestep >= self.num_timesteps
 
+        #print(f"REWARD: {reward}")
+        
+        self.rewards.append(reward)
         self.state = np.array([next_ep, next_ev, next_acc], dtype=np.float32)
 
         return self.state, reward, done, {}
-    
 
-    def compute_reward(self, action, next_ep, next_ev, next_acc, prev_acc):
-        # Compute jerk, absolute reward and quadratic reward
-        jerk = (next_acc - prev_acc) / self.T
-        r_abs = -(np.abs(next_ep/self.ep_max_nominal) + self.a * np.abs(next_ev/self.ev_max_nominal) + self.b * np.abs(action/self.u_max) + self.c * np.abs(jerk/self.acc_max))
-        r_qua = -self.lambd * ((next_ep)**2 + self.a * (next_ev)**2 + self.b * (action)**2 + self.c * (jerk * self.T)**2)
+    def compute_reward(self, action, next_ep, next_ev, prev_acc):
+        ep_norm = next_ep / self.ep_max_nominal
+        ev_norm = next_ev / self.ev_max_nominal
+        u_norm = action / self.u_max
+        jerk = (action - prev_acc) / self.tau
+        jerk_norm = jerk / (2 * self.acc_max / self.T)
 
-        # Huber Loss
-        if r_abs < self.reward_threshold:
-            return r_abs
-        else:
-            return r_qua
+        r_abs = -(np.abs(ep_norm) + self.a * np.abs(ev_norm) + self.b * np.abs(u_norm) + self.c * np.abs(jerk_norm))
+        r_qua = -self.lambd * ((next_ep)**2 + self.a * ((next_ev)**2) + self.b * ((action)**2) + self.c * ((jerk * self.T)**2))
 
+        reward = r_qua if r_abs >= self.reward_threshold else r_abs
+
+        return reward
 
     def get_cumulative_reward(self):
-        cumulative_reward = 0
-        for k, reward in enumerate(self.rewards):
-            cumulative_reward += (self.gamma**k) * reward
-        return cumulative_reward
-    
+        return sum((self.env_gamma**k) * r for k, r in enumerate(self.rewards)) / len(self.rewards)
 
     def discretize_state(self, state, num_bins):
         ep, ev, acc = state
-        ep_bins = np.linspace(self.ep_min, self.ep_max, num_bins[0])
-        ev_bins = np.linspace(self.ev_min, self.ev_max, num_bins[1])
+        ep_bins = np.linspace(-self.ep_max, self.ep_max, num_bins[0])
+        ev_bins = np.linspace(-self.ev_max, self.ev_max, num_bins[1])
         acc_bins = np.linspace(self.acc_min, self.acc_max, num_bins[2])
 
-        discrete_ep = np.digitize(ep, ep_bins)
-        discrete_ev = np.digitize(ev, ev_bins)
-        discrete_acc = np.digitize(acc, acc_bins)
-
-        return (discrete_ep, discrete_ev, discrete_acc)
-    
-
-    def discretize_action(self, action, num_bins):
-        action_bins = np.linspace(self.u_min, self.u_max, num_bins)
-        discrete_action = np.digitize(action, action_bins)
-
-        return discrete_action
-    
+        return (np.digitize(ep, ep_bins), np.digitize(ev, ev_bins), np.digitize(acc, acc_bins))
 
     def render(self, mode='human'):
         print(f"Current state: {self.state}")
         print(f"Current timestep: {self.current_timestep}")
         print(f"Current reward: {self.rewards[-1] if self.rewards else 'N/A'}")
-
 
     def close(self):
         self.state = None
@@ -141,7 +154,6 @@ class EnvPlatoon:
         self.current_timestep = 0
         self.rewards = []
         print("Environment closed")
-
 
     def seed(self, seed=None):
         np.random.seed(seed)
