@@ -1,0 +1,308 @@
+
+WARNING:tensorflow:From C:\Users\giova\anaconda3\envs\DLA\lib\site-packages\keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+C:\Users\giova\anaconda3\envs\DLA\lib\site-packages\numpy\core\fromnumeric.py:3504: RuntimeWarning: Mean of empty slice.
+  return _methods._mean(a, axis=axis, dtype=dtype,
+C:\Users\giova\anaconda3\envs\DLA\lib\site-packages\numpy\core\_methods.py:129: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+C:\Users\giova\__PRODUCTIVITY\ArtificialIntelligence\__UNI\PW_AutonomousAgents\agent.py:90: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at C:\cb\pytorch_1000000000000\work\torch\csrc\utils\tensor_new.cpp:264.)
+  states = torch.tensor(normalized_states, dtype=torch.float32, device=self.device)
+Episode 1, Total Reward: -59.4118, Epsilon: 0.9999, Tot Steps: 100, Global Steps: 100
+Episode 2, Total Reward: -54.7412, Epsilon: 0.9998, Tot Steps: 100, Global Steps: 200
+Episode 3, Total Reward: -1388.3945, Epsilon: 0.9997, Tot Steps: 50, Global Steps: 300
+Episode 4, Total Reward: -29.4969, Epsilon: 0.9996, Tot Steps: 100, Global Steps: 400
+Episode 5, Total Reward: -20.4900, Epsilon: 0.9995, Tot Steps: 100, Global Steps: 500
+Episode 6, Total Reward: -108.8046, Epsilon: 0.9994, Tot Steps: 100, Global Steps: 600
+Episode 7, Total Reward: -94.4171, Epsilon: 0.9993, Tot Steps: 95, Global Steps: 700
+Episode 8, Total Reward: -37.9401, Epsilon: 0.9992, Tot Steps: 100, Global Steps: 800
+Episode 9, Total Reward: -36.0694, Epsilon: 0.9991, Tot Steps: 100, Global Steps: 900
+Episode 10, Total Reward: -5.7046, Epsilon: 0.9990, Tot Steps: 100, Global Steps: 1000
+Episode 11, Total Reward: -53.1741, Epsilon: 0.9989, Tot Steps: 100, Global Steps: 1100
+Episode 12, Total Reward: -79.8475, Epsilon: 0.9988, Tot Steps: 100, Global Steps: 1200
+Episode 13, Total Reward: -25.4475, Epsilon: 0.9987, Tot Steps: 100, Global Steps: 1300
+Episode 14, Total Reward: -23.9484, Epsilon: 0.9986, Tot Steps: 100, Global Steps: 1400
+Episode 15, Total Reward: -84.2860, Epsilon: 0.9985, Tot Steps: 100, Global Steps: 1500
+Episode 16, Total Reward: -47.7232, Epsilon: 0.9984, Tot Steps: 100, Global Steps: 1600
+Episode 17, Total Reward: -29.3146, Epsilon: 0.9983, Tot Steps: 100, Global Steps: 1700
+Episode 18, Total Reward: -38.0868, Epsilon: 0.9982, Tot Steps: 100, Global Steps: 1800
+Episode 19, Total Reward: -62.3248, Epsilon: 0.9981, Tot Steps: 100, Global Steps: 1900
+Episode 20, Total Reward: -13.7530, Epsilon: 0.9980, Tot Steps: 100, Global Steps: 2000
+Episode 21, Total Reward: -35.2840, Epsilon: 0.9979, Tot Steps: 100, Global Steps: 2100
+Episode 22, Total Reward: -56.5222, Epsilon: 0.9978, Tot Steps: 100, Global Steps: 2200
+Episode 23, Total Reward: -14.2802, Epsilon: 0.9977, Tot Steps: 100, Global Steps: 2300
+Episode 24, Total Reward: -12.3709, Epsilon: 0.9976, Tot Steps: 100, Global Steps: 2400
+Episode 25, Total Reward: -2.3127, Epsilon: 0.9975, Tot Steps: 100, Global Steps: 2500
+Episode 26, Total Reward: -4.9558, Epsilon: 0.9974, Tot Steps: 100, Global Steps: 2600
+Episode 27, Total Reward: -133.0207, Epsilon: 0.9973, Tot Steps: 100, Global Steps: 2700
+Episode 28, Total Reward: -34.5094, Epsilon: 0.9972, Tot Steps: 100, Global Steps: 2800
+Episode 29, Total Reward: -85.1041, Epsilon: 0.9971, Tot Steps: 100, Global Steps: 2900
+Episode 30, Total Reward: -25.9542, Epsilon: 0.9970, Tot Steps: 100, Global Steps: 3000
+Episode 31, Total Reward: -13.2039, Epsilon: 0.9969, Tot Steps: 100, Global Steps: 3100
+Episode 32, Total Reward: -66.2594, Epsilon: 0.9968, Tot Steps: 100, Global Steps: 3200
+Episode 33, Total Reward: -52.3567, Epsilon: 0.9967, Tot Steps: 100, Global Steps: 3300
+Episode 34, Total Reward: -27.2170, Epsilon: 0.9966, Tot Steps: 100, Global Steps: 3400
+Episode 35, Total Reward: -1.7706, Epsilon: 0.9965, Tot Steps: 100, Global Steps: 3500
+Episode 36, Total Reward: -32.1626, Epsilon: 0.9964, Tot Steps: 100, Global Steps: 3600
+Episode 37, Total Reward: -54.6424, Epsilon: 0.9963, Tot Steps: 100, Global Steps: 3700
+Episode 38, Total Reward: -21.5001, Epsilon: 0.9962, Tot Steps: 100, Global Steps: 3800
+Episode 39, Total Reward: -19.3594, Epsilon: 0.9961, Tot Steps: 100, Global Steps: 3900
+Episode 40, Total Reward: -67.8495, Epsilon: 0.9960, Tot Steps: 100, Global Steps: 4000
+Episode 41, Total Reward: -17.1523, Epsilon: 0.9959, Tot Steps: 100, Global Steps: 4100
+Episode 42, Total Reward: -54.3907, Epsilon: 0.9958, Tot Steps: 100, Global Steps: 4200
+Episode 43, Total Reward: -4.2952, Epsilon: 0.9957, Tot Steps: 100, Global Steps: 4300
+Episode 44, Total Reward: -4.0763, Epsilon: 0.9956, Tot Steps: 100, Global Steps: 4400
+Episode 45, Total Reward: -3.7765, Epsilon: 0.9955, Tot Steps: 100, Global Steps: 4500
+Episode 46, Total Reward: -25.7205, Epsilon: 0.9954, Tot Steps: 100, Global Steps: 4600
+Episode 47, Total Reward: -32.2278, Epsilon: 0.9953, Tot Steps: 100, Global Steps: 4700
+Episode 48, Total Reward: -45.7821, Epsilon: 0.9952, Tot Steps: 100, Global Steps: 4800
+Episode 49, Total Reward: -5.6989, Epsilon: 0.9951, Tot Steps: 100, Global Steps: 4900
+Episode 50, Total Reward: -25.2107, Epsilon: 0.9950, Tot Steps: 100, Global Steps: 5000
+Episode 51, Total Reward: -35.9156, Epsilon: 0.9949, Tot Steps: 100, Global Steps: 5100
+Episode 52, Total Reward: -204.3361, Epsilon: 0.9948, Tot Steps: 82, Global Steps: 5200
+Episode 53, Total Reward: -38.7499, Epsilon: 0.9947, Tot Steps: 100, Global Steps: 5300
+Episode 54, Total Reward: -84.5561, Epsilon: 0.9946, Tot Steps: 100, Global Steps: 5400
+Episode 55, Total Reward: -43.7813, Epsilon: 0.9945, Tot Steps: 100, Global Steps: 5500
+Episode 56, Total Reward: -29.4498, Epsilon: 0.9944, Tot Steps: 100, Global Steps: 5600
+Episode 57, Total Reward: -4.4249, Epsilon: 0.9943, Tot Steps: 100, Global Steps: 5700
+Episode 58, Total Reward: -36.7796, Epsilon: 0.9942, Tot Steps: 100, Global Steps: 5800
+Episode 59, Total Reward: -6.9269, Epsilon: 0.9941, Tot Steps: 100, Global Steps: 5900
+Episode 60, Total Reward: -29.3028, Epsilon: 0.9940, Tot Steps: 100, Global Steps: 6000
+Episode 61, Total Reward: -4.7420, Epsilon: 0.9939, Tot Steps: 100, Global Steps: 6100
+Episode 62, Total Reward: -43.9546, Epsilon: 0.9938, Tot Steps: 100, Global Steps: 6200
+Episode 63, Total Reward: -38.1576, Epsilon: 0.9937, Tot Steps: 100, Global Steps: 6300
+Episode 64, Total Reward: -8.7586, Epsilon: 0.9936, Tot Steps: 100, Global Steps: 6400
+Episode 65, Total Reward: -7.8255, Epsilon: 0.9935, Tot Steps: 100, Global Steps: 6500
+Episode 66, Total Reward: -7.8948, Epsilon: 0.9934, Tot Steps: 100, Global Steps: 6600
+Episode 67, Total Reward: -53.2216, Epsilon: 0.9933, Tot Steps: 100, Global Steps: 6700
+Episode 68, Total Reward: -1.4543, Epsilon: 0.9932, Tot Steps: 100, Global Steps: 6800
+Episode 69, Total Reward: -38.1988, Epsilon: 0.9931, Tot Steps: 100, Global Steps: 6900
+Episode 70, Total Reward: -2.2929, Epsilon: 0.9930, Tot Steps: 100, Global Steps: 7000
+Episode 71, Total Reward: -28.7691, Epsilon: 0.9929, Tot Steps: 100, Global Steps: 7100
+Episode 72, Total Reward: -1.1361, Epsilon: 0.9928, Tot Steps: 100, Global Steps: 7200
+Episode 73, Total Reward: -9.0439, Epsilon: 0.9927, Tot Steps: 100, Global Steps: 7300
+Episode 74, Total Reward: -8.8516, Epsilon: 0.9926, Tot Steps: 100, Global Steps: 7400
+Episode 75, Total Reward: -9.9870, Epsilon: 0.9925, Tot Steps: 100, Global Steps: 7500
+Episode 76, Total Reward: -36.6689, Epsilon: 0.9924, Tot Steps: 100, Global Steps: 7600
+Episode 77, Total Reward: -2.0098, Epsilon: 0.9923, Tot Steps: 100, Global Steps: 7700
+Episode 78, Total Reward: -51.6458, Epsilon: 0.9922, Tot Steps: 100, Global Steps: 7800
+Episode 79, Total Reward: -43.3164, Epsilon: 0.9921, Tot Steps: 100, Global Steps: 7900
+Episode 80, Total Reward: -52.4769, Epsilon: 0.9920, Tot Steps: 100, Global Steps: 8000
+Episode 81, Total Reward: -32.1558, Epsilon: 0.9919, Tot Steps: 100, Global Steps: 8100
+Episode 82, Total Reward: -1.6291, Epsilon: 0.9918, Tot Steps: 100, Global Steps: 8200
+Episode 83, Total Reward: -40.9331, Epsilon: 0.9917, Tot Steps: 100, Global Steps: 8300
+Episode 84, Total Reward: -2.5483, Epsilon: 0.9916, Tot Steps: 100, Global Steps: 8400
+Episode 85, Total Reward: -102.5404, Epsilon: 0.9915, Tot Steps: 100, Global Steps: 8500
+Episode 86, Total Reward: -100.3763, Epsilon: 0.9914, Tot Steps: 95, Global Steps: 8600
+Episode 87, Total Reward: -13.4729, Epsilon: 0.9913, Tot Steps: 100, Global Steps: 8700
+Episode 88, Total Reward: -60.3011, Epsilon: 0.9912, Tot Steps: 100, Global Steps: 8800
+Episode 89, Total Reward: -24.7345, Epsilon: 0.9911, Tot Steps: 100, Global Steps: 8900
+Episode 90, Total Reward: -0.9956, Epsilon: 0.9910, Tot Steps: 100, Global Steps: 9000
+Episode 91, Total Reward: -6.2161, Epsilon: 0.9909, Tot Steps: 100, Global Steps: 9100
+Episode 92, Total Reward: -3.9457, Epsilon: 0.9908, Tot Steps: 100, Global Steps: 9200
+Episode 93, Total Reward: -2.5625, Epsilon: 0.9907, Tot Steps: 100, Global Steps: 9300
+Episode 94, Total Reward: -58.1107, Epsilon: 0.9906, Tot Steps: 100, Global Steps: 9400
+Episode 95, Total Reward: -2.3796, Epsilon: 0.9905, Tot Steps: 100, Global Steps: 9500
+Episode 96, Total Reward: -76.7469, Epsilon: 0.9904, Tot Steps: 100, Global Steps: 9600
+Episode 97, Total Reward: -440.7711, Epsilon: 0.9903, Tot Steps: 69, Global Steps: 9700
+Episode 98, Total Reward: -7.9027, Epsilon: 0.9902, Tot Steps: 100, Global Steps: 9800
+Episode 99, Total Reward: -64.6932, Epsilon: 0.9901, Tot Steps: 100, Global Steps: 9900
+Episode 100, Total Reward: -9.6591, Epsilon: 0.9900, Tot Steps: 100, Global Steps: 10000
+Episode 101, Total Reward: -11.7599, Avg Reward (last 100): -52.4199, Epsilon: 0.9900, Tot Steps: 100, Global Steps: 10100
+Episode 102, Total Reward: -40.5252, Avg Reward (last 100): -52.2778, Epsilon: 0.9899, Tot Steps: 100, Global Steps: 10200
+Episode 103, Total Reward: -17.5331, Avg Reward (last 100): -38.5692, Epsilon: 0.9898, Tot Steps: 100, Global Steps: 10300
+Episode 104, Total Reward: -59.7956, Avg Reward (last 100): -38.8722, Epsilon: 0.9897, Tot Steps: 100, Global Steps: 10400
+Episode 105, Total Reward: -31.7533, Avg Reward (last 100): -38.9848, Epsilon: 0.9896, Tot Steps: 100, Global Steps: 10500
+Episode 106, Total Reward: -124.7628, Avg Reward (last 100): -39.1444, Epsilon: 0.9895, Tot Steps: 91, Global Steps: 10600
+Episode 107, Total Reward: -3.9401, Avg Reward (last 100): -38.2396, Epsilon: 0.9894, Tot Steps: 100, Global Steps: 10700
+Episode 108, Total Reward: -44.8115, Avg Reward (last 100): -38.3083, Epsilon: 0.9893, Tot Steps: 100, Global Steps: 10800
+Episode 109, Total Reward: -2.0466, Avg Reward (last 100): -37.9681, Epsilon: 0.9892, Tot Steps: 100, Global Steps: 10900
+Episode 110, Total Reward: -7.0921, Avg Reward (last 100): -37.9820, Epsilon: 0.9891, Tot Steps: 100, Global Steps: 11000
+Episode 111, Total Reward: -77.6778, Avg Reward (last 100): -38.2270, Epsilon: 0.9890, Tot Steps: 100, Global Steps: 11100
+Episode 112, Total Reward: -10.7512, Avg Reward (last 100): -37.5360, Epsilon: 0.9889, Tot Steps: 100, Global Steps: 11200
+Episode 113, Total Reward: -67.8232, Avg Reward (last 100): -37.9598, Epsilon: 0.9888, Tot Steps: 100, Global Steps: 11300
+Episode 114, Total Reward: -1.3673, Avg Reward (last 100): -37.7340, Epsilon: 0.9887, Tot Steps: 100, Global Steps: 11400
+Episode 115, Total Reward: -34.1821, Avg Reward (last 100): -37.2329, Epsilon: 0.9886, Tot Steps: 100, Global Steps: 11500
+Episode 116, Total Reward: -5.6292, Avg Reward (last 100): -36.8120, Epsilon: 0.9885, Tot Steps: 100, Global Steps: 11600
+Episode 117, Total Reward: -31.8371, Avg Reward (last 100): -36.8372, Epsilon: 0.9884, Tot Steps: 100, Global Steps: 11700
+Episode 118, Total Reward: -30.5755, Avg Reward (last 100): -36.7621, Epsilon: 0.9883, Tot Steps: 100, Global Steps: 11800
+Episode 119, Total Reward: -24.8615, Avg Reward (last 100): -36.3875, Epsilon: 0.9882, Tot Steps: 100, Global Steps: 11900
+Episode 120, Total Reward: -38.4151, Avg Reward (last 100): -36.6341, Epsilon: 0.9881, Tot Steps: 100, Global Steps: 12000
+Episode 121, Total Reward: -12.5072, Avg Reward (last 100): -36.4063, Epsilon: 0.9880, Tot Steps: 100, Global Steps: 12100
+Episode 122, Total Reward: -20.1471, Avg Reward (last 100): -36.0426, Epsilon: 0.9879, Tot Steps: 100, Global Steps: 12200
+Episode 123, Total Reward: -3.1088, Avg Reward (last 100): -35.9309, Epsilon: 0.9878, Tot Steps: 100, Global Steps: 12300
+Episode 124, Total Reward: -22.6278, Avg Reward (last 100): -36.0334, Epsilon: 0.9877, Tot Steps: 100, Global Steps: 12400
+Episode 125, Total Reward: -20.3632, Avg Reward (last 100): -36.2139, Epsilon: 0.9876, Tot Steps: 100, Global Steps: 12500
+Episode 126, Total Reward: -10.4490, Avg Reward (last 100): -36.2689, Epsilon: 0.9875, Tot Steps: 100, Global Steps: 12600
+Episode 127, Total Reward: -4.6377, Avg Reward (last 100): -34.9850, Epsilon: 0.9874, Tot Steps: 100, Global Steps: 12700
+Episode 128, Total Reward: -44.5331, Avg Reward (last 100): -35.0853, Epsilon: 0.9873, Tot Steps: 100, Global Steps: 12800
+Episode 129, Total Reward: -10.1520, Avg Reward (last 100): -34.3358, Epsilon: 0.9872, Tot Steps: 100, Global Steps: 12900
+Episode 130, Total Reward: -66.4078, Avg Reward (last 100): -34.7403, Epsilon: 0.9871, Tot Steps: 100, Global Steps: 13000
+Episode 131, Total Reward: -48.7683, Avg Reward (last 100): -35.0959, Epsilon: 0.9870, Tot Steps: 100, Global Steps: 13100
+Episode 132, Total Reward: -6.2351, Avg Reward (last 100): -34.4957, Epsilon: 0.9869, Tot Steps: 100, Global Steps: 13200
+Episode 133, Total Reward: -1.5382, Avg Reward (last 100): -33.9875, Epsilon: 0.9868, Tot Steps: 100, Global Steps: 13300
+Episode 134, Total Reward: -23.2103, Avg Reward (last 100): -33.9475, Epsilon: 0.9867, Tot Steps: 100, Global Steps: 13400
+Episode 135, Total Reward: -24.7179, Avg Reward (last 100): -34.1769, Epsilon: 0.9866, Tot Steps: 100, Global Steps: 13500
+Episode 136, Total Reward: -21.2283, Avg Reward (last 100): -34.0676, Epsilon: 0.9865, Tot Steps: 100, Global Steps: 13600
+Episode 137, Total Reward: -47.0036, Avg Reward (last 100): -33.9912, Epsilon: 0.9864, Tot Steps: 100, Global Steps: 13700
+Episode 138, Total Reward: -36.9786, Avg Reward (last 100): -34.1460, Epsilon: 0.9863, Tot Steps: 100, Global Steps: 13800
+Episode 139, Total Reward: -1.1542, Avg Reward (last 100): -33.9639, Epsilon: 0.9862, Tot Steps: 100, Global Steps: 13900
+Episode 140, Total Reward: -12.3839, Avg Reward (last 100): -33.4093, Epsilon: 0.9861, Tot Steps: 100, Global Steps: 14000
+Episode 141, Total Reward: -1.0544, Avg Reward (last 100): -33.2483, Epsilon: 0.9860, Tot Steps: 100, Global Steps: 14100
+Episode 142, Total Reward: -9.6077, Avg Reward (last 100): -32.8005, Epsilon: 0.9859, Tot Steps: 100, Global Steps: 14200
+Episode 143, Total Reward: -1.6072, Avg Reward (last 100): -32.7736, Epsilon: 0.9858, Tot Steps: 100, Global Steps: 14300
+Episode 144, Total Reward: -2.5413, Avg Reward (last 100): -32.7582, Epsilon: 0.9857, Tot Steps: 100, Global Steps: 14400
+Episode 145, Total Reward: -31.1976, Avg Reward (last 100): -33.0324, Epsilon: 0.9856, Tot Steps: 100, Global Steps: 14500
+Episode 146, Total Reward: -12.1803, Avg Reward (last 100): -32.8970, Epsilon: 0.9855, Tot Steps: 100, Global Steps: 14600
+Episode 147, Total Reward: -19.0975, Avg Reward (last 100): -32.7657, Epsilon: 0.9854, Tot Steps: 100, Global Steps: 14700
+Episode 148, Total Reward: -17.3484, Avg Reward (last 100): -32.4814, Epsilon: 0.9853, Tot Steps: 100, Global Steps: 14800
+Episode 149, Total Reward: -19.7777, Avg Reward (last 100): -32.6222, Epsilon: 0.9852, Tot Steps: 100, Global Steps: 14900
+Episode 150, Total Reward: -1.3822, Avg Reward (last 100): -32.3839, Epsilon: 0.9851, Tot Steps: 100, Global Steps: 15000
+Episode 151, Total Reward: -266.2689, Avg Reward (last 100): -34.6874, Epsilon: 0.9850, Tot Steps: 80, Global Steps: 15100
+Episode 152, Total Reward: -39.8227, Avg Reward (last 100): -33.0423, Epsilon: 0.9849, Tot Steps: 100, Global Steps: 15200
+Episode 153, Total Reward: -1.1886, Avg Reward (last 100): -32.6667, Epsilon: 0.9848, Tot Steps: 100, Global Steps: 15300
+Episode 154, Total Reward: -47.3288, Avg Reward (last 100): -32.2944, Epsilon: 0.9847, Tot Steps: 99, Global Steps: 15400
+Episode 155, Total Reward: -111.8221, Avg Reward (last 100): -32.9748, Epsilon: 0.9846, Tot Steps: 78, Global Steps: 15500
+Episode 156, Total Reward: -1.8304, Avg Reward (last 100): -32.6986, Epsilon: 0.9845, Tot Steps: 100, Global Steps: 15600
+Episode 157, Total Reward: -21.9761, Avg Reward (last 100): -32.8741, Epsilon: 0.9844, Tot Steps: 100, Global Steps: 15700
+Episode 158, Total Reward: -6.1275, Avg Reward (last 100): -32.5676, Epsilon: 0.9843, Tot Steps: 100, Global Steps: 15800
+Episode 159, Total Reward: -2.0267, Avg Reward (last 100): -32.5186, Epsilon: 0.9842, Tot Steps: 100, Global Steps: 15900
+Episode 160, Total Reward: -1.2404, Avg Reward (last 100): -32.2380, Epsilon: 0.9841, Tot Steps: 100, Global Steps: 16000
+Episode 161, Total Reward: -64.4827, Avg Reward (last 100): -32.8354, Epsilon: 0.9840, Tot Steps: 100, Global Steps: 16100
+Episode 162, Total Reward: -78.0845, Avg Reward (last 100): -33.1767, Epsilon: 0.9839, Tot Steps: 100, Global Steps: 16200
+Episode 163, Total Reward: -17.4627, Avg Reward (last 100): -32.9698, Epsilon: 0.9838, Tot Steps: 100, Global Steps: 16300
+Episode 164, Total Reward: -9.8708, Avg Reward (last 100): -32.9809, Epsilon: 0.9837, Tot Steps: 100, Global Steps: 16400
+Episode 165, Total Reward: -42.2937, Avg Reward (last 100): -33.3256, Epsilon: 0.9836, Tot Steps: 100, Global Steps: 16500
+Episode 166, Total Reward: -100.7972, Avg Reward (last 100): -34.2546, Epsilon: 0.9835, Tot Steps: 100, Global Steps: 16600
+Episode 167, Total Reward: -0.8215, Avg Reward (last 100): -33.7306, Epsilon: 0.9834, Tot Steps: 100, Global Steps: 16700
+Episode 168, Total Reward: -4.0173, Avg Reward (last 100): -33.7562, Epsilon: 0.9833, Tot Steps: 100, Global Steps: 16800
+Episode 169, Total Reward: -38.1163, Avg Reward (last 100): -33.7554, Epsilon: 0.9832, Tot Steps: 100, Global Steps: 16900
+Episode 170, Total Reward: -12.3874, Avg Reward (last 100): -33.8563, Epsilon: 0.9831, Tot Steps: 100, Global Steps: 17000
+Episode 171, Total Reward: -6.8035, Avg Reward (last 100): -33.6367, Epsilon: 0.9830, Tot Steps: 100, Global Steps: 17100
+Episode 172, Total Reward: -50.6457, Avg Reward (last 100): -34.1318, Epsilon: 0.9829, Tot Steps: 100, Global Steps: 17200
+Episode 173, Total Reward: -5.1959, Avg Reward (last 100): -34.0933, Epsilon: 0.9828, Tot Steps: 100, Global Steps: 17300
+Episode 174, Total Reward: -1.0954, Avg Reward (last 100): -34.0157, Epsilon: 0.9827, Tot Steps: 100, Global Steps: 17400
+Episode 175, Total Reward: -34.5806, Avg Reward (last 100): -34.2617, Epsilon: 0.9827, Tot Steps: 100, Global Steps: 17500
+Episode 176, Total Reward: -100.7010, Avg Reward (last 100): -34.9020, Epsilon: 0.9826, Tot Steps: 100, Global Steps: 17600
+Episode 177, Total Reward: -13.6864, Avg Reward (last 100): -35.0188, Epsilon: 0.9825, Tot Steps: 100, Global Steps: 17700
+Episode 178, Total Reward: -25.9367, Avg Reward (last 100): -34.7617, Epsilon: 0.9824, Tot Steps: 100, Global Steps: 17800
+Episode 179, Total Reward: -15.0638, Avg Reward (last 100): -34.4791, Epsilon: 0.9823, Tot Steps: 100, Global Steps: 17900
+Episode 180, Total Reward: -18.3651, Avg Reward (last 100): -34.1380, Epsilon: 0.9822, Tot Steps: 100, Global Steps: 18000
+Episode 181, Total Reward: -50.9897, Avg Reward (last 100): -34.3264, Epsilon: 0.9821, Tot Steps: 100, Global Steps: 18100
+Episode 182, Total Reward: -34.1873, Avg Reward (last 100): -34.6519, Epsilon: 0.9820, Tot Steps: 100, Global Steps: 18200
+Episode 183, Total Reward: -54.7978, Avg Reward (last 100): -34.7906, Epsilon: 0.9819, Tot Steps: 96, Global Steps: 18300
+Episode 184, Total Reward: -18.2196, Avg Reward (last 100): -34.9473, Epsilon: 0.9818, Tot Steps: 100, Global Steps: 18400
+Episode 185, Total Reward: -6.7310, Avg Reward (last 100): -33.9892, Epsilon: 0.9817, Tot Steps: 100, Global Steps: 18500
+Episode 186, Total Reward: -0.7064, Avg Reward (last 100): -32.9925, Epsilon: 0.9816, Tot Steps: 100, Global Steps: 18600
+Episode 187, Total Reward: -59.5897, Avg Reward (last 100): -33.4537, Epsilon: 0.9815, Tot Steps: 100, Global Steps: 18700
+Episode 188, Total Reward: -18.2621, Avg Reward (last 100): -33.0333, Epsilon: 0.9814, Tot Steps: 100, Global Steps: 18800
+Episode 189, Total Reward: -0.8098, Avg Reward (last 100): -32.7940, Epsilon: 0.9813, Tot Steps: 100, Global Steps: 18900
+Episode 190, Total Reward: -2.1835, Avg Reward (last 100): -32.8059, Epsilon: 0.9812, Tot Steps: 100, Global Steps: 19000
+Episode 191, Total Reward: -15.9709, Avg Reward (last 100): -32.9035, Epsilon: 0.9811, Tot Steps: 100, Global Steps: 19100
+Episode 192, Total Reward: -47.2095, Avg Reward (last 100): -33.3361, Epsilon: 0.9810, Tot Steps: 100, Global Steps: 19200
+Episode 193, Total Reward: -6.4512, Avg Reward (last 100): -33.3750, Epsilon: 0.9809, Tot Steps: 100, Global Steps: 19300
+Episode 194, Total Reward: -9.6823, Avg Reward (last 100): -32.8907, Epsilon: 0.9808, Tot Steps: 100, Global Steps: 19400
+Episode 195, Total Reward: -5.5354, Avg Reward (last 100): -32.9223, Epsilon: 0.9807, Tot Steps: 100, Global Steps: 19500
+Episode 196, Total Reward: -9.3002, Avg Reward (last 100): -32.2478, Epsilon: 0.9806, Tot Steps: 100, Global Steps: 19600
+Episode 197, Total Reward: -26.2330, Avg Reward (last 100): -28.1024, Epsilon: 0.9805, Tot Steps: 100, Global Steps: 19700
+Episode 198, Total Reward: -55.4229, Avg Reward (last 100): -28.5776, Epsilon: 0.9804, Tot Steps: 100, Global Steps: 19800
+Episode 199, Total Reward: -0.7578, Avg Reward (last 100): -27.9383, Epsilon: 0.9803, Tot Steps: 100, Global Steps: 19900
+Episode 200, Total Reward: -42.8705, Avg Reward (last 100): -28.2704, Epsilon: 0.9802, Tot Steps: 100, Global Steps: 20000
+Episode 201, Total Reward: -3.3037, Avg Reward (last 100): -28.1858, Epsilon: 0.9801, Tot Steps: 100, Global Steps: 20100
+Episode 202, Total Reward: -65.2808, Avg Reward (last 100): -28.4334, Epsilon: 0.9800, Tot Steps: 100, Global Steps: 20200
+Episode 203, Total Reward: -6.9827, Avg Reward (last 100): -28.3279, Epsilon: 0.9799, Tot Steps: 100, Global Steps: 20300
+Episode 204, Total Reward: -9.7332, Avg Reward (last 100): -27.8272, Epsilon: 0.9798, Tot Steps: 100, Global Steps: 20400
+Episode 205, Total Reward: -141.7222, Avg Reward (last 100): -28.9269, Epsilon: 0.9797, Tot Steps: 88, Global Steps: 20500
+Episode 206, Total Reward: -10.6412, Avg Reward (last 100): -27.7857, Epsilon: 0.9796, Tot Steps: 100, Global Steps: 20600
+Episode 207, Total Reward: -43.9933, Avg Reward (last 100): -28.1862, Epsilon: 0.9795, Tot Steps: 100, Global Steps: 20700
+Episode 208, Total Reward: -36.2609, Avg Reward (last 100): -28.1007, Epsilon: 0.9794, Tot Steps: 100, Global Steps: 20800
+Episode 209, Total Reward: -57.7289, Avg Reward (last 100): -28.6576, Epsilon: 0.9793, Tot Steps: 100, Global Steps: 20900
+Episode 210, Total Reward: -13.0579, Avg Reward (last 100): -28.7172, Epsilon: 0.9792, Tot Steps: 100, Global Steps: 21000
+Episode 211, Total Reward: -2.5933, Avg Reward (last 100): -27.9664, Epsilon: 0.9791, Tot Steps: 100, Global Steps: 21100
+Episode 212, Total Reward: -2.1070, Avg Reward (last 100): -27.8799, Epsilon: 0.9790, Tot Steps: 100, Global Steps: 21200
+Episode 213, Total Reward: -81.0298, Avg Reward (last 100): -28.0120, Epsilon: 0.9789, Tot Steps: 100, Global Steps: 21300
+Episode 214, Total Reward: -21.3283, Avg Reward (last 100): -28.2116, Epsilon: 0.9788, Tot Steps: 100, Global Steps: 21400
+Episode 215, Total Reward: -1.5602, Avg Reward (last 100): -27.8854, Epsilon: 0.9787, Tot Steps: 100, Global Steps: 21500
+Episode 216, Total Reward: -46.7264, Avg Reward (last 100): -28.2964, Epsilon: 0.9786, Tot Steps: 100, Global Steps: 21600
+Episode 217, Total Reward: -1.4046, Avg Reward (last 100): -27.9920, Epsilon: 0.9785, Tot Steps: 100, Global Steps: 21700
+Episode 218, Total Reward: -17.8119, Avg Reward (last 100): -27.8644, Epsilon: 0.9784, Tot Steps: 100, Global Steps: 21800
+Episode 219, Total Reward: -85.0726, Avg Reward (last 100): -28.4665, Epsilon: 0.9783, Tot Steps: 100, Global Steps: 21900
+Episode 220, Total Reward: -26.0293, Avg Reward (last 100): -28.3427, Epsilon: 0.9782, Tot Steps: 100, Global Steps: 22000
+Episode 221, Total Reward: -63.1788, Avg Reward (last 100): -28.8494, Epsilon: 0.9781, Tot Steps: 100, Global Steps: 22100
+Episode 222, Total Reward: -22.7593, Avg Reward (last 100): -28.8755, Epsilon: 0.9780, Tot Steps: 100, Global Steps: 22200
+Episode 223, Total Reward: -21.2212, Avg Reward (last 100): -29.0566, Epsilon: 0.9779, Tot Steps: 100, Global Steps: 22300
+Episode 224, Total Reward: -66.0759, Avg Reward (last 100): -29.4911, Epsilon: 0.9778, Tot Steps: 100, Global Steps: 22400
+Episode 225, Total Reward: -6.8985, Avg Reward (last 100): -29.3565, Epsilon: 0.9778, Tot Steps: 100, Global Steps: 22500
+Episode 226, Total Reward: -63.0638, Avg Reward (last 100): -29.8826, Epsilon: 0.9777, Tot Steps: 100, Global Steps: 22600
+Episode 227, Total Reward: -155.3572, Avg Reward (last 100): -31.3898, Epsilon: 0.9776, Tot Steps: 87, Global Steps: 22700
+Episode 228, Total Reward: -75.1095, Avg Reward (last 100): -31.6956, Epsilon: 0.9775, Tot Steps: 97, Global Steps: 22800
+Episode 229, Total Reward: -13.1883, Avg Reward (last 100): -31.7259, Epsilon: 0.9774, Tot Steps: 100, Global Steps: 22900
+Episode 230, Total Reward: -62.0355, Avg Reward (last 100): -31.6822, Epsilon: 0.9773, Tot Steps: 100, Global Steps: 23000
+Episode 231, Total Reward: -2.1712, Avg Reward (last 100): -31.2162, Epsilon: 0.9772, Tot Steps: 100, Global Steps: 23100
+Episode 232, Total Reward: -9.8451, Avg Reward (last 100): -31.2523, Epsilon: 0.9771, Tot Steps: 100, Global Steps: 23200
+Episode 233, Total Reward: -117.1220, Avg Reward (last 100): -32.4082, Epsilon: 0.9770, Tot Steps: 100, Global Steps: 23300
+Episode 234, Total Reward: -14.9419, Avg Reward (last 100): -32.3255, Epsilon: 0.9769, Tot Steps: 100, Global Steps: 23400
+Episode 235, Total Reward: -48.0724, Avg Reward (last 100): -32.5590, Epsilon: 0.9768, Tot Steps: 100, Global Steps: 23500
+Episode 236, Total Reward: -28.3734, Avg Reward (last 100): -32.6305, Epsilon: 0.9767, Tot Steps: 100, Global Steps: 23600
+Episode 237, Total Reward: -9.3388, Avg Reward (last 100): -32.2538, Epsilon: 0.9766, Tot Steps: 100, Global Steps: 23700
+Episode 238, Total Reward: -88.9133, Avg Reward (last 100): -32.7732, Epsilon: 0.9765, Tot Steps: 100, Global Steps: 23800
+Episode 239, Total Reward: -11.3440, Avg Reward (last 100): -32.8751, Epsilon: 0.9764, Tot Steps: 100, Global Steps: 23900
+Episode 240, Total Reward: -26.2416, Avg Reward (last 100): -33.0137, Epsilon: 0.9763, Tot Steps: 100, Global Steps: 24000
+Episode 241, Total Reward: -23.2046, Avg Reward (last 100): -33.2352, Epsilon: 0.9762, Tot Steps: 100, Global Steps: 24100
+Episode 242, Total Reward: -36.4184, Avg Reward (last 100): -33.5033, Epsilon: 0.9761, Tot Steps: 100, Global Steps: 24200
+Episode 243, Total Reward: -0.9575, Avg Reward (last 100): -33.4968, Epsilon: 0.9760, Tot Steps: 100, Global Steps: 24300
+Episode 244, Total Reward: -101.5869, Avg Reward (last 100): -34.4872, Epsilon: 0.9759, Tot Steps: 100, Global Steps: 24400
+Episode 245, Total Reward: -6.5291, Avg Reward (last 100): -34.2405, Epsilon: 0.9758, Tot Steps: 100, Global Steps: 24500
+Episode 246, Total Reward: -267.5615, Avg Reward (last 100): -36.7943, Epsilon: 0.9757, Tot Steps: 79, Global Steps: 24600
+Episode 247, Total Reward: -81.1288, Avg Reward (last 100): -37.4147, Epsilon: 0.9756, Tot Steps: 100, Global Steps: 24700
+Episode 248, Total Reward: -2.0990, Avg Reward (last 100): -37.2622, Epsilon: 0.9755, Tot Steps: 100, Global Steps: 24800
+Episode 249, Total Reward: -6.4769, Avg Reward (last 100): -37.1292, Epsilon: 0.9754, Tot Steps: 100, Global Steps: 24900
+Episode 250, Total Reward: -71.5403, Avg Reward (last 100): -37.8307, Epsilon: 0.9753, Tot Steps: 100, Global Steps: 25000
+Episode 251, Total Reward: -79.2903, Avg Reward (last 100): -35.9610, Epsilon: 0.9752, Tot Steps: 99, Global Steps: 25100
+Episode 252, Total Reward: -4.4120, Avg Reward (last 100): -35.6068, Epsilon: 0.9751, Tot Steps: 100, Global Steps: 25200
+Episode 253, Total Reward: -67.4952, Avg Reward (last 100): -36.2699, Epsilon: 0.9750, Tot Steps: 100, Global Steps: 25300
+Episode 254, Total Reward: -32.4406, Avg Reward (last 100): -36.1210, Epsilon: 0.9749, Tot Steps: 100, Global Steps: 25400
+Episode 255, Total Reward: -1.6609, Avg Reward (last 100): -35.0194, Epsilon: 0.9748, Tot Steps: 100, Global Steps: 25500
+Episode 256, Total Reward: -10.7411, Avg Reward (last 100): -35.1085, Epsilon: 0.9747, Tot Steps: 100, Global Steps: 25600
+Episode 257, Total Reward: -2.6342, Avg Reward (last 100): -34.9151, Epsilon: 0.9746, Tot Steps: 100, Global Steps: 25700
+Episode 258, Total Reward: -16.5027, Avg Reward (last 100): -35.0189, Epsilon: 0.9745, Tot Steps: 100, Global Steps: 25800
+Episode 259, Total Reward: -59.2343, Avg Reward (last 100): -35.5909, Epsilon: 0.9744, Tot Steps: 100, Global Steps: 25900
+Episode 260, Total Reward: -43.9301, Avg Reward (last 100): -36.0178, Epsilon: 0.9743, Tot Steps: 100, Global Steps: 26000
+Episode 261, Total Reward: -46.5662, Avg Reward (last 100): -35.8387, Epsilon: 0.9742, Tot Steps: 100, Global Steps: 26100
+Episode 262, Total Reward: -80.8291, Avg Reward (last 100): -35.8661, Epsilon: 0.9741, Tot Steps: 100, Global Steps: 26200
+Episode 263, Total Reward: -39.2205, Avg Reward (last 100): -36.0837, Epsilon: 0.9740, Tot Steps: 100, Global Steps: 26300
+Episode 264, Total Reward: -121.1456, Avg Reward (last 100): -37.1964, Epsilon: 0.9739, Tot Steps: 83, Global Steps: 26400
+Episode 265, Total Reward: -3.2976, Avg Reward (last 100): -36.8065, Epsilon: 0.9738, Tot Steps: 100, Global Steps: 26500
+Episode 266, Total Reward: -15.0930, Avg Reward (last 100): -35.9494, Epsilon: 0.9737, Tot Steps: 100, Global Steps: 26600
+Episode 267, Total Reward: -56.8768, Avg Reward (last 100): -36.5100, Epsilon: 0.9737, Tot Steps: 100, Global Steps: 26700
+Episode 268, Total Reward: -46.9519, Avg Reward (last 100): -36.9393, Epsilon: 0.9736, Tot Steps: 100, Global Steps: 26800
+Episode 269, Total Reward: -30.3069, Avg Reward (last 100): -36.8612, Epsilon: 0.9735, Tot Steps: 100, Global Steps: 26900
+Episode 270, Total Reward: -9.9999, Avg Reward (last 100): -36.8374, Epsilon: 0.9734, Tot Steps: 100, Global Steps: 27000
+Episode 271, Total Reward: -24.4883, Avg Reward (last 100): -37.0142, Epsilon: 0.9733, Tot Steps: 100, Global Steps: 27100
+Episode 272, Total Reward: -25.5265, Avg Reward (last 100): -36.7630, Epsilon: 0.9732, Tot Steps: 100, Global Steps: 27200
+Episode 273, Total Reward: -74.4363, Avg Reward (last 100): -37.4554, Epsilon: 0.9731, Tot Steps: 100, Global Steps: 27300
+Episode 274, Total Reward: -44.3634, Avg Reward (last 100): -37.8881, Epsilon: 0.9730, Tot Steps: 100, Global Steps: 27400
+Episode 275, Total Reward: -5.1366, Avg Reward (last 100): -37.5937, Epsilon: 0.9729, Tot Steps: 100, Global Steps: 27500
+Episode 276, Total Reward: -27.5014, Avg Reward (last 100): -36.8617, Epsilon: 0.9728, Tot Steps: 100, Global Steps: 27600
+Episode 277, Total Reward: -12.3644, Avg Reward (last 100): -36.8484, Epsilon: 0.9727, Tot Steps: 100, Global Steps: 27700
+Episode 278, Total Reward: -123.8577, Avg Reward (last 100): -37.8277, Epsilon: 0.9726, Tot Steps: 87, Global Steps: 27800
+Episode 279, Total Reward: -16.8993, Avg Reward (last 100): -37.8460, Epsilon: 0.9725, Tot Steps: 100, Global Steps: 27900
+Episode 280, Total Reward: -1.6735, Avg Reward (last 100): -37.6791, Epsilon: 0.9724, Tot Steps: 100, Global Steps: 28000
+Episode 281, Total Reward: -14.3980, Avg Reward (last 100): -37.3132, Epsilon: 0.9723, Tot Steps: 100, Global Steps: 28100
+Episode 282, Total Reward: -54.5017, Avg Reward (last 100): -37.5163, Epsilon: 0.9722, Tot Steps: 100, Global Steps: 28200
+Episode 283, Total Reward: -77.3157, Avg Reward (last 100): -37.7415, Epsilon: 0.9721, Tot Steps: 100, Global Steps: 28300
+Episode 284, Total Reward: -10.2783, Avg Reward (last 100): -37.6621, Epsilon: 0.9720, Tot Steps: 100, Global Steps: 28400
+Episode 285, Total Reward: -0.8197, Avg Reward (last 100): -37.6030, Epsilon: 0.9719, Tot Steps: 100, Global Steps: 28500
+Episode 286, Total Reward: -103.4707, Avg Reward (last 100): -38.6306, Epsilon: 0.9718, Tot Steps: 100, Global Steps: 28600
+Episode 287, Total Reward: -66.4448, Avg Reward (last 100): -38.6992, Epsilon: 0.9717, Tot Steps: 100, Global Steps: 28700
+Episode 288, Total Reward: -59.3271, Avg Reward (last 100): -39.1098, Epsilon: 0.9716, Tot Steps: 100, Global Steps: 28800
+Episode 289, Total Reward: -5.6312, Avg Reward (last 100): -39.1580, Epsilon: 0.9715, Tot Steps: 100, Global Steps: 28900
+Episode 290, Total Reward: -2.1964, Avg Reward (last 100): -39.1582, Epsilon: 0.9714, Tot Steps: 100, Global Steps: 29000
+Episode 291, Total Reward: -70.8515, Avg Reward (last 100): -39.7070, Epsilon: 0.9713, Tot Steps: 100, Global Steps: 29100
+Episode 292, Total Reward: -22.1305, Avg Reward (last 100): -39.4562, Epsilon: 0.9712, Tot Steps: 100, Global Steps: 29200
+Episode 293, Total Reward: -789.2993, Avg Reward (last 100): -47.2847, Epsilon: 0.9711, Tot Steps: 59, Global Steps: 29300
+Episode 294, Total Reward: -30.4960, Avg Reward (last 100): -47.4928, Epsilon: 0.9710, Tot Steps: 100, Global Steps: 29400
+Episode 295, Total Reward: -3.4082, Avg Reward (last 100): -47.4715, Epsilon: 0.9709, Tot Steps: 100, Global Steps: 29500
+Episode 296, Total Reward: -40.8890, Avg Reward (last 100): -47.7874, Epsilon: 0.9708, Tot Steps: 100, Global Steps: 29600
+Episode 297, Total Reward: -12.3869, Avg Reward (last 100): -47.6490, Epsilon: 0.9707, Tot Steps: 100, Global Steps: 29700
+Episode 298, Total Reward: -6.3365, Avg Reward (last 100): -47.1581, Epsilon: 0.9706, Tot Steps: 100, Global Steps: 29800
+Episode 299, Total Reward: -13.0448, Avg Reward (last 100): -47.2810, Epsilon: 0.9705, Tot Steps: 100, Global Steps: 29900
+Episode 300, Total Reward: -57.2409, Avg Reward (last 100): -47.4247, Epsilon: 0.9704, Tot Steps: 100, Global Steps: 30000

@@ -1,0 +1,53 @@
+{
+    "os": "Windows-10-10.0.22631-SP0",
+    "python": "3.10.9",
+    "heartbeatAt": "2024-10-16T07:27:42.778535",
+    "startedAt": "2024-10-16T07:27:41.667497",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "C:\\Users\\giova\\__PRODUCTIVITY\\ArtificialIntelligence\\__UNI\\PW_AutonomousAgents\\main.py",
+    "codePathLocal": "main.py",
+    "codePath": "main.py",
+    "git": {
+        "remote": "https://github.com/giovancombo/AutonomousPlatoonControl.git",
+        "commit": "be99c5ec07d498adf02acb8ec9bc8167763485ae"
+    },
+    "email": "gionni.combo@gmail.com",
+    "root": "C:/Users/giova/__PRODUCTIVITY/ArtificialIntelligence/__UNI/PW_AutonomousAgents",
+    "host": "MSI",
+    "username": "giova",
+    "executable": "C:\\Users\\giova\\anaconda3\\envs\\DLA\\python.exe",
+    "cpu_count": 14,
+    "cpu_count_logical": 20,
+    "cpu_freq": {
+        "current": 2382.0,
+        "min": 0.0,
+        "max": 2700.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2382.0,
+            "min": 0.0,
+            "max": 2700.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 929.9726524353027,
+            "used": 740.5754776000977
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3060 Laptop GPU",
+            "memory_total": 6442450944
+        }
+    ],
+    "memory": {
+        "total": 15.710723876953125
+    }
+}

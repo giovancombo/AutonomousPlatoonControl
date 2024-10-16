@@ -1,0 +1,149 @@
+wandb_version: 1
+
+num_vehicles:
+  desc: null
+  value: 2
+vehicles_length:
+  desc: null
+  value: 4
+num_timesteps:
+  desc: null
+  value: 100
+T:
+  desc: null
+  value: 0.1
+tau:
+  desc: null
+  value: 0.1
+h:
+  desc: null
+  value: 1.5
+ep_max:
+  desc: null
+  value: 2
+ep_max_nominal:
+  desc: null
+  value: 15
+ev_max:
+  desc: null
+  value: 1.5
+ev_max_nominal:
+  desc: null
+  value: 10
+acc_min:
+  desc: null
+  value: -2.6
+acc_max:
+  desc: null
+  value: 2.6
+u_min:
+  desc: null
+  value: -2.6
+u_max:
+  desc: null
+  value: 2.6
+a:
+  desc: null
+  value: 0.1
+b:
+  desc: null
+  value: 0.1
+c:
+  desc: null
+  value: 0.2
+reward_threshold:
+  desc: null
+  value: -0.4483
+lambd:
+  desc: null
+  value: 0.005
+env_gamma:
+  desc: null
+  value: 1
+r:
+  desc: null
+  value: 2
+leader_min_speed:
+  desc: null
+  value: 50
+leader_max_speed:
+  desc: null
+  value: 50
+min_safe_distance:
+  desc: null
+  value: 0.3
+collision_penalty:
+  desc: null
+  value: -2
+hidden_size:
+  desc: null
+  value:
+  - 256
+  - 128
+action_size:
+  desc: null
+  value: 200
+state_bins:
+  desc: null
+  value:
+  - 50
+  - 50
+  - 50
+lr:
+  desc: null
+  value: 0.005
+agent_gamma:
+  desc: null
+  value: 0.99
+soft_update_tau:
+  desc: null
+  value: 0.01
+epsilon:
+  desc: null
+  value: 1.0
+eps_decay:
+  desc: null
+  value: 0.9999
+min_epsilon:
+  desc: null
+  value: 0.01
+buffer_size:
+  desc: null
+  value: 100000
+batch_size:
+  desc: null
+  value: 128
+update_freq:
+  desc: null
+  value: 4
+_wandb:
+  desc: null
+  value:
+    python_version: 3.10.9
+    cli_version: 0.16.1
+    framework: huggingface
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1729064093.389338
+    t:
+      1:
+      - 1
+      - 55
+      - 105
+      2:
+      - 1
+      - 2
+      - 3
+      - 11
+      - 49
+      - 55
+      - 105
+      3:
+      - 16
+      - 23
+      4: 3.10.9
+      5: 0.16.1
+      8:
+      - 3
+      - 5
+      13: windows-amd64

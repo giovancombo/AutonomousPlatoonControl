@@ -1,0 +1,166 @@
+
+WARNING:tensorflow:From C:\Users\giova\anaconda3\envs\DLA\lib\site-packages\keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+C:\Users\giova\__PRODUCTIVITY\ArtificialIntelligence\__UNI\PW_AutonomousAgents\agent.py:90: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at C:\cb\pytorch_1000000000000\work\torch\csrc\utils\tensor_new.cpp:264.)
+  states = torch.tensor(normalized_states, dtype=torch.float32, device=self.device)
+Episode 1, Total Reward: -70.0659, Epsilon: 0.9999, Tot Steps: 100
+Episode 2, Total Reward: -87.7000, Epsilon: 0.9998, Tot Steps: 100
+Episode 3, Total Reward: -7.7322, Epsilon: 0.9997, Tot Steps: 100
+Episode 4, Total Reward: -61.5074, Epsilon: 0.9996, Tot Steps: 100
+Episode 5, Total Reward: -1.0127, Epsilon: 0.9995, Tot Steps: 100
+Episode 6, Total Reward: -52.4511, Epsilon: 0.9994, Tot Steps: 100
+Episode 7, Total Reward: -4.6914, Epsilon: 0.9993, Tot Steps: 100
+Episode 8, Total Reward: -6.7716, Epsilon: 0.9992, Tot Steps: 100
+Episode 9, Total Reward: -7.7305, Epsilon: 0.9991, Tot Steps: 100
+Episode 10, Total Reward: -100.0336, Epsilon: 0.9990, Tot Steps: 100
+Episode 11, Total Reward: -87.8189, Epsilon: 0.9989, Tot Steps: 100
+Episode 12, Total Reward: -35.9659, Epsilon: 0.9988, Tot Steps: 100
+Episode 13, Total Reward: -56.1196, Epsilon: 0.9987, Tot Steps: 100
+Episode 14, Total Reward: -18.2109, Epsilon: 0.9986, Tot Steps: 100
+Episode 15, Total Reward: -9.0700, Epsilon: 0.9985, Tot Steps: 100
+Episode 16, Total Reward: -25.5689, Epsilon: 0.9984, Tot Steps: 100
+Episode 17, Total Reward: -3.7992, Epsilon: 0.9983, Tot Steps: 100
+Episode 18, Total Reward: -97.7518, Epsilon: 0.9982, Tot Steps: 87
+Episode 19, Total Reward: -509.0534, Epsilon: 0.9981, Tot Steps: 68
+Episode 20, Total Reward: -32.0728, Epsilon: 0.9980, Tot Steps: 100
+Episode 21, Total Reward: -1.9323, Epsilon: 0.9979, Tot Steps: 100
+Episode 22, Total Reward: -66.9590, Epsilon: 0.9978, Tot Steps: 100
+Episode 23, Total Reward: -81.3324, Epsilon: 0.9977, Tot Steps: 100
+Episode 24, Total Reward: -92.8730, Epsilon: 0.9976, Tot Steps: 100
+Episode 25, Total Reward: -43.5918, Epsilon: 0.9975, Tot Steps: 100
+Episode 26, Total Reward: -2.5422, Epsilon: 0.9974, Tot Steps: 100
+Episode 27, Total Reward: -11.8116, Epsilon: 0.9973, Tot Steps: 100
+Episode 28, Total Reward: -602.4851, Epsilon: 0.9972, Tot Steps: 73
+Episode 29, Total Reward: -56.4061, Epsilon: 0.9971, Tot Steps: 100
+Episode 30, Total Reward: -62.1260, Epsilon: 0.9970, Tot Steps: 99
+Episode 31, Total Reward: -2.2185, Epsilon: 0.9969, Tot Steps: 100
+Episode 32, Total Reward: -33.3554, Epsilon: 0.9968, Tot Steps: 100
+Episode 33, Total Reward: -0.7608, Epsilon: 0.9967, Tot Steps: 100
+Episode 34, Total Reward: -3.5452, Epsilon: 0.9966, Tot Steps: 100
+Episode 35, Total Reward: -0.8742, Epsilon: 0.9965, Tot Steps: 100
+Episode 36, Total Reward: -44.7529, Epsilon: 0.9964, Tot Steps: 100
+Episode 37, Total Reward: -25.6738, Epsilon: 0.9963, Tot Steps: 100
+Episode 38, Total Reward: -43.7901, Epsilon: 0.9962, Tot Steps: 100
+Episode 39, Total Reward: -27.7200, Epsilon: 0.9961, Tot Steps: 100
+Episode 40, Total Reward: -74.0460, Epsilon: 0.9960, Tot Steps: 100
+Episode 41, Total Reward: -67.6434, Epsilon: 0.9959, Tot Steps: 100
+Episode 42, Total Reward: -81.9072, Epsilon: 0.9958, Tot Steps: 100
+Episode 43, Total Reward: -1.3026, Epsilon: 0.9957, Tot Steps: 100
+Episode 44, Total Reward: -3.4714, Epsilon: 0.9956, Tot Steps: 100
+Episode 45, Total Reward: -9.9518, Epsilon: 0.9955, Tot Steps: 100
+Episode 46, Total Reward: -123.8342, Epsilon: 0.9954, Tot Steps: 76
+Episode 47, Total Reward: -62.0674, Epsilon: 0.9953, Tot Steps: 100
+Episode 48, Total Reward: -55.0012, Epsilon: 0.9952, Tot Steps: 100
+Episode 49, Total Reward: -53.0686, Epsilon: 0.9951, Tot Steps: 100
+Episode 50, Total Reward: -8.7805, Epsilon: 0.9950, Tot Steps: 100
+wandb: WARNING Step only supports monotonically increasing values, use define_metric to set a custom x axis. For details see: https://wandb.me/define-metric
+wandb: WARNING (User provided step: 0 is less than current step: 99. Dropping entry: {'Score': -70.06593670106467, 'epsilon decay': 1.0, '_timestamp': 1728852078.5158553}).
+wandb: WARNING (User provided step: 1 is less than current step: 99. Dropping entry: {'Score': -87.69995329752946, 'epsilon decay': 0.9999, '_timestamp': 1728852078.7900703}).
+wandb: WARNING (User provided step: 2 is less than current step: 99. Dropping entry: {'Score': -7.732225021050043, 'epsilon decay': 0.9998000100000001, '_timestamp': 1728852078.894579}).
+wandb: WARNING (User provided step: 3 is less than current step: 99. Dropping entry: {'Score': -61.50735014786409, 'epsilon decay': 0.9997000299990001, '_timestamp': 1728852078.9952738}).
+wandb: WARNING (User provided step: 4 is less than current step: 99. Dropping entry: {'Score': -1.012736769042782, 'epsilon decay': 0.9996000599960002, '_timestamp': 1728852079.0953434}).
+wandb: WARNING (User provided step: 5 is less than current step: 99. Dropping entry: {'Score': -52.45107039551865, 'epsilon decay': 0.9995000999900007, '_timestamp': 1728852079.207056}).
+wandb: WARNING (User provided step: 6 is less than current step: 99. Dropping entry: {'Score': -4.691404687231224, 'epsilon decay': 0.9994001499800017, '_timestamp': 1728852079.3084784}).
+wandb: WARNING (User provided step: 7 is less than current step: 99. Dropping entry: {'Score': -6.7715924471088345, 'epsilon decay': 0.9993002099650037, '_timestamp': 1728852079.4081855}).
+wandb: WARNING (User provided step: 8 is less than current step: 99. Dropping entry: {'Score': -7.730481619729699, 'epsilon decay': 0.9992002799440072, '_timestamp': 1728852079.507907}).
+wandb: WARNING (User provided step: 9 is less than current step: 99. Dropping entry: {'Score': -100.03363294874197, 'epsilon decay': 0.9991003599160128, '_timestamp': 1728852079.6152966}).
+wandb: WARNING (User provided step: 10 is less than current step: 99. Dropping entry: {'Score': -87.81891989021096, 'epsilon decay': 0.9990004498800211, '_timestamp': 1728852079.7130632}).
+wandb: WARNING (User provided step: 11 is less than current step: 99. Dropping entry: {'Score': -35.965884087795125, 'epsilon decay': 0.9989005498350332, '_timestamp': 1728852079.8098557}).
+wandb: WARNING (User provided step: 12 is less than current step: 99. Dropping entry: {'Score': -56.11958219176655, 'epsilon decay': 0.9988006597800497, '_timestamp': 1728852079.9220862}).
+wandb: WARNING (User provided step: 13 is less than current step: 99. Dropping entry: {'Score': -18.210914276721553, 'epsilon decay': 0.9987007797140718, '_timestamp': 1728852080.0185115}).
+wandb: WARNING (User provided step: 14 is less than current step: 99. Dropping entry: {'Score': -9.070028363231255, 'epsilon decay': 0.9986009096361004, '_timestamp': 1728852080.1150043}).
+wandb: WARNING (User provided step: 15 is less than current step: 99. Dropping entry: {'Score': -25.568891636517556, 'epsilon decay': 0.9985010495451367, '_timestamp': 1728852080.2135713}).
+wandb: WARNING (User provided step: 16 is less than current step: 99. Dropping entry: {'Score': -3.799159609650028, 'epsilon decay': 0.9984011994401822, '_timestamp': 1728852080.3152223}).
+wandb: WARNING (User provided step: 17 is less than current step: 99. Dropping entry: {'Score': -97.7518102940674, 'epsilon decay': 0.9983013593202382, '_timestamp': 1728852080.411225}).
+wandb: WARNING (User provided step: 18 is less than current step: 99. Dropping entry: {'Score': -509.0533665357342, 'epsilon decay': 0.9982015291843062, '_timestamp': 1728852080.5123541}).
+wandb: WARNING (User provided step: 19 is less than current step: 99. Dropping entry: {'Score': -32.072777148590575, 'epsilon decay': 0.9981017090313877, '_timestamp': 1728852080.6151483}).
+wandb: WARNING (User provided step: 20 is less than current step: 99. Dropping entry: {'Score': -1.9322943639965102, 'epsilon decay': 0.9980018988604846, '_timestamp': 1728852080.7259328}).
+wandb: WARNING (User provided step: 21 is less than current step: 99. Dropping entry: {'Score': -66.95897363872685, 'epsilon decay': 0.9979020986705985, '_timestamp': 1728852080.8334832}).
+wandb: WARNING (User provided step: 22 is less than current step: 99. Dropping entry: {'Score': -81.33236028186295, 'epsilon decay': 0.9978023084607315, '_timestamp': 1728852080.9389372}).
+wandb: WARNING (User provided step: 23 is less than current step: 99. Dropping entry: {'Score': -92.87299188037528, 'epsilon decay': 0.9977025282298854, '_timestamp': 1728852081.0375695}).
+wandb: WARNING (User provided step: 24 is less than current step: 99. Dropping entry: {'Score': -43.59176474618331, 'epsilon decay': 0.9976027579770624, '_timestamp': 1728852081.159983}).
+wandb: WARNING (User provided step: 25 is less than current step: 99. Dropping entry: {'Score': -2.5422294507148897, 'epsilon decay': 0.9975029977012647, '_timestamp': 1728852081.277141}).
+wandb: WARNING (User provided step: 26 is less than current step: 99. Dropping entry: {'Score': -11.81162622364014, 'epsilon decay': 0.9974032474014946, '_timestamp': 1728852081.3871853}).
+wandb: WARNING (User provided step: 27 is less than current step: 99. Dropping entry: {'Score': -602.4850820626355, 'epsilon decay': 0.9973035070767544, '_timestamp': 1728852081.4920409}).
+wandb: WARNING (User provided step: 28 is less than current step: 99. Dropping entry: {'Score': -56.40611374446031, 'epsilon decay': 0.9972037767260468, '_timestamp': 1728852081.6064966}).
+wandb: WARNING (User provided step: 29 is less than current step: 99. Dropping entry: {'Score': -62.12598277496165, 'epsilon decay': 0.9971040563483742, '_timestamp': 1728852081.7075834}).
+wandb: WARNING (User provided step: 30 is less than current step: 99. Dropping entry: {'Score': -2.2185369483412587, 'epsilon decay': 0.9970043459427393, '_timestamp': 1728852081.8136039}).
+wandb: WARNING (User provided step: 31 is less than current step: 99. Dropping entry: {'Score': -33.35536376620464, 'epsilon decay': 0.9969046455081451, '_timestamp': 1728852081.922867}).
+wandb: WARNING (User provided step: 32 is less than current step: 99. Dropping entry: {'Score': -0.7607800195678524, 'epsilon decay': 0.9968049550435942, '_timestamp': 1728852082.0361488}).
+wandb: WARNING (User provided step: 33 is less than current step: 99. Dropping entry: {'Score': -3.54518922246971, 'epsilon decay': 0.9967052745480899, '_timestamp': 1728852082.1440988}).
+wandb: WARNING (User provided step: 34 is less than current step: 99. Dropping entry: {'Score': -0.8742362131467926, 'epsilon decay': 0.9966056040206351, '_timestamp': 1728852082.2632105}).
+wandb: WARNING (User provided step: 35 is less than current step: 99. Dropping entry: {'Score': -44.75286221996608, 'epsilon decay': 0.9965059434602331, '_timestamp': 1728852082.3833196}).
+wandb: WARNING (User provided step: 36 is less than current step: 99. Dropping entry: {'Score': -25.673765985927766, 'epsilon decay': 0.9964062928658871, '_timestamp': 1728852082.493779}).
+wandb: WARNING (User provided step: 37 is less than current step: 99. Dropping entry: {'Score': -43.79009440059881, 'epsilon decay': 0.9963066522366005, '_timestamp': 1728852082.6046724}).
+wandb: WARNING (User provided step: 38 is less than current step: 99. Dropping entry: {'Score': -27.720045086020427, 'epsilon decay': 0.9962070215713769, '_timestamp': 1728852082.721216}).
+wandb: WARNING (User provided step: 39 is less than current step: 99. Dropping entry: {'Score': -74.04597083366723, 'epsilon decay': 0.9961074008692198, '_timestamp': 1728852082.830017}).
+wandb: WARNING (User provided step: 40 is less than current step: 99. Dropping entry: {'Score': -67.64337730546418, 'epsilon decay': 0.9960077901291329, '_timestamp': 1728852082.9417586}).
+wandb: WARNING (User provided step: 41 is less than current step: 99. Dropping entry: {'Score': -81.90724434248467, 'epsilon decay': 0.9959081893501199, '_timestamp': 1728852083.0587626}).
+wandb: WARNING (User provided step: 42 is less than current step: 99. Dropping entry: {'Score': -1.3025945558070182, 'epsilon decay': 0.995808598531185, '_timestamp': 1728852083.1620817}).
+wandb: WARNING (User provided step: 43 is less than current step: 99. Dropping entry: {'Score': -3.471380948035894, 'epsilon decay': 0.9957090176713319, '_timestamp': 1728852083.2673345}).
+wandb: WARNING (User provided step: 44 is less than current step: 99. Dropping entry: {'Score': -9.951820846957515, 'epsilon decay': 0.9956094467695648, '_timestamp': 1728852083.3766017}).
+wandb: WARNING (User provided step: 45 is less than current step: 99. Dropping entry: {'Score': -123.83419447608573, 'epsilon decay': 0.9955098858248879, '_timestamp': 1728852083.482541}).
+wandb: WARNING (User provided step: 46 is less than current step: 99. Dropping entry: {'Score': -62.06741538673848, 'epsilon decay': 0.9954103348363054, '_timestamp': 1728852083.5875804}).
+wandb: WARNING (User provided step: 47 is less than current step: 99. Dropping entry: {'Score': -55.0012303178488, 'epsilon decay': 0.9953107938028217, '_timestamp': 1728852083.701151}).
+wandb: WARNING (User provided step: 48 is less than current step: 99. Dropping entry: {'Score': -53.068572578719824, 'epsilon decay': 0.9952112627234414, '_timestamp': 1728852083.8075054}).
+wandb: WARNING (User provided step: 49 is less than current step: 99. Dropping entry: {'Score': -8.78045721767593, 'epsilon decay': 0.9951117415971691, '_timestamp': 1728852083.9101562}).
+wandb: WARNING (User provided step: 0 is less than current step: 99. Dropping entry: {'State/51 - EP': -1.7300409078598022, 'State/51 - EV': -1.275077223777771, 'State/51 - ACC': -0.3833693861961365, '_timestamp': 1728852083.9107814}).
+wandb: WARNING (User provided step: 1 is less than current step: 99. Dropping entry: {'State/51 - EP': -1.8000432252883911, 'State/51 - EV': -1.236740231513977, 'State/51 - ACC': -0.4050251245498657, '_timestamp': 1728852084.0211446}).
+wandb: WARNING (User provided step: 2 is less than current step: 99. Dropping entry: {'State/51 - EP': -1.8629634380340576, 'State/51 - EV': -1.1962376832962036, 'State/51 - ACC': 2.4170854091644287, '_timestamp': 1728852084.1288745}).
+wandb: WARNING (User provided step: 3 is less than current step: 99. Dropping entry: {'State/51 - EP': -2.3451499938964844, 'State/51 - EV': -1.4379462003707886, 'State/51 - ACC': -1.528643250465393, '_timestamp': 1728852084.235565}).
+wandb: WARNING (User provided step: 4 is less than current step: 99. Dropping entry: {'State/51 - EP': -2.259648084640503, 'State/51 - EV': -1.2850818634033203, 'State/51 - ACC': -0.2221105545759201, '_timestamp': 1728852084.3432536}).
+wandb: WARNING (User provided step: 5 is less than current step: 99. Dropping entry: {'State/51 - EP': -2.35483980178833, 'State/51 - EV': -1.2628707885742188, 'State/51 - ACC': -1.4763818979263306, '_timestamp': 1728852084.466239}).
+wandb: WARNING (User provided step: 6 is less than current step: 99. Dropping entry: {'State/51 - EP': -2.259669542312622, 'State/51 - EV': -1.1152325868606567, 'State/51 - ACC': 1.2412060499191284, '_timestamp': 1728852084.5744984}).
+wandb: WARNING (User provided step: 7 is less than current step: 99. Dropping entry: {'State/51 - EP': -2.5573737621307373, 'State/51 - EV': -1.2393531799316406, 'State/51 - ACC': 2.1819095611572266, '_timestamp': 1728852084.6825118}).
+wandb: WARNING (User provided step: 8 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.0085954666137695, 'State/51 - EV': -1.4575440883636475, 'State/51 - ACC': -1.9467337131500244, '_timestamp': 1728852084.7904303}).
+wandb: WARNING (User provided step: 9 is less than current step: 99. Dropping entry: {'State/51 - EP': -2.862339735031128, 'State/51 - EV': -1.2628706693649292, 'State/51 - ACC': 2.129648208618164, '_timestamp': 1728852084.914161}).
+wandb: WARNING (User provided step: 10 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.3080739974975586, 'State/51 - EV': -1.4758354425430298, 'State/51 - ACC': -2.234170913696289, '_timestamp': 1728852085.021394}).
+wandb: WARNING (User provided step: 11 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.1205317974090576, 'State/51 - EV': -1.2524183988571167, 'State/51 - ACC': 0.03919598087668419, '_timestamp': 1728852085.1286986}).
+wandb: WARNING (User provided step: 12 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.251652956008911, 'State/51 - EV': -1.2563380002975464, 'State/51 - ACC': 1.9728642702102661, '_timestamp': 1728852085.23763}).
+wandb: WARNING (User provided step: 13 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.6732163429260254, 'State/51 - EV': -1.4536244869232178, 'State/51 - ACC': 2.1819095611572266, '_timestamp': 1728852085.3606858}).
+wandb: WARNING (User provided step: 14 is less than current step: 99. Dropping entry: {'State/51 - EP': -4.145865440368652, 'State/51 - EV': -1.6718153953552246, 'State/51 - ACC': -2.1557788848876953, '_timestamp': 1728852085.469103}).
+wandb: WARNING (User provided step: 15 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.989680051803589, 'State/51 - EV': -1.456237554550171, 'State/51 - ACC': -1.9467337131500244, '_timestamp': 1728852085.5789814}).
+wandb: WARNING (User provided step: 16 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.8432936668395996, 'State/51 - EV': -1.2615641355514526, 'State/51 - ACC': -0.5879396796226501, '_timestamp': 1728852085.6877878}).
+wandb: WARNING (User provided step: 17 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.8812592029571533, 'State/51 - EV': -1.2027701139450073, 'State/51 - ACC': -2.4170854091644287, '_timestamp': 1728852085.8117206}).
+wandb: WARNING (User provided step: 18 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.6389734745025635, 'State/51 - EV': -0.9610615968704224, 'State/51 - ACC': -2.234170913696289, '_timestamp': 1728852085.923524}).
+wandb: WARNING (User provided step: 19 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.399954080581665, 'State/51 - EV': -0.7376444935798645, 'State/51 - ACC': -0.352763831615448, '_timestamp': 1728852086.0305233}).
+wandb: WARNING (User provided step: 20 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.420804023742676, 'State/51 - EV': -0.7023681402206421, 'State/51 - ACC': 2.2864322662353516, '_timestamp': 1728852086.1384878}).
+wandb: WARNING (User provided step: 21 is less than current step: 99. Dropping entry: {'State/51 - EP': -3.83400559425354, 'State/51 - EV': -0.9310113787651062, 'State/51 - ACC': 2.103517532348633, '_timestamp': 1728852086.2616692}).
+wandb: WARNING (User provided step: 22 is less than current step: 99. Dropping entry: {'State/51 - EP': -4.242634296417236, 'State/51 - EV': -1.1413631439208984, 'State/51 - ACC': 2.1557788848876953, '_timestamp': 1728852086.3694868}).
+wandb: WARNING (User provided step: 23 is less than current step: 99. Dropping entry: {'State/51 - EP': -4.680137634277344, 'State/51 - EV': -1.3569409847259521, 'State/51 - ACC': 0.9276381731033325, '_timestamp': 1728852086.477213}).
+wandb: WARNING (User provided step: 24 is less than current step: 99. Dropping entry: {'State/51 - EP': -4.954977512359619, 'State/51 - EV': -1.4497047662734985, 'State/51 - ACC': 1.6070351600646973, '_timestamp': 1728852086.584115}).
+wandb: WARNING (User provided step: 25 is less than current step: 99. Dropping entry: {'State/51 - EP': -5.34100341796875, 'State/51 - EV': -1.6104083061218262, 'State/51 - ACC': -1.188944697380066, '_timestamp': 1728852086.7081318}).
+wandb: WARNING (User provided step: 26 is less than current step: 99. Dropping entry: {'State/51 - EP': -5.323702335357666, 'State/51 - EV': -1.4915138483047485, 'State/51 - ACC': 0.14371860027313232, '_timestamp': 1728852086.815736}).
+wandb: WARNING (User provided step: 27 is less than current step: 99. Dropping entry: {'State/51 - EP': -5.494411468505859, 'State/51 - EV': -1.5058857202529907, 'State/51 - ACC': 0.9276381731033325, '_timestamp': 1728852086.9264884}).
+wandb: WARNING (User provided step: 28 is less than current step: 99. Dropping entry: {'State/51 - EP': -5.784145832061768, 'State/51 - EV': -1.598649501800537, 'State/51 - ACC': 1.424120545387268, '_timestamp': 1728852087.033245}).
+wandb: WARNING (User provided step: 29 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.157629013061523, 'State/51 - EV': -1.7410615682601929, 'State/51 - ACC': -0.01306532695889473, '_timestamp': 1728852087.1585302}).
+wandb: WARNING (User provided step: 30 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.329775333404541, 'State/51 - EV': -1.7397550344467163, 'State/51 - ACC': -0.5879396796226501, '_timestamp': 1728852087.2663097}).
+wandb: WARNING (User provided step: 31 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.415559768676758, 'State/51 - EV': -1.680961012840271, 'State/51 - ACC': 0.6663316488265991, '_timestamp': 1728852087.3738008}).
+wandb: WARNING (User provided step: 32 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.683605670928955, 'State/51 - EV': -1.7475941181182861, 'State/51 - ACC': -2.1557788848876953, '_timestamp': 1728852087.4823444}).
+wandb: WARNING (User provided step: 33 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.534998416900635, 'State/51 - EV': -1.5320162773132324, 'State/51 - ACC': -2.0512561798095703, '_timestamp': 1728852087.5915077}).
+wandb: WARNING (User provided step: 34 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.38051176071167, 'State/51 - EV': -1.3268907070159912, 'State/51 - ACC': -0.01306532695889473, '_timestamp': 1728852087.7002347}).
+wandb: WARNING (User provided step: 35 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.5112409591674805, 'State/51 - EV': -1.3255841732025146, 'State/51 - ACC': -1.9728642702102661, '_timestamp': 1728852087.8084}).
+wandb: WARNING (User provided step: 36 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.347869873046875, 'State/51 - EV': -1.1282978057861328, 'State/51 - ACC': 2.0512561798095703, '_timestamp': 1728852087.9173787}).
+wandb: WARNING (User provided step: 37 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.768388271331787, 'State/51 - EV': -1.333423376083374, 'State/51 - ACC': -2.364824056625366, '_timestamp': 1728852088.0273154}).
+wandb: WARNING (User provided step: 38 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.547007083892822, 'State/51 - EV': -1.0969409942626953, 'State/51 - ACC': 0.37889447808265686, '_timestamp': 1728852088.1359367}).
+wandb: WARNING (User provided step: 39 is less than current step: 99. Dropping entry: {'State/51 - EP': -6.713535308837891, 'State/51 - EV': -1.1348304748535156, 'State/51 - ACC': 2.3125627040863037, '_timestamp': 1728852088.246019}).
+wandb: WARNING (User provided step: 40 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.173902988433838, 'State/51 - EV': -1.366086721420288, 'State/51 - ACC': -1.1105527877807617, '_timestamp': 1728852088.354209}).
+wandb: WARNING (User provided step: 41 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.143928527832031, 'State/51 - EV': -1.2550314664840698, 'State/51 - ACC': -1.5025125741958618, '_timestamp': 1728852088.4642673}).
+wandb: WARNING (User provided step: 42 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.044054985046387, 'State/51 - EV': -1.1047801971435547, 'State/51 - ACC': 2.208040237426758, '_timestamp': 1728852088.5732236}).
+wandb: WARNING (User provided step: 43 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.485739231109619, 'State/51 - EV': -1.3255841732025146, 'State/51 - ACC': 1.737688422203064, '_timestamp': 1728852088.682521}).
+wandb: WARNING (User provided step: 44 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.878951072692871, 'State/51 - EV': -1.499353051185608, 'State/51 - ACC': -2.44321608543396, '_timestamp': 1728852088.7920334}).
+wandb: WARNING (User provided step: 45 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.6624040603637695, 'State/51 - EV': -1.2550314664840698, 'State/51 - ACC': 0.1698492467403412, '_timestamp': 1728852088.9006252}).
+wandb: WARNING (User provided step: 46 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.813384532928467, 'State/51 - EV': -1.2720164060592651, 'State/51 - ACC': -1.1105527877807617, '_timestamp': 1728852089.0080516}).
+wandb: WARNING (User provided step: 47 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.774003028869629, 'State/51 - EV': -1.1609611511230469, 'State/51 - ACC': 0.6924623250961304, '_timestamp': 1728852089.1155672}).
+wandb: WARNING (User provided step: 48 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.993968486785889, 'State/51 - EV': -1.2302074432373047, 'State/51 - ACC': -1.136683464050293, '_timestamp': 1728852089.2233815}).
+wandb: WARNING (User provided step: 49 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.946486473083496, 'State/51 - EV': -1.1165391206741333, 'State/51 - ACC': -0.8753768801689148, '_timestamp': 1728852089.3337498}).
+wandb: WARNING (User provided step: 50 is less than current step: 99. Dropping entry: {'State/51 - EP': -7.926833629608154, 'State/51 - EV': -1.0290014743804932, 'State/51 - ACC': 0.901507556438446, '_timestamp': 1728852089.4426773}).
+wandb: WARNING (User provided step: 51 is less than current step: 99. Dropping entry: {'State/51 - EP': -8.164959907531738, 'State/51 - EV': -1.1191521883010864, 'State/51 - ACC': 2.3909547328948975, '_timestamp': 1728852089.5519533}).
+wandb: WARNING (User provided step: 52 is less than current step: 99. Dropping entry: {'State/51 - EP': -8.635518074035645, 'State/51 - EV': -1.3582476377487183, 'State/51 - ACC': -2.3909547328948975, '_timestamp': 1728852089.661441}).
+wandb: WARNING (User provided step: 53 is less than current step: 99. Dropping entry: {'State/51 - EP': -8.412699699401855, 'State/51 - EV': -1.1191521883010864, 'State/51 - ACC': -1.0582914352416992, '_timestamp': 1728852089.7845063}).
+wandb: WARNING (User provided step: 54 is less than current step: 99. Dropping entry: {'State/51 - EP': -8.36587142944336, 'State/51 - EV': -1.0133230686187744, 'State/51 - ACC': 0.7185929417610168, '_timestamp': 1728852089.8921382}).
+wandb: WARNING (User provided step: 55 is less than current step: 99. Dropping entry: {'State/51 - EP': -8.574993133544922, 'State/51 - EV': -1.0851823091506958, 'State/51 - ACC': 1.1105527877807617, '_timestamp': 1728852090.0006568}).
+wandb: WARNING (User provided step: 56 is less than current step: 99. Dropping entry: {'State/51 - EP': -8.850093841552734, 'State/51 - EV': -1.196237564086914, 'State/51 - ACC': -0.03919598087668419, '_timestamp': 1728852090.1106522}).
+wandb: WARNING (User provided step: 57 is less than current step: 99. Dropping entry: {'State/51 - EP': -8.963838577270508, 'State/51 - EV': -1.1923179626464844, 'State/51 - ACC': -0.9537688493728638, '_timestamp': 1728852090.2335994}).
+wandb: WARNING (User provided step: 58 is less than current step: 99. Dropping entry: {'State/51 - EP': -8.9400053024292, 'State/51 - EV': -1.0969411134719849, 'State/51 - ACC': -1.8422110080718994, '_timestamp': 1728852090.3413858}).
+wandb: WARNING (User provided step: 59 is less than current step: 99. Dropping entry: {'State/51 - EP': -8.773367881774902, 'State/51 - EV': -0.9127200245857239, 'State/51 - ACC': -2.0773868560791016, '_timestamp': 1728852090.4491491}).
+wandb: WARNING (User provided step: 60 is less than current step: 99. Dropping entry: {'State/51 - EP': -8.553031921386719, 'State/51 - EV': -0.7049813270568848, 'State/51 - ACC': 0.9537688493728638, '_timestamp': 1728852090.5556576}).

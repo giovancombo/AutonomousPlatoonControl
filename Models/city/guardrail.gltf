@@ -1,0 +1,155 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v1.5.17",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Guardrail"
+        }
+    ],
+    "materials" : [
+        {
+            "name" : "guardrail_material",
+            "normalTexture" : {
+                "index" : 0
+            },
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 1
+                },
+                "metallicRoughnessTexture" : {
+                    "index" : 2
+                },
+                "roughnessFactor" : 0.5
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Cylinder.002",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 2
+        }
+    ],
+    "images" : [
+        {
+            "mimeType" : "image/png",
+            "name" : "guardrail_normal",
+            "uri" : "guardrail_normal.png"
+        },
+        {
+            "mimeType" : "image/png",
+            "name" : "guardrail_base",
+            "uri" : "guardrail_base.png"
+        },
+        {
+            "mimeType" : "image/png",
+            "name" : "guardrail_metal",
+            "uri" : "guardrail_metal.png"
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 329,
+            "max" : [
+                0.08844145387411118,
+                1.4293345212936401,
+                1.3445408344268799
+            ],
+            "min" : [
+                -0.21621403098106384,
+                0.008388519287109375,
+                -1.6554594039916992
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 329,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 329,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 1044,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 3948,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 3948,
+            "byteOffset" : 3948
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 2632,
+            "byteOffset" : 7896
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 2088,
+            "byteOffset" : 10528
+        }
+    ],
+    "samplers" : [
+        {
+            "magFilter" : 9729,
+            "minFilter" : 9987
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 12616,
+            "uri" : "guardrail.bin"
+        }
+    ]
+}
