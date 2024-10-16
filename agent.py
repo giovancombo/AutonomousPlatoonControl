@@ -6,7 +6,7 @@ from collections import deque
 import random
 
 
-class DQN(nn.Module):
+class DeepQNetwork(nn.Module):
     def __init__(self, state_size, hidden_size, action_size):
         super().__init__()
         self.fc1 = nn.Linear(state_size, hidden_size[0])
@@ -39,8 +39,8 @@ class DQNAgent:
         self.device = device
         self.discrete_actions = discrete_actions
 
-        self.q_network = DQN(state_size, hidden_size, action_size).to(self.device)
-        self.target_q_network = DQN(state_size, hidden_size, action_size).to(self.device)
+        self.q_network = DeepQNetwork(state_size, hidden_size, action_size).to(self.device)
+        self.target_q_network = DeepQNetwork(state_size, hidden_size, action_size).to(self.device)
         self.target_q_network.load_state_dict(self.q_network.state_dict())
 
         self.optimizer = optim.Adam(self.q_network.parameters(), lr=lr)

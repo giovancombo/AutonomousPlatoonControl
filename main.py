@@ -10,7 +10,7 @@ from agent import DQNAgent, TabularQAgent
 
 
 TABULAR_QL = False
-num_episodes = 10000
+num_episodes = 1000
 
 num_vehicles = 2
 vehicles_length = 4

@@ -22,8 +22,8 @@ class EnvPlatoon:
         self.ep_max_nominal = ep_max_nominal
         self.ev_max = ev_max                            # Velocity gap limit
         self.ev_max_nominal = ev_max_nominal
-        self.acc_min, self.acc_max = acc_min, acc_max   # Acceleration limits
-        self.u_min, self.u_max = u_min, u_max           # Action limits
+        self.acc_min, self.acc_max = acc_min, acc_max   # Acceleration limit
+        self.u_min, self.u_max = u_min, u_max           # Action limit
 
         # Reward parameters
         self.a = a                                      # Weight for position gap reward
