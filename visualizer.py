@@ -1,251 +1,193 @@
 from panda3d.core import *
 from direct.showbase.ShowBase import ShowBase
+from panda3d.core import AmbientLight, DirectionalLight
+from panda3d.core import Geom, GeomNode, GeomTriangles, GeomVertexFormat, GeomVertexData, GeomVertexWriter
+from panda3d.core import NodePath
 from direct.task import Task
 from direct.gui.OnscreenText import OnscreenText
 from math import pi, sin, cos, radians, sqrt
 
-class PlatooningVisualizer(ShowBase):    
-    # Costanti di visualizzazione
-    ROAD_COLOR = (0.6, 0.6, 0.6, 1)         # Grigio
-    TERRAIN_COLOR = (0, 0.8, 0.35, 1)       # Verde
-    SIDEWALK_COLOR = (0.9, 0.9, 0.9, 1)     # Grigio chiaro
-    LINE_COLOR = (1, 1, 1, 1)               # Bianco
-    DESIRED_LINE_COLOR = (1, 0, 0, 1)       # Rosso
-    ACTUAL_LINE_COLOR = (0, 0, 1, 1)        # Blu
-    
-    # Dimensioni dell'ambiente
-    ROAD_WIDTH = 8
-    ROAD_LENGTH = 800
-    TERRAIN_WIDTH = 10000
-    TERRAIN_LENGTH = 10000
-    SIDEWALK_WIDTH = 3
-    SIDEWALK_HEIGHT = 0.25
-    
+
+class PlatooningVisualizer(ShowBase):
     def __init__(self, env):
         ShowBase.__init__(self)
-        self.env = env
         
-        # Stato del visualizzatore
+        self.env = env
         self.episode = 1
         self.total_reward = 0
         self.avg_reward = 0
         self.instant_rewards = []
-        self.total_distance = 0
-        self.is_visualizing = False
-        self.paused = False
-        
-        # Parametri di visualizzazione
+
+        self.road_color = (0.6, 0.6, 0.6, 1)        # Grigio
+        self.terrain_color = (0, 0.8, 0.35, 1)      # Verde
+        self.sidewalk_color = (0.9, 0.9, 0.9, 1)    # Grigio chiaro
+
+        self.road_width = 8
+        self.road_length = 800
+        self.terrain_width = 10000
+        self.terrain_length = 10000
+        self.sidewalk_width = 3
+        self.sidewalk_height = 0.25
+        dash_length = 20
+        gap_length = 0
         self.car_height_offset = 0
-        self.leader_starting_pos = -self.ROAD_LENGTH/2 + 50
+        self.leader_starting_pos = -self.road_length/2 + 50
         
-        self._setup_camera()
-        self._setup_environment()
-        self._setup_vehicles()
-        self._setup_lighting()
-        self._setup_info_display()
-        self._setup_event_handlers()
-        
-    def _setup_camera(self):
-        """Inizializza la camera e i suoi controlli"""
+        # Disabilita i controlli di camera predefiniti
         self.disableMouse()
         self.camera_control = CameraControl(self)
-        self.camera.setPos(0, 0, 0)
-        self.camera.lookAt(0, 0, 0)
         
-    def _setup_environment(self):
-        """Crea l'ambiente 3D base"""
-        self._create_road()
-        self._create_terrain()
-        self._create_sidewalks()
-        self._create_road_lines()
-        self._create_distance_indicators()
-        
-    def _create_road(self):
-        """Crea la strada principale"""
-        self.road = self._create_plane(self.ROAD_WIDTH, self.ROAD_LENGTH, self.ROAD_COLOR)
-        self.road.setColor(self.ROAD_COLOR)
-        self.road.setPos(0, 0, 0)
-        self.road.reparentTo(self.render)
-        
-    def _create_terrain(self):
-        """Crea il terreno circostante"""
-        self.terrain = self._create_plane(self.TERRAIN_WIDTH, self.TERRAIN_LENGTH, self.TERRAIN_COLOR)
-        self.terrain.setColor(self.TERRAIN_COLOR)
-        self.terrain.setPos(0, 0, -0.1)
-        self.terrain.reparentTo(self.render)
-        
-    def _create_road_lines(self):
-        """Crea le linee stradali"""
-        # Linea centrale
-        self.center_line = self._create_dashed_line(self.ROAD_LENGTH, self.LINE_COLOR)
-        self.center_line.setPos(0, -self.ROAD_LENGTH/2, 0.01)
-        self.center_line.reparentTo(self.render)
-        
-        # Linee laterali
-        self.left_line = self._create_dashed_line(self.ROAD_LENGTH, self.LINE_COLOR, 20, 0)
-        self.left_line.setPos(-self.ROAD_WIDTH/2 + 0.5, -self.ROAD_LENGTH/2, 0.01)
-        self.left_line.reparentTo(self.render)
-        
-        self.right_line = self._create_dashed_line(self.ROAD_LENGTH, self.LINE_COLOR, 20, 0)
-        self.right_line.setPos(self.ROAD_WIDTH/2 - 0.5, -self.ROAD_LENGTH/2, 0.01)
-        self.right_line.reparentTo(self.render)
-
-    def _create_sidewalks(self):
-        """Crea i marciapiedi ai lati della strada"""
-        # Marciapiede sinistro
-        self.left_sidewalk = self.loader.loadModel("models/box")
-        self.left_sidewalk.setScale(self.SIDEWALK_WIDTH, self.ROAD_LENGTH, self.SIDEWALK_HEIGHT)
-        self.left_sidewalk.setPos(-self.ROAD_WIDTH/2 - self.SIDEWALK_WIDTH, -self.ROAD_LENGTH/2, 0)
-        self.left_sidewalk.setColor(self.SIDEWALK_COLOR)
-        self.left_sidewalk.reparentTo(self.render)
-
-        # Marciapiede destro
-        self.right_sidewalk = self.loader.loadModel("models/box")
-        self.right_sidewalk.setScale(self.SIDEWALK_WIDTH, self.ROAD_LENGTH, self.SIDEWALK_HEIGHT)
-        self.right_sidewalk.setPos(self.ROAD_WIDTH/2, -self.ROAD_LENGTH/2, 0)
-        self.right_sidewalk.setColor(self.SIDEWALK_COLOR)
-        self.right_sidewalk.reparentTo(self.render)
-        
-    def _setup_vehicles(self):
-        """Carica e posiziona i modelli dei veicoli"""
-        # Leader
         self.leader = self.loader.loadModel("Panda3D/Models/road/sedan.glb")
         self.leader.setHpr(180, 0, 0)
         self.leader.setScale(1.55)
         self.leader.reparentTo(self.render)
-        
-        # Follower
+
         self.follower = self.loader.loadModel("Panda3D/Models/road/police.glb")
         self.follower.setHpr(180, 0, 0)
         self.follower.setScale(1.55)
         self.follower.reparentTo(self.render)
         
-    def _setup_lighting(self):
-        """Configura l'illuminazione della scena"""
-        # Luce ambientale
+        # Crea la strada
+        self.road = self.create_plane(self.road_width, self.road_length, self.road_color)
+        self.road.setColor(self.road_color)
+        self.road.setPos(0, 0, 0)
+        self.road.reparentTo(self.render)
+        
+        # Crea il terreno
+        self.terrain = self.create_plane(self.terrain_width, self.terrain_length, self.terrain_color)
+        self.terrain.setColor(self.terrain_color)
+        self.terrain.setPos(0, 0, -0.1)
+        self.terrain.reparentTo(self.render)
+
+        # Crea i marciapiedi
+        self.left_sidewalk = self.loader.loadModel("models/box")
+        self.left_sidewalk.setScale(self.sidewalk_width, self.road_length, self.sidewalk_height)
+        self.left_sidewalk.setPos(-self.road_width/2 - self.sidewalk_width, -self.road_length/2, 0)
+        self.left_sidewalk.setColor(self.sidewalk_color)
+        #self.left_sidewalk.reparentTo(self.render)
+
+        self.right_sidewalk = self.loader.loadModel("models/box")
+        self.right_sidewalk.setScale(self.sidewalk_width, self.road_length, self.sidewalk_height)
+        self.right_sidewalk.setPos(self.road_width/2, -self.road_length/2, 0)
+        self.right_sidewalk.setColor(self.sidewalk_color)
+        #self.right_sidewalk.reparentTo(self.render)
+
+        self.building1sx = self.loader.loadModel("Panda3D/Models/buildings/skyscraperA.glb")
+        self.building1sx.setScale(10)
+        self.building1sx.setHpr(90, 0, 0)
+        self.building1sx.setPos(-self.road_width/2 - 20, 400, 0)
+        #self.building1sx.reparentTo(self.render)
+
+        self.building2sx = self.loader.loadModel("Panda3D/Models/buildings/large_buildingA.glb")
+        self.building2sx.setScale(10)
+        self.building2sx.setHpr(90, 0, 0)
+        self.building2sx.setPos(-self.road_width/2 - 20, 350, 0)
+        #self.building2sx.reparentTo(self.render)
+
+        self.building3sx = self.loader.loadModel("Panda3D/Models/buildings/low_wideA.glb")
+        self.building3sx.setScale(10)
+        self.building3sx.setHpr(90, 0, 0)
+        self.building3sx.setPos(-self.road_width/2 - 20, 300, 0)
+        #self.building3sx.reparentTo(self.render)
+
+        self.building4sx = self.loader.loadModel("Panda3D/Models/buildings/low_buildingA.glb")
+        self.building4sx.setScale(10)
+        self.building4sx.setHpr(90, 0, 0)
+        self.building4sx.setPos(-self.road_width/2 - 20, 250, 0)
+        #self.building4sx.reparentTo(self.render)
+
+        self.building1dx = self.loader.loadModel("Panda3D/Models/buildings/large_buildingB.glb")
+        self.building1dx.setScale(10)
+        self.building1dx.setHpr(-90, 0, 0)
+        self.building1dx.setPos(self.road_width/2 + 20, 250, 0)
+        #self.building1dx.reparentTo(self.render)
+
+        self.building2dx = self.loader.loadModel("Panda3D/Models/buildings/large_buildingC.glb")
+        self.building2dx.setScale(10)
+        self.building2dx.setHpr(-90, 0, 0)
+        self.building2dx.setPos(self.road_width/2 + 20, 300, 0)
+        #self.building2dx.reparentTo(self.render)
+
+        self.building3dx = self.loader.loadModel("Panda3D/Models/buildings/skyscraperE.glb")
+        self.building3dx.setScale(10)
+        self.building3dx.setHpr(-90, 0, 0)
+        self.building3dx.setPos(self.road_width/2 + 20, 350, 0)
+        #self.building3dx.reparentTo(self.render)
+
+        self.building4dx = self.loader.loadModel("Panda3D/Models/buildings/low_wideB.glb")
+        self.building4dx.setScale(10)
+        self.building4dx.setHpr(-90, 0, 0)
+        self.building4dx.setPos(self.road_width/2 + 20, 400, 0)
+        #self.building4dx.reparentTo(self.render)
+
+        self.buildingct = self.loader.loadModel("Panda3D/Models/buildings/skyscraperD.glb")
+        self.buildingct.setScale(10)
+        self.buildingct.setHpr(-90, 0, 0)
+        self.buildingct.setPos(0, 400, 0)
+        #self.buildingct.reparentTo(self.render)
+
+        self.center_line = self.create_dashed_line(self.road_length, (1, 1, 1, 1))
+        self.center_line.setPos(0, -self.road_length/2, 0.01)
+        self.center_line.reparentTo(self.render)
+
+        self.left_line = self.create_dashed_line(self.road_length, (1, 1, 1, 1), dash_length, gap_length)
+        self.left_line.setPos(-self.road_width/2 + 0.5, -self.road_length/2, 0.01)
+        self.left_line.reparentTo(self.render)
+
+        self.right_line = self.create_dashed_line(self.road_length, (1, 1, 1, 1), dash_length, gap_length)
+        self.right_line.setPos(self.road_width/2 - 0.5, -self.road_length/2, 0.01)
+        self.right_line.reparentTo(self.render)
+
+        self.desired_distance_line = self.create_line((1, 0, 0, 1))  # Rosso
+        self.actual_distance_line = self.create_line((0, 0, 1, 1))   # Blu
+        self.desired_distance_line.reparentTo(self.render)
+        self.actual_distance_line.reparentTo(self.render)
+
+        self.desired_text = self.create_text("DESIRED", (1, 0, 0, 1))  # Rosso
+        self.desired_text.reparentTo(self.render)
+        
         alight = AmbientLight('alight')
         alight.setColor((0.2, 0.2, 0.2, 1))
         alnp = self.render.attachNewNode(alight)
         self.render.setLight(alnp)
         
-        # Luce direzionale
         dlight = DirectionalLight('dlight')
         dlight.setColor((0.8, 0.8, 0.8, 1))
         dlnp = self.render.attachNewNode(dlight)
         dlnp.setHpr(0, -60, 0)
         self.render.setLight(dlnp)
+
+        self.info_display = self.create_info_display()
         
-    def _create_distance_indicators(self):
-        """Crea gli indicatori di distanza"""
-        self.desired_distance_line = self._create_line(self.DESIRED_LINE_COLOR)
-        self.actual_distance_line = self._create_line(self.ACTUAL_LINE_COLOR)
-        self.desired_distance_line.reparentTo(self.render)
-        self.actual_distance_line.reparentTo(self.render)
+        self.camera.setPos(0,0,0)
+        self.camera.lookAt(0,0,0)
         
-        self.desired_text = self._create_text("DESIRED", self.DESIRED_LINE_COLOR)
-        self.desired_text.reparentTo(self.render)
-        
-    def _setup_info_display(self):
-        """Crea il display delle informazioni"""
-        self.info_display = OnscreenText(
-            text="",
-            style=1,
-            fg=(0, 0, 0, 1),
-            pos=(-1.25, -0.3),
-            align=TextNode.ALeft,
-            scale=0.05,
-            mayChange=True
-        )
-        
-    def _setup_event_handlers(self):
-        """Configura gli handler degli eventi"""
-        self.taskMgr.add(self.update_camera, "UpdateCameraTask")
-        self.accept("p", self.toggle_pause)
-        
-    def update(self, env):
-        """Aggiorna lo stato del visualizzatore"""
-        if not self.is_visualizing:
-            self.episode += 1
-            return
-            
-        self.env = env
-        self._update_positions()
-        self._update_distance_lines()
-        self._update_info_display()
-        
-    def _update_positions(self):
-        """Aggiorna le posizioni dei veicoli"""
-        if self.paused:
-            return
-            
-        leader_pos = self.total_distance + self.leader_starting_pos
-        follower_pos = leader_pos - self.env.actual_distance
-        
-        self.leader.setPos(1.9, leader_pos, self.car_height_offset)
-        self.follower.setPos(1.9, follower_pos, self.car_height_offset)
-        
-        # Aggiorna la camera
-        midpoint = (leader_pos + follower_pos) / 2
-        self.camera_control.update_target(Vec3(0, midpoint, self.car_height_offset))
-        
-    def _update_distance_lines(self):
-        """Aggiorna gli indicatori di distanza"""
-        leader_pos = self.leader.getPos()
-        follower_pos = self.follower.getPos()
-        
-        desired_pos = leader_pos - Vec3(0, self.env.desired_distance, 0)
-        self.desired_distance_line.setPos(desired_pos.x, desired_pos.y + 2.1, 0.1)
-        self.desired_text.setPos(desired_pos.x, desired_pos.y + 2.3, 0.1)
-        self.actual_distance_line.setPos(follower_pos.x, follower_pos.y + 2.1, 0.1)
-        
-    def _update_info_display(self):
-        """Aggiorna il display delle informazioni"""
-        ep = self.env.state[0]
-        ev = self.env.state[1]
-        acc = self.env.state[2]
-        info_text = (
-            f"Episode: {self.episode}\n"
-            f"Position gap (ep): {ep:.2f} m\n"
-            f"Velocity gap (ev): {ev:.2f} m/s\n"
-            f"Acceleration gap (acc): {acc:.2f} m/s^2\n"
-            f"Leader velocity: {(self.env.leader_velocity * 3.6):.2f} km/h\n"
-            f"Agent velocity: {(self.env.agent_velocity * 3.6):.2f} km/h\n"
-            f"Actual distance: {(self.env.actual_distance - self.env.vehicles_length):.2f} m\n"
-            f"Desired distance: {(self.env.desired_distance - self.env.vehicles_length):.2f} m\n\n"
-            f"Total Reward: {self.total_reward:.4f}\n"
-            f"Avg Reward (last 100): {self.avg_reward:.4f}\n"
-            f"Instant Reward: {self.instant_rewards[-1]:.4f}\n\n"
-        )
-        self.info_display.setText(info_text)
-        
-    def reset_episode(self, episode):
-        """Resetta lo stato per un nuovo episodio"""
-        self.episode = episode + 1
-        self.total_distance = 0
-        self.leader.setPos(1.9, self.leader_starting_pos, self.car_height_offset)
-        self.follower.setPos(1.9, self.leader_starting_pos - self.env.actual_distance, self.car_height_offset)
-        self.camera_control.reset()
-        self.is_visualizing = True
-        self.paused = False
-        self.instant_rewards = []
-        
-    def update_camera(self, task):
-        """Task di aggiornamento della camera"""
-        self.camera_control.update()
-        return Task.cont
-        
-    def toggle_pause(self):
-        """Toggle dello stato di pausa"""
-        self.paused = not self.paused
-        
-    def stop_visualizing(self):
-        """Ferma la visualizzazione"""
         self.is_visualizing = False
-        self.paused = True
+        self.paused = False
+
+        self.taskMgr.add(self.update_camera, "UpdateCameraTask")
         
-    # Metodi di utility per la creazione di oggetti grafici
-    def _create_plane(self, width, length, color):
-        """Crea un piano geometrico"""
+        self.total_distance = 0
+
+    def create_line(self, color):
+        line_segs = LineSegs()
+        line_segs.setThickness(2)
+        line_segs.setColor(color)
+        line_segs.moveTo(-1.5, 0, 0.02)  # Inizio linea
+        line_segs.drawTo(1.5, 0, 0.02)   # Fine linea
+        return self.render.attachNewNode(line_segs.create())
+    
+    def create_text(self, text, color):
+        text_node = TextNode('road_text')
+        text_node.setText(text)
+        text_node.setTextColor(color)
+        text_node.setAlign(TextNode.ACenter)
+        text_path = self.render.attachNewNode(text_node)
+        text_path.setScale(0.5)     # Dimensione testo
+        text_path.setHpr(0, -90, 0)
+        return text_path
+
+    def create_plane(self, width, length, color):
         format = GeomVertexFormat.getV3n3c4()
         vdata = GeomVertexData('plane', format, Geom.UHStatic)
         
@@ -273,97 +215,154 @@ class PlatooningVisualizer(ShowBase):
         node.addGeom(geom)
         
         return NodePath(node)
-        
-    def _create_line(self, color):
-        """Crea una linea"""
-        line_segs = LineSegs()
-        line_segs.setThickness(2)
-        line_segs.setColor(color)
-        line_segs.moveTo(-1.5, 0, 0.02)
-        line_segs.drawTo(1.5, 0, 0.02)
-        return self.render.attachNewNode(line_segs.create())
-        
-    def _create_text(self, text, color):
-        """Crea un nodo di testo"""
-        text_node = TextNode('road_text')
-        text_node.setText(text)
-        text_node.setTextColor(color)
-        text_node.setAlign(TextNode.ACenter)
-        text_path = self.render.attachNewNode(text_node)
-        text_path.setScale(0.5)
-        text_path.setHpr(0, -90, 0)
-        return text_path
-        
-    def _create_dashed_line(self, length, color, dash_length=3, gap_length=4, line_width=0.2):
-        """Crea una linea tratteggiata"""
+    
+    def create_dashed_line(self, length, color, dash_length=3, gap_length=4, line_width=0.2):
         line_root = NodePath("dashed_line_root")
         
         for i in range(0, int(length), dash_length + gap_length):
-            line = self._create_plane(line_width, dash_length, color)
+            line = self.create_plane(line_width, dash_length, color)
             line.reparentTo(line_root)
             line.setPos(0, i, 0)
         
         return line_root
+    
+    def create_info_display(self):
+        info_text = OnscreenText(
+            text="",
+            style=1,
+            fg=(0, 0, 0, 1),
+            pos=(-1.25, -0.3),  # Posizione in basso a sinistra
+            align=TextNode.ALeft,
+            scale=0.05,         # Dimensione testo
+            mayChange=True
+        )
+        return info_text
+    
+    def reset_episode(self, episode):
+        self.episode = episode + 1
+        self.total_distance = 0
+        self.leader.setPos(1.9, self.leader_starting_pos, self.car_height_offset)
+        self.follower.setPos(1.9, self.leader_starting_pos - self.env.actual_distance, self.car_height_offset)
+        self.camera_control.reset()
+        self.is_visualizing = True
+        self.paused = False
+        self.instant_rewards = []
+
+    def update_positions(self):
+        if self.paused:
+            return
+
+        leader_pos = self.total_distance + self.leader_starting_pos
+        follower_pos = leader_pos - self.env.actual_distance
+        
+        self.leader.setPos(1.9, leader_pos, self.car_height_offset)
+        self.follower.setPos(1.9, follower_pos, self.car_height_offset)
+        
+        # Aggiorna il punto medio tra i veicoli
+        midpoint = (leader_pos + follower_pos) / 2
+        self.camera_control.update_target(Vec3(0, midpoint, self.car_height_offset))
+
+    def update_distance_lines(self):
+        leader_pos = self.leader.getPos()
+        follower_pos = self.follower.getPos()
+
+        # Aggiorna la linea della desired_distance
+        desired_pos = leader_pos - Vec3(0, self.env.desired_distance, 0)
+        self.desired_distance_line.setPos(desired_pos.x, desired_pos.y + 2.1, 0.1)
+        self.desired_text.setPos(desired_pos.x, desired_pos.y + 2.3, 0.1)
+        
+        # Aggiorna la linea della actual_distance
+        self.actual_distance_line.setPos(follower_pos.x, follower_pos.y + 2.1, 0.1)
+
+    def update_info_display(self, ep, ev, acc, leader_vel, agent_vel, actual_distance, desired_distance):
+        info_text = (
+            f"Episode: {self.episode}\n"
+            f"Position gap (ep): {ep:.2f} m\n"
+            f"Velocity gap (ev): {ev:.2f} m/s\n"
+            f"Acceleration gap (acc): {acc:.2f} m/s^2\n"
+            f"Leader velocity: {(leader_vel * 3.6):.2f} km/h\n"
+            f"Agent velocity: {(agent_vel * 3.6):.2f} km/h\n"
+            f"Actual distance: {(actual_distance - self.env.vehicles_length):.2f} m\n"
+            f"Desired distance: {(desired_distance - self.env.vehicles_length):.2f} m\n\n"
+            f"Total Reward: {self.total_reward:.4f}\n"
+            f"Avg Reward (last 100): {self.avg_reward:.4f}\n"
+            f"Instant Reward: {self.instant_rewards[-1]:.4f}\n\n"
+        )
+        self.info_display.setText(info_text)
+
+    def update(self, env):
+        if not self.is_visualizing:
+            self.episode += 1
+            return
+        
+        self.env = env
+        self.update_positions()
+        self.update_distance_lines()
+
+        ep = self.env.state[0]
+        ev = self.env.state[1]
+        acc = self.env.state[2]
+        leader_vel = self.env.leader_velocity
+        agent_vel = self.env.agent_velocity
+        actual_distance = self.env.actual_distance
+        desired_distance = self.env.desired_distance
+        self.update_info_display(ep, ev, acc, leader_vel, agent_vel, actual_distance, desired_distance)
+
+    def update_camera(self, task):
+        self.camera_control.update()
+        return Task.cont
+
+    def toggle_pause(self):
+        self.paused = not self.paused
+
+    def stop_visualizing(self):
+        self.is_visualizing = False
+        self.paused = True
 
 class CameraControl:
-    """Gestisce il controllo della camera e l'input dell'utente"""
-    
     def __init__(self, base):
         self.base = base
         self.camera = base.camera
         
-        # Parametri del mouse
         self.last_mouse_x = 0
         self.last_mouse_y = 0
         self.mouse_sensitivity = 0.8
-        self.dragging = False
-        
-        # Parametri della camera
         self.zoom_speed = 1.5
         self.min_height = 0.5
+        
         self.camera_distance = 40
         self.camera_pitch = 20
         self.camera_yaw = 0
         
-        # Target e offset della camera
         self.target = Vec3(0, 0, 0)
         self.offset = Vec3(-40, -40, 70)
         
-        # Setup degli input handlers
-        self._setup_input_handlers()
-        
-    def _setup_input_handlers(self):
-        """Configura gli handler degli input del mouse"""
+        # Accetta gli input del mouse
         self.base.accept("mouse3", self.start_drag)
         self.base.accept("mouse3-up", self.stop_drag)
         self.base.accept("wheel_up", self.zoom_in)
         self.base.accept("wheel_down", self.zoom_out)
+        
+        self.dragging = False
 
     def start_drag(self):
-        """Inizia il dragging della camera"""
         self.dragging = True
         self.last_mouse_x = self.base.mouseWatcherNode.getMouseX()
         self.last_mouse_y = self.base.mouseWatcherNode.getMouseY()
 
     def stop_drag(self):
-        """Termina il dragging della camera"""
         self.dragging = False
 
     def zoom_in(self):
-        """Zoom in della camera"""
         self.camera_distance = max(5, self.camera_distance - self.zoom_speed)
 
     def zoom_out(self):
-        """Zoom out della camera"""
         self.camera_distance = min(100, self.camera_distance + self.zoom_speed)
 
     def update_target(self, new_target):
-        """Aggiorna il punto target della camera"""
         self.target = new_target
 
     def update(self):
-        """Aggiorna la posizione e rotazione della camera"""
-        # Gestisce il dragging del mouse
         if self.dragging and self.base.mouseWatcherNode.hasMouse():
             mouse_x = self.base.mouseWatcherNode.getMouseX()
             mouse_y = self.base.mouseWatcherNode.getMouseY()
@@ -374,20 +373,17 @@ class CameraControl:
             self.camera_yaw -= dx * self.mouse_sensitivity * 100
             self.camera_pitch += dy * self.mouse_sensitivity * 100
             
-            # Limita il pitch per evitare inversioni della camera
             self.camera_pitch = max(-89, min(89, self.camera_pitch))
             
             self.last_mouse_x = mouse_x
             self.last_mouse_y = mouse_y
         
-        # Calcola la nuova posizione della camera
         relative_x = self.camera_distance * -sin(radians(self.camera_yaw)) * cos(radians(self.camera_pitch))
         relative_y = self.camera_distance * -cos(radians(self.camera_yaw)) * cos(radians(self.camera_pitch))
         relative_z = self.camera_distance * sin(radians(self.camera_pitch))
         
         new_pos = self.target + Vec3(relative_x, relative_y, relative_z)
         
-        # Gestisce il limite di altezza minima
         if new_pos.z < self.min_height:
             distance_xy = sqrt(relative_x**2 + relative_y**2)
             max_distance_xy = sqrt(self.camera_distance**2 - self.min_height**2)
@@ -398,12 +394,10 @@ class CameraControl:
             relative_z = self.min_height
             new_pos = self.target + Vec3(relative_x, relative_y, relative_z)
         
-        # Aggiorna la posizione e orientamento della camera
         self.camera.setPos(new_pos)
         self.camera.lookAt(self.target)
 
     def reset(self):
-        """Resetta la camera alla posizione iniziale"""
         self.camera_distance = 40
         self.camera_pitch = 20
         self.camera_yaw = 0
