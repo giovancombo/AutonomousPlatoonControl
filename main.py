@@ -8,61 +8,70 @@ from env_platoon import EnvPlatoon
 from visualizer import PlatooningVisualizer
 from agent import DQNAgent, TabularQAgent
 
-
-TABULAR_QL = False
+TABULAR_QL = False          # True per usare il Q-Learning tabulare, False per usare il DQN
 num_episodes = 1000
 
 num_vehicles = 2
-vehicles_length = 4
-num_timesteps = 100
-T = 0.1
-tau = 0.1
-h = 1.5
-ep_max = 2
-ep_max_nominal = 15
-ev_max = 1.5
-ev_max_nominal = 10
-acc_min = -2.6
-acc_max = 2.6
-u_min = -2.6
-u_max = 2.6
-a = 0.1
-b = 0.1
-c = 0.2
-reward_threshold = -0.4483  # Paper: -0.4483
-lambd = 5e-3
-env_gamma = 1               # Non utile per il Q-Learning
-r = 2
-leader_min_speed = 50       # km/h
-leader_max_speed = 50
-min_safe_distance = 0.2
-collision_penalty = -2
+vehicles_length = 4         # Lunghezza fisica di ogni veicolo
+T = 0.1                     # Intervallo di campionamento/controllo
+tau = 0.1                   # Costante di tempo della dinamica del veicolo (risposta all'accelerazione)
+h = 1.5                     # Time headway: tempo desiderato per raggiungere il veicolo precedente andando a velocità costante
+r = 2                       # Standstill distance: distanza di sicurezza minima a veicolo fermo
+min_safe_distance = 0.3     # Distanza minima assoluta per evitare collisioni in metri
 
-# Parametri dell'agente
-discrete_actions = True
+ep_max = 2                  # Massimo errore di posizione ammissibile
+ep_max_nominal = 15         # Valore di normalizzazione per l'errore di posizione
+ev_max = 1.5                # Massimo errore di velocità ammissibile
+ev_max_nominal = 10         # Valore di normalizzazione per l'errore di velocità
+acc_min = -2.6              # Accelerazione minima possibile
+acc_max = 2.6               # Accelerazione massima possibile
 
-state_size = 3
-hidden_size = [256, 128]
-action_size = 1 if not discrete_actions else 200
-state_bins = (50, 50, 50)
-lr = 0.005
-agent_gamma = 0.99
-soft_update_tau = 0.01
-epsilon = 1.0
-eps_decay = 0.9999
-min_epsilon = 0.01
-buffer_size = 100000
-batch_size = 128
+u_min = -2.6                # Input di controllo minimo
+u_max = 2.6                 # Input di controllo massimo
 
-window_size = 100
-update_freq = 4
+a = 0.1                     # Peso per il termine di errore di velocità nel reward
+b = 0.1                     # Peso per il termine di input di controllo nel reward
+c = 0.2                     # Peso per il termine di jerk nel reward
+reward_threshold = -0.4483  # Soglia per switchare tra reward assoluto e quadratico
+lambd = 5e-3                # Fattore di scala per il reward quadratico
+env_gamma = 1               # Fattore di sconto per il reward cumulativo (1 = no discount)
+collision_penalty = -2      # Penalità applicata in caso di collisione
 
-visualization_freq = 200
-log_freq = 200
+num_timesteps = 100         # Numero di step temporali per episodio
+leader_min_speed = 50       # Velocità minima del leader in km/h
+leader_max_speed = 50       # Velocità massima del leader in km/h
+
+# Architettura della rete neurale
+state_size = 3                                          # Dimensione dello spazio degli stati (ep, ev, acc)
+hidden_size = [256, 128]                                # Dimensioni dei layer nascosti della rete
+
+discrete_actions = True                                 # True (consigliato) per usare spazio delle azioni discreto invece che continuo
+action_size = 1 if not discrete_actions else 200        # Dimensione dello spazio delle azioni
+state_bins = (50, 50, 50)                               # Numero di bin per discretizzare ogni dimensione dello stato
+
+lr = 0.005                  # Learning rate per l'ottimizzazione
+agent_gamma = 0.99          # Discount factor per i reward futuri
+soft_update_tau = 0.01      # Coefficiente per soft update della target network
+
+epsilon = 1.0               # Probabilità iniziale di esplorazione
+eps_decay = 0.9999          # Fattore di decadimento dell'epsilon
+min_epsilon = 0.01          # Valore minimo di epsilon
+
+buffer_size = 100000        # Dimensione massima del buffer di esperienza
+batch_size = 128            # Dimensione del batch per l'addestramento
+update_freq = 4             # Frequenza di aggiornamento della rete (ogni quanti step)
+
+window_size = 100           # Finestra per il calcolo della media mobile delle performance
+visualization_freq = 200    # Frequenza di visualizzazione episodio (ogni quanti episodi)
+log_freq = 200              # Frequenza di logging su wandb (ogni quanti episodi)
+
+# Device configuration
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 config = {
     "num_vehicles": num_vehicles,
     "vehicles_length": vehicles_length,
+    "min_safe_distance": min_safe_distance,
     "num_timesteps": num_timesteps,
     "T": T,
     "tau": tau,
@@ -81,10 +90,9 @@ config = {
     "reward_threshold": reward_threshold,
     "lambd": lambd,
     "r": r,
+    "collision_penalty": collision_penalty,
     "leader_min_speed": leader_min_speed,
     "leader_max_speed": leader_max_speed,
-    "min_safe_distance": min_safe_distance,
-    "collision_penalty": collision_penalty,
     "hidden_size": hidden_size,
     "action_size": action_size,
     "state_bins": state_bins,
@@ -99,22 +107,20 @@ config = {
     "update_freq": update_freq,
 }
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-rewards_history = []
-leader_actions = np.zeros(num_timesteps)
-global_step = 0
+leader_actions = np.zeros(num_timesteps)            # Pattern del leader (moto uniforme)
+rewards_history = []                                # Storia dei reward per calcolare medie
+global_step = 0                                     # Contatore globale degli step per logging
 
 def run_simulation(env, agent, visualizer):
     global rewards_history, global_step
 
     for episode in range(num_episodes):
+        # Setup dell'episodio
         state = env.reset(leader_actions)
-        visualizer.reset_episode(episode)
         visualize_episode = episode % visualization_freq == 0
         score = 0
         episode_step = 0
-
+        
         if visualize_episode:
             visualizer.reset_episode(episode)
         
@@ -130,11 +136,14 @@ def run_simulation(env, agent, visualizer):
                     f"State/{episode+1} - ACC": state[2]
                 }, step=global_step)
             
+            # Aggiornamento dell'agente (Q-Learning o DQN)
             if TABULAR_QL:
+                # Discretizzazione per Q-Learning tabellare
                 discrete_state = env.discretize_state(state, agent.state_bins)
                 discrete_next_state = env.discretize_state(next_state, agent.state_bins)
                 agent.update(discrete_state, action, reward, discrete_next_state, done)
             else:
+                # Memorizzazione esperienza e update DQN
                 agent.store_transition(state, action, reward, next_state, done)
                 if timestep % update_freq == 0:
                     agent.update()
@@ -147,7 +156,6 @@ def run_simulation(env, agent, visualizer):
             
             episode_step += 1
             global_step += 1
-
             if done:
                 break
             
@@ -166,10 +174,7 @@ def run_simulation(env, agent, visualizer):
 
         if visualize_episode:
             visualizer.total_reward = score
-            if len(rewards_history) > window_size:
-                visualizer.avg_reward = np.mean(rewards_history[-window_size:])
-            else:
-                visualizer.avg_reward = np.mean(rewards_history)
+            visualizer.avg_reward = np.mean(rewards_history[-window_size:]) if len(rewards_history) > window_size else np.mean(rewards_history)
         
         if len(rewards_history) > window_size:
             avg_reward = np.mean(rewards_history[-window_size:])
@@ -181,11 +186,13 @@ if __name__ == "__main__":
     wandb.login()
     wandb.init(project="PlatoonControl", config=config)
 
+    # Setup Environment e Agente
     env = EnvPlatoon(num_vehicles, vehicles_length, num_timesteps, T, h, tau, ep_max, ep_max_nominal,
                      ev_max, ev_max_nominal, acc_min, acc_max, u_min, u_max, a, b, c, reward_threshold,
                      lambd, env_gamma, r, leader_min_speed, leader_max_speed, min_safe_distance, collision_penalty)
     visualizer = PlatooningVisualizer(env)
 
+    # Inizializzazione agente (Q-Learning o DQN)
     if TABULAR_QL:
         agent = TabularQAgent(state_bins, action_size, env.u_min, env.u_max, lr, agent_gamma, epsilon, eps_decay, min_epsilon)
     else:
@@ -202,11 +209,12 @@ if __name__ == "__main__":
             return task.done
         return task.cont
 
+    # Avvio visualizzatore
     visualizer.taskMgr.add(update_task, "UpdateTask")
     visualizer.accept("p", visualizer.toggle_pause)
     visualizer.run()
 
+    # Cleanup
     sim_thread.join()
     visualizer.stop_visualizing()
-
     wandb.finish()
