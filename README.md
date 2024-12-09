@@ -71,7 +71,7 @@ $$r_{abs} = -(|\frac{e_{p,i}^k}{e_{p,max}^{nom}}| + a|\frac{e_{v,i}^k}{e_{v,max}
 
 $$r_{qua} = -\lambda{(e_{p,i}^k)^2 + a(e_{v,i}^k)^2 + b(u_i^k)^2 + c(j_i^kT)^2)}$$
 
-$R(S_i^k, u_i^k) = r_{abs}$ se $r_{abs} < \epsilon$
+$R(S_i^k, u_i^k) = r_{abs}$ se $r_{abs} < \epsilon$, altrimenti $R(S_i^k, u_i^k) = r_{qua}$
 
 Definito l'**expected cumulative reward** $J_{\pi_i} = E_{\pi_i}[\sum_{k=1}^K \gamma^{k-1}R(S_i^k, u_i^k)]$, l'obiettivo ultimo del problema è quello di trovare una *policy* $\pi^*$ che **massimizza** $J_{\pi_i}$:
 
