@@ -90,6 +90,13 @@ Breve spiegazione delle aggiunte che ho deciso di fare nel mio lavoro, legate pa
 ### 3.2 - Visualization
 Spiegazione sommaria di come ho utilizzato Panda3D per visualizzare ogni episodio + piccola guida su come utilizzare e interpretare la visualizzazione.
 
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/panda2.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/panda3.png", width="45%" />
+</p>
+
+<p align="center"><i>Rendering di episodi utilizzando Panda3D</i></p>
+
 ## 4 - Training
 Setup hardware e software; Iperparametri e range vari. Spiegazione della logica che ho adottato per raccogliere i vari risultati e fare i test.
 
