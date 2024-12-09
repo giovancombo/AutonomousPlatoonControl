@@ -57,7 +57,6 @@ class PlatooningVisualizer(ShowBase):
         self._create_road()
         self._create_terrain()
         self._create_sidewalks()
-        self._create_buildings()
         self._create_road_lines()
         self._create_distance_indicators()
         
@@ -90,6 +89,22 @@ class PlatooningVisualizer(ShowBase):
         self.right_line = self._create_dashed_line(self.ROAD_LENGTH, self.LINE_COLOR, 20, 0)
         self.right_line.setPos(self.ROAD_WIDTH/2 - 0.5, -self.ROAD_LENGTH/2, 0.01)
         self.right_line.reparentTo(self.render)
+
+    def _create_sidewalks(self):
+        """Crea i marciapiedi ai lati della strada"""
+        # Marciapiede sinistro
+        self.left_sidewalk = self.loader.loadModel("models/box")
+        self.left_sidewalk.setScale(self.SIDEWALK_WIDTH, self.ROAD_LENGTH, self.SIDEWALK_HEIGHT)
+        self.left_sidewalk.setPos(-self.ROAD_WIDTH/2 - self.SIDEWALK_WIDTH, -self.ROAD_LENGTH/2, 0)
+        self.left_sidewalk.setColor(self.SIDEWALK_COLOR)
+        self.left_sidewalk.reparentTo(self.render)
+
+        # Marciapiede destro
+        self.right_sidewalk = self.loader.loadModel("models/box")
+        self.right_sidewalk.setScale(self.SIDEWALK_WIDTH, self.ROAD_LENGTH, self.SIDEWALK_HEIGHT)
+        self.right_sidewalk.setPos(self.ROAD_WIDTH/2, -self.ROAD_LENGTH/2, 0)
+        self.right_sidewalk.setColor(self.SIDEWALK_COLOR)
+        self.right_sidewalk.reparentTo(self.render)
         
     def _setup_vehicles(self):
         """Carica e posiziona i modelli dei veicoli"""
