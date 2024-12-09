@@ -97,10 +97,10 @@ class DQNAgent:
         normalized_states = [self.normalize_state(state) for state in states]
         normalized_next_states = [self.normalize_state(state) for state in next_states]
 
-        states = torch.tensor(normalized_states, dtype=torch.float32, device=self.device)
+        states = torch.tensor(np.array(normalized_states), dtype=torch.float32, device=self.device)
         actions = torch.tensor(actions, dtype=torch.float32, device=self.device).unsqueeze(1)
         rewards = torch.tensor(rewards, dtype=torch.float32, device=self.device).unsqueeze(1)
-        next_states = torch.tensor(normalized_next_states, dtype=torch.float32, device=self.device)
+        next_states = torch.tensor(np.array(normalized_next_states), dtype=torch.float32, device=self.device)
         dones = torch.tensor(dones, dtype=torch.float32, device=self.device).unsqueeze(1)
 
         # Calcolo Q-values correnti

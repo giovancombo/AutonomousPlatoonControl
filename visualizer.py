@@ -7,7 +7,6 @@ from direct.task import Task
 from direct.gui.OnscreenText import OnscreenText
 from math import pi, sin, cos, radians, sqrt
 
-
 class PlatooningVisualizer(ShowBase):
     def __init__(self, env):
         ShowBase.__init__(self)
@@ -17,17 +16,19 @@ class PlatooningVisualizer(ShowBase):
         self.total_reward = 0
         self.avg_reward = 0
         self.instant_rewards = []
-
-        self.road_color = (0.6, 0.6, 0.6, 1)        # Grigio
-        self.terrain_color = (0, 0.8, 0.35, 1)      # Verde
-        self.sidewalk_color = (0.9, 0.9, 0.9, 1)    # Grigio chiaro
-
+        
         self.road_width = 8
         self.road_length = 800
+        self.road_color = (0.6, 0.6, 0.6, 1)        # Grigio
+
         self.terrain_width = 10000
         self.terrain_length = 10000
+        self.terrain_color = (0, 0.8, 0.35, 1)      # Verde
+
         self.sidewalk_width = 3
         self.sidewalk_height = 0.25
+        self.sidewalk_color = (0.9, 0.9, 0.9, 1)    # Grigio chiaro
+
         dash_length = 20
         gap_length = 0
         self.car_height_offset = 0
@@ -38,12 +39,12 @@ class PlatooningVisualizer(ShowBase):
         self.camera_control = CameraControl(self)
         
         self.leader = self.loader.loadModel("Panda3D/Models/road/sedan.glb")
-        self.leader.setHpr(180, 0, 0)
+        self.leader.setHpr(180, 90, 0)
         self.leader.setScale(1.55)
         self.leader.reparentTo(self.render)
 
         self.follower = self.loader.loadModel("Panda3D/Models/road/police.glb")
-        self.follower.setHpr(180, 0, 0)
+        self.follower.setHpr(180, 90, 0)
         self.follower.setScale(1.55)
         self.follower.reparentTo(self.render)
         
@@ -126,6 +127,7 @@ class PlatooningVisualizer(ShowBase):
         self.buildingct.setPos(0, 400, 0)
         #self.buildingct.reparentTo(self.render)
 
+        # Crea la linea tratteggiata
         self.center_line = self.create_dashed_line(self.road_length, (1, 1, 1, 1))
         self.center_line.setPos(0, -self.road_length/2, 0.01)
         self.center_line.reparentTo(self.render)
@@ -138,14 +140,15 @@ class PlatooningVisualizer(ShowBase):
         self.right_line.setPos(self.road_width/2 - 0.5, -self.road_length/2, 0.01)
         self.right_line.reparentTo(self.render)
 
-        self.desired_distance_line = self.create_line((1, 0, 0, 1))  # Rosso
-        self.actual_distance_line = self.create_line((0, 0, 1, 1))   # Blu
+        self.desired_distance_line = self.create_line((1, 0, 0, 1))     # Rosso
+        self.actual_distance_line = self.create_line((0, 0, 1, 1))      # Blu
         self.desired_distance_line.reparentTo(self.render)
         self.actual_distance_line.reparentTo(self.render)
 
-        self.desired_text = self.create_text("DESIRED", (1, 0, 0, 1))  # Rosso
+        self.desired_text = self.create_text("DESIRED", (1, 0, 0, 1))   # Rosso
         self.desired_text.reparentTo(self.render)
         
+        # Aggiungi illuminazione
         alight = AmbientLight('alight')
         alight.setColor((0.2, 0.2, 0.2, 1))
         alnp = self.render.attachNewNode(alight)
@@ -159,6 +162,7 @@ class PlatooningVisualizer(ShowBase):
 
         self.info_display = self.create_info_display()
         
+        # Imposta la telecamera
         self.camera.setPos(0,0,0)
         self.camera.lookAt(0,0,0)
         
@@ -173,8 +177,8 @@ class PlatooningVisualizer(ShowBase):
         line_segs = LineSegs()
         line_segs.setThickness(2)
         line_segs.setColor(color)
-        line_segs.moveTo(-1.5, 0, 0.02)  # Inizio linea
-        line_segs.drawTo(1.5, 0, 0.02)   # Fine linea
+        line_segs.moveTo(-1.5, 0, 0.02)     # Inizio linea
+        line_segs.drawTo(1.5, 0, 0.02)      # Fine linea
         return self.render.attachNewNode(line_segs.create())
     
     def create_text(self, text, color):
@@ -183,8 +187,8 @@ class PlatooningVisualizer(ShowBase):
         text_node.setTextColor(color)
         text_node.setAlign(TextNode.ACenter)
         text_path = self.render.attachNewNode(text_node)
-        text_path.setScale(0.5)     # Dimensione testo
-        text_path.setHpr(0, -90, 0)
+        text_path.setScale(0.5)             # Regola la dimensione del testo
+        text_path.setHpr(0, -90, 0)         # Ruota il testo per essere parallelo alla strada
         return text_path
 
     def create_plane(self, width, length, color):
@@ -193,8 +197,9 @@ class PlatooningVisualizer(ShowBase):
         
         vertex = GeomVertexWriter(vdata, 'vertex')
         normal = GeomVertexWriter(vdata, 'normal')
-        color_writer = GeomVertexWriter(vdata, 'color')
+        color_writer = GeomVertexWriter(vdata, 'color')  # Rinominato per evitare conflitti
         
+        # Define the vertices
         vertex.addData3(-width/2, -length/2, 0)
         vertex.addData3(width/2, -length/2, 0)
         vertex.addData3(width/2, length/2, 0)
@@ -202,7 +207,7 @@ class PlatooningVisualizer(ShowBase):
         
         for _ in range(4):
             normal.addData3(0, 0, 1)
-            color_writer.addData4(*color)
+            color_writer.addData4(*color)  # Usa il colore passato come argomento
         
         prim = GeomTriangles(Geom.UHStatic)
         prim.addVertices(0, 1, 2)
@@ -231,9 +236,9 @@ class PlatooningVisualizer(ShowBase):
             text="",
             style=1,
             fg=(0, 0, 0, 1),
-            pos=(-1.25, -0.3),  # Posizione in basso a sinistra
+            pos=(-1.25, -0.3),      # Posizione in basso a sinistra
             align=TextNode.ALeft,
-            scale=0.05,         # Dimensione testo
+            scale=0.05,             # Dimensione del testo
             mayChange=True
         )
         return info_text
@@ -378,13 +383,17 @@ class CameraControl:
             self.last_mouse_x = mouse_x
             self.last_mouse_y = mouse_y
         
+        # Calcola la nuova posizione della camera relativa al target
         relative_x = self.camera_distance * -sin(radians(self.camera_yaw)) * cos(radians(self.camera_pitch))
         relative_y = self.camera_distance * -cos(radians(self.camera_yaw)) * cos(radians(self.camera_pitch))
         relative_z = self.camera_distance * sin(radians(self.camera_pitch))
         
+        # Calcola la nuova posizione della camera
         new_pos = self.target + Vec3(relative_x, relative_y, relative_z)
         
+        # Controlla se la nuova posizione è sotto il terreno
         if new_pos.z < self.min_height:
+            # Calcola l'altezza corretta mantenendo la distanza dal target
             distance_xy = sqrt(relative_x**2 + relative_y**2)
             max_distance_xy = sqrt(self.camera_distance**2 - self.min_height**2)
             if distance_xy > max_distance_xy:
@@ -394,6 +403,7 @@ class CameraControl:
             relative_z = self.min_height
             new_pos = self.target + Vec3(relative_x, relative_y, relative_z)
         
+        # Aggiorna la posizione e l'orientamento della camera
         self.camera.setPos(new_pos)
         self.camera.lookAt(self.target)
 

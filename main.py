@@ -10,6 +10,7 @@ from agent import DQNAgent, TabularQAgent
 
 TABULAR_QL = False          # True per usare il Q-Learning tabulare, False per usare il DQN
 num_episodes = 1000
+num_timesteps = 100         # Numero di step temporali per episodio
 
 num_vehicles = 2
 vehicles_length = 4         # Lunghezza fisica di ogni veicolo
@@ -37,7 +38,6 @@ lambd = 5e-3                # Fattore di scala per il reward quadratico
 env_gamma = 1               # Fattore di sconto per il reward cumulativo (1 = no discount)
 collision_penalty = -2      # Penalità applicata in caso di collisione
 
-num_timesteps = 100         # Numero di step temporali per episodio
 leader_min_speed = 50       # Velocità minima del leader in km/h
 leader_max_speed = 50       # Velocità massima del leader in km/h
 
@@ -174,8 +174,11 @@ def run_simulation(env, agent, visualizer):
 
         if visualize_episode:
             visualizer.total_reward = score
-            visualizer.avg_reward = np.mean(rewards_history[-window_size:]) if len(rewards_history) > window_size else np.mean(rewards_history)
-        
+            if len(rewards_history) > 0:
+                visualizer.avg_reward = np.mean(rewards_history[-window_size:]) if len(rewards_history) > window_size else np.mean(rewards_history)
+            else:
+                visualizer.avg_reward = 0
+
         if len(rewards_history) > window_size:
             avg_reward = np.mean(rewards_history[-window_size:])
             print(f"Episode {episode + 1}, Epsilon: {agent.epsilon:.4f}, Avg Reward (last {window_size}): {avg_reward:.4f}, Total Reward: {score:.4f}, Tot Steps: {env.collision_step if env.collision_step is not None else episode_step}")
