@@ -103,5 +103,16 @@ Setup hardware e software; Iperparametri e range vari. Spiegazione della logica 
 ## 5 - Results
 Sequenza di plot con relativa spiegazione.
 
+### Comparison with paper results
+
+| |*Mean Episode Reward*|
+|:-:|:-:|
+|DDPG|-0.0680|
+|FH-DDPG|-0.0736|
+|HCFS|-0.0673|
+|FH-DDPG-SS|-0.0600|
+|**QL Tabellare**|?|
+|**Deep QL**|-5.0000|
+
 ## 6 - Conclusion
 Recap generale dell'esperienza, menzionando i risultati ottenuti da ciascun metodo.
