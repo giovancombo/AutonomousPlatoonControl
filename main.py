@@ -9,7 +9,7 @@ from visualizer import PlatooningVisualizer
 from agent import DQNAgent, TabularQAgent
 
 TABULAR_QL = False          # True per usare il Q-Learning tabulare, False per usare il DQN
-num_episodes = 1000
+num_episodes = 10000
 num_timesteps = 100         # Numero di step temporali per episodio
 
 num_vehicles = 2
@@ -46,7 +46,7 @@ state_size = 3                                          # Dimensione dello spazi
 hidden_size = [256, 128]                                # Dimensioni dei layer nascosti della rete
 
 discrete_actions = True                                 # True (consigliato) per usare spazio delle azioni discreto invece che continuo
-action_size = 1 if not discrete_actions else 200        # Dimensione dello spazio delle azioni
+action_size = 1 if not discrete_actions else 50         # Dimensione dello spazio delle azioni
 state_bins = (50, 50, 50)                               # Numero di bin per discretizzare ogni dimensione dello stato
 
 lr = 0.005                  # Learning rate per l'ottimizzazione
@@ -57,12 +57,12 @@ epsilon = 1.0               # Probabilità iniziale di esplorazione
 eps_decay = 0.9999          # Fattore di decadimento dell'epsilon
 min_epsilon = 0.01          # Valore minimo di epsilon
 
-buffer_size = 100000        # Dimensione massima del buffer di esperienza
+buffer_size = 10000         # Dimensione massima del buffer di esperienza
 batch_size = 128            # Dimensione del batch per l'addestramento
 update_freq = 4             # Frequenza di aggiornamento della rete (ogni quanti step)
 
 window_size = 100           # Finestra per il calcolo della media mobile delle performance
-visualization_freq = 200    # Frequenza di visualizzazione episodio (ogni quanti episodi)
+visualization_freq = 2000   # Frequenza di visualizzazione episodio (ogni quanti episodi)
 log_freq = 200              # Frequenza di logging su wandb (ogni quanti episodi)
 
 # Device configuration
@@ -106,6 +106,8 @@ config = {
     "batch_size": batch_size,
     "update_freq": update_freq,
 }
+run_name = "DQN" if not TABULAR_QL else "TAB"
+run_name = run_name + f"_speed{leader_max_speed}_{num_timesteps}steps_{str(time.time())[-4:]}"
 
 leader_actions = np.zeros(num_timesteps)            # Pattern del leader (moto uniforme)
 rewards_history = []                                # Storia dei reward per calcolare medie
@@ -187,7 +189,7 @@ def run_simulation(env, agent, visualizer):
 
 if __name__ == "__main__":
     wandb.login()
-    wandb.init(project="PlatoonControl", config=config)
+    wandb.init(project="PlatoonControl", config=config, name = run_name)
 
     # Setup Environment e Agente
     env = EnvPlatoon(num_vehicles, vehicles_length, num_timesteps, T, h, tau, ep_max, ep_max_nominal,
