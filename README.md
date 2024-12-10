@@ -112,7 +112,7 @@ Sequenza di plot con relativa spiegazione.
 |HCFS|-0.0673|
 |FH-DDPG-SS|-0.0600|
 |**QL Tabellare**|?|
-|**Deep QL**|-5.0000|
+|**Deep QL**|-0.9466|
 
 ## 6 - Conclusion
 Recap generale dell'esperienza, menzionando i risultati ottenuti da ciascun metodo.
