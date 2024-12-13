@@ -46,8 +46,8 @@ state_size = 3                                          # Dimensione dello spazi
 hidden_size = [256, 128]                                # Dimensioni dei layer nascosti della rete
 
 discrete_actions = True                                 # True (consigliato) per usare spazio delle azioni discreto invece che continuo
-action_size = 1 if not discrete_actions else 50         # Dimensione dello spazio delle azioni
-state_bins = (50, 50, 50)                               # Numero di bin per discretizzare ogni dimensione dello stato
+action_size = 1 if not discrete_actions else 10         # Dimensione dello spazio delle azioni
+state_bins = (10, 10, 10)                               # Solo se TABULAR_QL = True. Numero di bin per discretizzare ogni dimensione dello stato
 
 lr = 0.005                  # Learning rate per l'ottimizzazione
 agent_gamma = 0.99          # Discount factor per i reward futuri
@@ -57,7 +57,7 @@ epsilon = 1.0               # Probabilità iniziale di esplorazione
 eps_decay = 0.9999          # Fattore di decadimento dell'epsilon
 min_epsilon = 0.01          # Valore minimo di epsilon
 
-buffer_size = 10000         # Dimensione massima del buffer di esperienza
+buffer_size = 30000         # Dimensione massima del buffer di esperienza
 batch_size = 128            # Dimensione del batch per l'addestramento
 update_freq = 4             # Frequenza di aggiornamento della rete (ogni quanti step)
 
@@ -65,7 +65,9 @@ window_size = 100           # Finestra per il calcolo della media mobile delle p
 visualization_freq = 2000   # Frequenza di visualizzazione episodio (ogni quanti episodi)
 log_freq = 200              # Frequenza di logging su wandb (ogni quanti episodi)
 
-# Device configuration
+validation_freq = 100
+validation_episodes = 100
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 config = {
@@ -105,91 +107,124 @@ config = {
     "buffer_size": buffer_size,
     "batch_size": batch_size,
     "update_freq": update_freq,
+    "validation_freq": validation_freq,
+    "validation_episodes": validation_episodes,
 }
 run_name = "DQN" if not TABULAR_QL else "TAB"
 run_name = run_name + f"_speed{leader_max_speed}_{num_timesteps}steps_{str(time.time())[-4:]}"
 
-leader_actions = np.zeros(num_timesteps)            # Pattern del leader (moto uniforme)
-rewards_history = []                                # Storia dei reward per calcolare medie
-global_step = 0                                     # Contatore globale degli step per logging
+leader_actions = np.zeros(num_timesteps)            # Pattern del leader (prova: moto uniforme)
+rewards_history = []
+global_step = 0
 
 def run_simulation(env, agent, visualizer):
     global rewards_history, global_step
+    
+    training_rewards = []
+    validation_rewards = []
+    episode_count = 0
 
-    for episode in range(num_episodes):
-        # Setup dell'episodio
-        state = env.reset(leader_actions)
-        visualize_episode = episode % visualization_freq == 0
-        score = 0
-        episode_step = 0
-        
-        if visualize_episode:
-            visualizer.reset_episode(episode)
-        
-        for timestep in range(num_timesteps):
-            action = agent.select_action(state)
-            next_state, reward, done, _ = env.step(action)
-            score += reward
-
-            if episode % log_freq == 0:
-                wandb.log({
-                    f"State/{episode+1} - EP": state[0],
-                    f"State/{episode+1} - EV": state[1],
-                    f"State/{episode+1} - ACC": state[2]
-                }, step=global_step)
+    while episode_count < num_episodes:
+        # Training phase
+        for _ in range(validation_freq):
+            if episode_count >= num_episodes:
+                break
+                
+            state = env.reset(leader_actions)
+            visualize_episode = episode_count % visualization_freq == 0
+            score = 0
+            episode_step = 0
             
-            # Aggiornamento dell'agente (Q-Learning o DQN)
-            if TABULAR_QL:
-                # Discretizzazione per Q-Learning tabellare
-                discrete_state = env.discretize_state(state, agent.state_bins)
-                discrete_next_state = env.discretize_state(next_state, agent.state_bins)
-                agent.update(discrete_state, action, reward, discrete_next_state, done)
-            else:
-                # Memorizzazione esperienza e update DQN
-                agent.store_transition(state, action, reward, next_state, done)
-                if timestep % update_freq == 0:
-                    agent.update()
+            if visualize_episode:
+                visualizer.reset_episode(episode_count)
+            
+            for timestep in range(num_timesteps):
+                action = agent.select_action(state)
+                next_state, reward, done, _ = env.step(action)
+                score += reward
+
+                if episode_count % log_freq == 0:
+                    wandb.log({
+                        f"Training/State/{episode_count+1} - EP": state[0],
+                        f"Training/State/{episode_count+1} - EV": state[1],
+                        f"Training/State/{episode_count+1} - ACC": state[2]
+                    }, step=global_step)
+                
+                # Training updates
+                if TABULAR_QL:
+                    discrete_state = env.discretize_state(state, agent.state_bins)
+                    discrete_next_state = env.discretize_state(next_state, agent.state_bins)
+                    agent.update(discrete_state, action, reward, discrete_next_state, done)
+                else:
+                    agent.store_transition(state, action, reward, next_state, done)
+                    if timestep % update_freq == 0:
+                        agent.update()
+
+                if visualize_episode:
+                    visualizer.instant_rewards.append(reward)
+                    visualizer.update(env)
+                    visualizer.total_distance += env.leader_velocity * T
+                    time.sleep(T)
+                
+                episode_step += 1
+                global_step += 1
+                if done:
+                    break
+                
+                state = next_state
+
+            training_rewards.append(score)
+            agent.decay_epsilon()
+            
+            wandb.log({
+                "Training/Score": score,
+                "Training/epsilon": agent.epsilon,
+                "Episode": episode_count,
+                "Training/Average Score": np.mean(training_rewards[-window_size:]),
+                "Training/Steps": env.collision_step if env.collision_step is not None else episode_step,
+            }, step=global_step)
 
             if visualize_episode:
-                visualizer.instant_rewards.append(reward)
-                visualizer.update(env)
-                visualizer.total_distance += env.leader_velocity * T
-                time.sleep(T)
-            
-            episode_step += 1
-            global_step += 1
-            if done:
-                break
-            
-            state = next_state
+                visualizer.total_reward = score
+                visualizer.avg_reward = np.mean(training_rewards[-window_size:]) if len(training_rewards) > window_size else np.mean(training_rewards)
 
+            print(f"Training Episode {episode_count + 1}, Epsilon: {agent.epsilon:.4f}, Score: {score:.4f}")
+            episode_count += 1
+
+        # Validation phase
+        saved_epsilon = agent.epsilon
+        agent.epsilon = 0  # Disabilita exploration durante validation
+        
+        validation_scores = []
+        for _ in range(validation_episodes):
+            state = env.reset(leader_actions)
+            score = 0
+            
+            for timestep in range(num_timesteps):
+                action = agent.select_action(state)
+                next_state, reward, done, _ = env.step(action)
+                score += reward
+                if done:
+                    break   
+                state = next_state
+            validation_scores.append(score)
+        
+        val_avg_score = np.mean(validation_scores)
+        val_std_score = np.std(validation_scores)
+        validation_rewards.append(val_avg_score)
+        
         wandb.log({
-            "Score": score,
-            "epsilon decay": agent.epsilon,
-            "Episode": episode,
-            "Average Score": np.mean(rewards_history[-window_size:]),
-            "Total Steps": env.collision_step if env.collision_step is not None else episode_step,
+            "Validation/Average Score": val_avg_score,
+            "Validation/Score Std": val_std_score,
         }, step=global_step)
         
-        rewards_history.append(score)
-        agent.decay_epsilon()
-
-        if visualize_episode:
-            visualizer.total_reward = score
-            if len(rewards_history) > 0:
-                visualizer.avg_reward = np.mean(rewards_history[-window_size:]) if len(rewards_history) > window_size else np.mean(rewards_history)
-            else:
-                visualizer.avg_reward = 0
-
-        if len(rewards_history) > window_size:
-            avg_reward = np.mean(rewards_history[-window_size:])
-            print(f"Episode {episode + 1}, Epsilon: {agent.epsilon:.4f}, Avg Reward (last {window_size}): {avg_reward:.4f}, Total Reward: {score:.4f}, Tot Steps: {env.collision_step if env.collision_step is not None else episode_step}")
-        else:
-            print(f"Episode {episode + 1}, Epsilon: {agent.epsilon:.4f}, Total Reward: {score:.4f}, Tot Steps: {env.collision_step if env.collision_step is not None else episode_step}")
+        print(f"Validation after episode {episode_count}: Avg Score: {val_avg_score:.4f} ± {val_std_score:.4f}")
+        
+        agent.epsilon = saved_epsilon
 
 if __name__ == "__main__":
     wandb.login()
-    wandb.init(project="PlatoonControl", config=config, name = run_name)
+    wandb.init(project="PlatoonControl", config=config, name=run_name)
 
     # Setup Environment e Agente
     env = EnvPlatoon(num_vehicles, vehicles_length, num_timesteps, T, h, tau, ep_max, ep_max_nominal,
