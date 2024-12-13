@@ -9,7 +9,7 @@ from visualizer import PlatooningVisualizer
 from agent import DQNAgent, TabularQAgent
 
 TABULAR_QL = False          # True per usare il Q-Learning tabulare, False per usare il DQN
-num_episodes = 10000
+num_episodes = 5000
 num_timesteps = 100         # Numero di step temporali per episodio
 
 num_vehicles = 2
@@ -43,23 +43,23 @@ leader_max_speed = 50       # Velocità massima del leader in km/h
 
 # Architettura della rete neurale
 state_size = 3                                          # Dimensione dello spazio degli stati (ep, ev, acc)
-hidden_size = [256, 128]                                # Dimensioni dei layer nascosti della rete
+hidden_size = [512, 256]                                # Dimensioni dei layer nascosti della rete
 
 discrete_actions = True                                 # True (consigliato) per usare spazio delle azioni discreto invece che continuo
 action_size = 1 if not discrete_actions else 10         # Dimensione dello spazio delle azioni
 state_bins = (10, 10, 10)                               # Numero di bin per discretizzare ogni dimensione dello stato
 
-lr = 0.005                  # Learning rate per l'ottimizzazione
+lr = 5e-4                   # Learning rate per l'ottimizzazione
 agent_gamma = 0.99          # Discount factor per i reward futuri
 soft_update_tau = 0.01      # Coefficiente per soft update della target network
 
 epsilon = 1.0               # Probabilità iniziale di esplorazione
-eps_decay = 0.9999          # Fattore di decadimento dell'epsilon
-min_epsilon = 0.01          # Valore minimo di epsilon
+eps_decay = 0.999           # Fattore di decadimento dell'epsilon
+min_epsilon = 0.08          # Valore minimo di epsilon
 
-buffer_size = 30000         # Dimensione massima del buffer di esperienza
-batch_size = 128            # Dimensione del batch per l'addestramento
-update_freq = 4             # Frequenza di aggiornamento della rete (ogni quanti step)
+buffer_size = 150000        # Dimensione massima del buffer di esperienza
+batch_size = 256            # Dimensione del batch per l'addestramento
+update_freq = 100           # Frequenza di aggiornamento della rete (ogni quanti step)
 
 window_size = 100           # Finestra per il calcolo della media mobile delle performance
 visualization_freq = 2000   # Frequenza di visualizzazione episodio (ogni quanti episodi)
