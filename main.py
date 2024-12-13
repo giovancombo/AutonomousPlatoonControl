@@ -36,7 +36,7 @@ c = 0.2                     # Peso per il termine di jerk nel reward
 reward_threshold = -0.4483  # Soglia per switchare tra reward assoluto e quadratico
 lambd = 5e-3                # Fattore di scala per il reward quadratico
 env_gamma = 1               # Fattore di sconto per il reward cumulativo (1 = no discount)
-collision_penalty = -2      # Penalità applicata in caso di collisione
+collision_penalty = 0       # Penalità applicata in caso di collisione
 
 leader_min_speed = 50       # Velocità minima del leader in km/h
 leader_max_speed = 50       # Velocità massima del leader in km/h
@@ -46,8 +46,8 @@ state_size = 3                                          # Dimensione dello spazi
 hidden_size = [256, 128]                                # Dimensioni dei layer nascosti della rete
 
 discrete_actions = True                                 # True (consigliato) per usare spazio delle azioni discreto invece che continuo
-action_size = 1 if not discrete_actions else 200        # Dimensione dello spazio delle azioni
-state_bins = (50, 50, 50)                               # Numero di bin per discretizzare ogni dimensione dello stato
+action_size = 1 if not discrete_actions else 10         # Dimensione dello spazio delle azioni
+state_bins = (10, 10, 10)                               # Numero di bin per discretizzare ogni dimensione dello stato
 
 lr = 0.005                  # Learning rate per l'ottimizzazione
 agent_gamma = 0.99          # Discount factor per i reward futuri
