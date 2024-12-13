@@ -18,7 +18,8 @@ T = 0.1                     # Intervallo di campionamento/controllo
 tau = 0.1                   # Costante di tempo della dinamica del veicolo (risposta all'accelerazione)
 h = 1.5                     # Time headway: tempo desiderato per raggiungere il veicolo precedente andando a velocità costante
 r = 2                       # Standstill distance: distanza di sicurezza minima a veicolo fermo
-min_safe_distance = 0.3     # Distanza minima assoluta per evitare collisioni in metri
+min_safe_distance = 0.0     # Distanza minima assoluta per evitare collisioni in metri
+collision_penalty = 0       # Penalità applicata in caso di collisione
 
 ep_max = 2                  # Massimo errore di posizione ammissibile
 ep_max_nominal = 15         # Valore di normalizzazione per l'errore di posizione
@@ -36,7 +37,6 @@ c = 0.2                     # Peso per il termine di jerk nel reward
 reward_threshold = -0.4483  # Soglia per switchare tra reward assoluto e quadratico
 lambd = 5e-3                # Fattore di scala per il reward quadratico
 env_gamma = 1               # Fattore di sconto per il reward cumulativo (1 = no discount)
-collision_penalty = 0       # Penalità applicata in caso di collisione
 
 leader_min_speed = 50       # Velocità minima del leader in km/h
 leader_max_speed = 50       # Velocità massima del leader in km/h
