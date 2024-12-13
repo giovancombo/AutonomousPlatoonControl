@@ -146,9 +146,9 @@ def run_simulation(env, agent, visualizer):
 
                 if episode_count % log_freq == 0:
                     wandb.log({
-                        f"Training/State/{episode_count+1} - EP": state[0],
-                        f"Training/State/{episode_count+1} - EV": state[1],
-                        f"Training/State/{episode_count+1} - ACC": state[2]
+                        f"States/{episode_count+1} - EP": state[0],
+                        f"States/{episode_count+1} - EV": state[1],
+                        f"States/{episode_count+1} - ACC": state[2]
                     }, step=global_step)
                 
                 # Training updates
@@ -189,7 +189,7 @@ def run_simulation(env, agent, visualizer):
                 visualizer.total_reward = score
                 visualizer.avg_reward = np.mean(training_rewards[-window_size:]) if len(training_rewards) > window_size else np.mean(training_rewards)
 
-            print(f"Training Episode {episode_count + 1}, Epsilon: {agent.epsilon:.4f}, Score: {score:.4f}")
+            print(f"Training Episode {episode_count + 1}, Epsilon: {agent.epsilon:.4f}, Score: {score:.4f}, Avg Score: {np.mean(training_rewards[-window_size:]):.4f}")
             episode_count += 1
 
         # Validation phase
