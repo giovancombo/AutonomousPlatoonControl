@@ -46,8 +46,8 @@ state_size = 3                                          # Dimensione dello spazi
 hidden_size = [256, 128]                                # Dimensioni dei layer nascosti della rete
 
 discrete_actions = True                                 # True (consigliato) per usare spazio delle azioni discreto invece che continuo
-action_size = 1 if not discrete_actions else 10         # Dimensione dello spazio delle azioni
-state_bins = (10, 10, 10)                               # Solo se TABULAR_QL = True. Numero di bin per discretizzare ogni dimensione dello stato
+action_size = 1 if not discrete_actions else 200        # Dimensione dello spazio delle azioni
+state_bins = (50, 50, 50)                               # Numero di bin per discretizzare ogni dimensione dello stato
 
 lr = 0.005                  # Learning rate per l'ottimizzazione
 agent_gamma = 0.99          # Discount factor per i reward futuri
@@ -57,7 +57,7 @@ epsilon = 1.0               # Probabilità iniziale di esplorazione
 eps_decay = 0.9999          # Fattore di decadimento dell'epsilon
 min_epsilon = 0.01          # Valore minimo di epsilon
 
-buffer_size = 30000         # Dimensione massima del buffer di esperienza
+buffer_size = 30000        # Dimensione massima del buffer di esperienza
 batch_size = 128            # Dimensione del batch per l'addestramento
 update_freq = 4             # Frequenza di aggiornamento della rete (ogni quanti step)
 
@@ -110,12 +110,13 @@ config = {
     "validation_freq": validation_freq,
     "validation_episodes": validation_episodes,
 }
+
 run_name = "DQN" if not TABULAR_QL else "TAB"
 run_name = run_name + f"_speed{leader_max_speed}_{num_timesteps}steps_{str(time.time())[-4:]}"
 
-leader_actions = np.zeros(num_timesteps)            # Pattern del leader (prova: moto uniforme)
-rewards_history = []
-global_step = 0
+leader_actions = np.zeros(num_timesteps)            # Pattern del leader (moto uniforme)
+rewards_history = []                                # Storia dei reward per calcolare medie
+global_step = 0                                     # Contatore globale degli step per logging
 
 def run_simulation(env, agent, visualizer):
     global rewards_history, global_step
