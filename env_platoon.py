@@ -97,12 +97,11 @@ class EnvPlatoon:
         self.leader_velocity += self.T * self.leader_acc
         self.agent_velocity = self.leader_velocity - next_ev
         self.desired_distance = self.r + self.h * self.agent_velocity + self.vehicles_length
-        self.actual_distance = self.desired_distance - next_ep
+        self.actual_distance = self.desired_distance + next_ep
 
         # Calcola il reward
         if self.actual_distance < self.min_safe_distance + self.vehicles_length:
-            collision_penalty = self.collision_penalty * \
-                              (self.actual_distance - self.min_safe_distance - self.vehicles_length)
+            collision_penalty = self.collision_penalty * (self.actual_distance - self.min_safe_distance - self.vehicles_length)
             reward = self.compute_reward(action, next_ep, next_ev, prev_acc) - collision_penalty
             if self.collision_step is None:    
                 self.collision_step = self.current_timestep

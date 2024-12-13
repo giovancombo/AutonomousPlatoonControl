@@ -18,7 +18,7 @@ T = 0.1                     # Intervallo di campionamento/controllo
 tau = 0.1                   # Costante di tempo della dinamica del veicolo (risposta all'accelerazione)
 h = 1.5                     # Time headway: tempo desiderato per raggiungere il veicolo precedente andando a velocità costante
 r = 2                       # Standstill distance: distanza di sicurezza minima a veicolo fermo
-min_safe_distance = 0.0     # Distanza minima assoluta per evitare collisioni in metri
+min_safe_distance = 0.3     # Distanza minima assoluta per evitare collisioni in metri
 collision_penalty = 0       # Penalità applicata in caso di collisione
 
 ep_max = 2                  # Massimo errore di posizione ammissibile
@@ -57,7 +57,7 @@ epsilon = 1.0               # Probabilità iniziale di esplorazione
 eps_decay = 0.9999          # Fattore di decadimento dell'epsilon
 min_epsilon = 0.01          # Valore minimo di epsilon
 
-buffer_size = 30000        # Dimensione massima del buffer di esperienza
+buffer_size = 30000         # Dimensione massima del buffer di esperienza
 batch_size = 128            # Dimensione del batch per l'addestramento
 update_freq = 4             # Frequenza di aggiornamento della rete (ogni quanti step)
 
