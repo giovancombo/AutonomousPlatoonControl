@@ -8,64 +8,63 @@ from env_platoon import EnvPlatoon
 from visualizer import PlatooningVisualizer
 from agent import DQNAgent, TabularQAgent
 
-TABULAR_QL = False          # True per usare il Q-Learning tabulare, False per usare il DQN
-num_episodes = 5000
-num_timesteps = 100         # Numero di step temporali per episodio
+TABULAR_QL = False          # True to use Tabular Q-Learning, False to use DQL
+num_episodes = 10000
+num_timesteps = 100         # Number of timesteps per episode
 
 num_vehicles = 2
-vehicles_length = 4         # Lunghezza fisica di ogni veicolo
-T = 0.1                     # Intervallo di campionamento/controllo
-tau = 0.1                   # Costante di tempo della dinamica del veicolo (risposta all'accelerazione)
-h = 1.5                     # Time headway: tempo desiderato per raggiungere il veicolo precedente andando a velocità costante
-r = 2                       # Standstill distance: distanza di sicurezza minima a veicolo fermo
-min_safe_distance = 0.3     # Distanza minima assoluta per evitare collisioni in metri
-collision_penalty = 0       # Penalità applicata in caso di collisione
+vehicles_length = 4         # Length of each vehicle in meters
+T = 0.1                     # Duration of each timestep in seconds
+tau = 0.1                   # Time constant for the vehicle dynamics
+h = 1.5                     # Time to bridge the distance to the leader while proceeding at constant speed
+r = 2                       # Standstill distance: minimum safety distance to the leader while stopped
+min_safe_distance = 0.3     # Distance to the leader in meters that results in collision
+collision_penalty = 0       # Penalty for collision
 
-ep_max = 2                  # Massimo errore di posizione ammissibile
-ep_max_nominal = 15         # Valore di normalizzazione per l'errore di posizione
-ev_max = 1.5                # Massimo errore di velocità ammissibile
-ev_max_nominal = 10         # Valore di normalizzazione per l'errore di velocità
-acc_min = -2.6              # Accelerazione minima possibile
-acc_max = 2.6               # Accelerazione massima possibile
+ep_max = 2                  # Maximum position gap
+ep_max_nominal = 15         # Maximum position gap nominal value (for normalization)
+ev_max = 1.5                # Maximum velocity gap
+ev_max_nominal = 10         # Maximum valocity gap nominal value (for normalization)
+acc_min = -2.6              # Minumum limit for acceleration
+acc_max = 2.6               # Maximum limit for acceleration
 
-u_min = -2.6                # Input di controllo minimo
-u_max = 2.6                 # Input di controllo massimo
+u_min = -2.6                # Minumum limit for control input
+u_max = 2.6                 # Maximum limit for control input
 
-a = 0.1                     # Peso per il termine di errore di velocità nel reward
-b = 0.1                     # Peso per il termine di input di controllo nel reward
-c = 0.2                     # Peso per il termine di jerk nel reward
-reward_threshold = -0.4483  # Soglia per switchare tra reward assoluto e quadratico
-lambd = 5e-3                # Fattore di scala per il reward quadratico
-env_gamma = 1               # Fattore di sconto per il reward cumulativo (1 = no discount)
+a = 0.1                     # Reward Weight for the velocity gap term
+b = 0.1                     # Reward Weight for the control input term
+c = 0.2                     # Reward Weight for the jerk term
+reward_threshold = -0.4483  # Threshold for switching between absolute and quadratic reward
+lambd = 5e-3                # Scale factor for quadratic reward
+env_gamma = 1               # Discount factor for cumulative reward (1 = No discount)
 
-leader_min_speed = 50       # Velocità minima del leader in km/h
-leader_max_speed = 50       # Velocità massima del leader in km/h
+leader_min_speed = 50       # Minimum initial leader velocity in km/h
+leader_max_speed = 50       # Maximum initial leader velocity in km/h
 
-# Architettura della rete neurale
-state_size = 3                                          # Dimensione dello spazio degli stati (ep, ev, acc)
-hidden_size = [512, 256]                                # Dimensioni dei layer nascosti della rete
+state_size = 3
+hidden_size = [512, 256]                                # Hidden layer sizes for the DQN
+discrete_actions = True                                 # True for discretized actions, False for continuous actions
+action_size = 1 if not discrete_actions else 50         # Size of the action space
+state_bins = (10, 10, 10)                               # Size of the state space bins (only for Tabular Q-Learning)
 
-discrete_actions = True                                 # True (consigliato) per usare spazio delle azioni discreto invece che continuo
-action_size = 1 if not discrete_actions else 10         # Dimensione dello spazio delle azioni
-state_bins = (10, 10, 10)                               # Numero di bin per discretizzare ogni dimensione dello stato
+lr = 1e-3                   # Learning rate
+agent_gamma = 0.99          # Discount factor for future rewards
+soft_update_tau = 0.01      # Soft Update coefficient for the Target Network
+max_grad_norm = 1.0         # Gradient Clipping Norm
 
-lr = 5e-4                   # Learning rate per l'ottimizzazione
-agent_gamma = 0.99          # Discount factor per i reward futuri
-soft_update_tau = 0.01      # Coefficiente per soft update della target network
+epsilon = 1.0               # Initial epsilon for ε-greedy strategy
+eps_decay = 0.9995          # Decay rate for epsilon
+min_epsilon = 0.08          # Minimum epsilon value
 
-epsilon = 1.0               # Probabilità iniziale di esplorazione
-eps_decay = 0.999           # Fattore di decadimento dell'epsilon
-min_epsilon = 0.08          # Valore minimo di epsilon
+buffer_size = 200000        # Size of the experience replay buffer
+batch_size = 512
+update_freq = 100           # Frequency of the Target Q-Network update
 
-buffer_size = 150000        # Dimensione massima del buffer di esperienza
-batch_size = 256            # Dimensione del batch per l'addestramento
-update_freq = 100           # Frequenza di aggiornamento della rete (ogni quanti step)
+window_size = 100           # Size of the window for calculating the average score
+visualization_freq = 10000  # Frequency of visualization of episodes
+log_freq = 200              # Frequency of logging states to WandB
 
-window_size = 100           # Finestra per il calcolo della media mobile delle performance
-visualization_freq = 2000   # Frequenza di visualizzazione episodio (ogni quanti episodi)
-log_freq = 200              # Frequenza di logging su wandb (ogni quanti episodi)
-
-validation_freq = 100
+validation_freq = 25
 validation_episodes = 100
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -101,6 +100,7 @@ config = {
     "lr": lr,
     "agent_gamma": agent_gamma,
     "soft_update_tau": soft_update_tau,
+    "max_grad_norm": max_grad_norm,
     "epsilon": epsilon,
     "eps_decay": eps_decay,
     "min_epsilon": min_epsilon,
@@ -114,15 +114,81 @@ config = {
 run_name = "DQN" if not TABULAR_QL else "TAB"
 run_name = run_name + f"_speed{leader_max_speed}_{num_timesteps}steps_{str(time.time())[-4:]}"
 
-leader_actions = np.zeros(num_timesteps)            # Pattern del leader (moto uniforme)
-rewards_history = []                                # Storia dei reward per calcolare medie
-global_step = 0                                     # Contatore globale degli step per logging
+class LeaderPatternGenerator:
+    def __init__(self, num_timesteps, T, acc_max=2.6):
+        self.num_timesteps = num_timesteps
+        self.T = T
+        self.acc_max = acc_max
+        self.patterns = {'uniform': self.uniform_pattern,
+                        'uniform_acc': self.uniform_acc_pattern,
+                        'uniform_dec': self.uniform_dec_pattern,
+                        'sinusoidal': self.sinusoidal_pattern,
+                        'stop_and_go': self.stop_and_go_pattern,
+                        'acc_dec_sequence': self.acc_dec_sequence,
+                        'random_changes': self.random_changes_pattern}
+        
+    def uniform_pattern(self):
+        return np.zeros(self.num_timesteps)
+        
+    def uniform_acc_pattern(self):
+        """Constant positive acceleration"""
+        return np.ones(self.num_timesteps) * self.acc_max * 0.4
+        
+    def uniform_dec_pattern(self):
+        """Constant negative acceleration"""
+        return np.ones(self.num_timesteps) * -self.acc_max * 0.4
+        
+    def sinusoidal_pattern(self):
+        t = np.linspace(0, 4*np.pi, self.num_timesteps)
+        return np.sin(t) * self.acc_max * 0.3
+        
+    def stop_and_go_pattern(self):
+        """Typical traffic pattern with stops and accelerations"""
+        pattern = np.zeros(self.num_timesteps)
+        segment_length = self.num_timesteps // 4
+        
+        pattern[:segment_length] = self.acc_max * 0.4
+        pattern[2*segment_length:3*segment_length] = -self.acc_max * 0.4
+        return pattern
+        
+    def acc_dec_sequence(self):
+        pattern = np.zeros(self.num_timesteps)
+        segment_length = self.num_timesteps // 5
+        
+        pattern[:segment_length] = self.acc_max * 0.5
+        pattern[2*segment_length:3*segment_length] = -self.acc_max * 0.5
+        pattern[4*segment_length:] = self.acc_max * 0.5
+        return pattern
+        
+    def random_changes_pattern(self):
+        """Smooth random changes in acceleration"""
+        num_changes = 5
+        change_points = np.linspace(0, self.num_timesteps, num_changes+1, dtype=int)
+        pattern = np.zeros(self.num_timesteps)
+        
+        for i in range(num_changes):
+            pattern[change_points[i]:change_points[i+1]] = np.random.uniform(-0.5, 0.5) * self.acc_max
+        return pattern
+        
+    def generate_pattern(self, pattern_type=None, return_name=False):
+        if pattern_type is not None and pattern_type in self.patterns:
+            pattern = self.patterns[pattern_type]()
+            return (pattern, pattern_type) if return_name else pattern
+        probabilities = {'uniform': 0.14,
+                        'uniform_acc': 0.14,
+                        'uniform_dec': 0.14,
+                        'sinusoidal': 0.14,
+                        'stop_and_go': 0.15,
+                        'acc_dec_sequence': 0.15,
+                        'random_changes': 0.14,}
+        pattern_type = np.random.choice(list(probabilities.keys()), p=list(probabilities.values()))
+        pattern = self.patterns[pattern_type]()
+        
+        return (pattern, pattern_type) if return_name else pattern
 
-def run_simulation(env, agent, visualizer):
+def run_simulation(env, agent, visualizer, pattern_generator):
     global rewards_history, global_step
-    
-    training_rewards = []
-    validation_rewards = []
+    training_rewards, validation_rewards = [], []
     episode_count = 0
 
     while episode_count < num_episodes:
@@ -130,12 +196,12 @@ def run_simulation(env, agent, visualizer):
         for _ in range(validation_freq):
             if episode_count >= num_episodes:
                 break
-                
-            state = env.reset(leader_actions)
-            visualize_episode = episode_count % visualization_freq == 0
-            score = 0
-            episode_step = 0
             
+            leader_actions, pattern_name = pattern_generator.generate_pattern(return_name=True)
+            state = env.reset(leader_actions, pattern_name)
+            score, episode_step = 0, 0
+            visualize_episode = episode_count % visualization_freq == 0
+
             if visualize_episode:
                 visualizer.reset_episode(episode_count)
             
@@ -149,13 +215,13 @@ def run_simulation(env, agent, visualizer):
                         f"States/{episode_count+1} - EP": state[0],
                         f"States/{episode_count+1} - EV": state[1],
                         f"States/{episode_count+1} - ACC": state[2]
-                    }, step=global_step)
+                    }, step = global_step)
                 
                 # Training updates
                 if TABULAR_QL:
                     discrete_state = env.discretize_state(state, agent.state_bins)
                     discrete_next_state = env.discretize_state(next_state, agent.state_bins)
-                    agent.update(discrete_state, action, reward, discrete_next_state, done)
+                    agent.tab_update(discrete_state, action, reward, discrete_next_state, done)
                 else:
                     agent.store_transition(state, action, reward, next_state, done)
                     if timestep % update_freq == 0:
@@ -176,7 +242,8 @@ def run_simulation(env, agent, visualizer):
 
             training_rewards.append(score)
             agent.decay_epsilon()
-            
+            episode_count += 1
+
             wandb.log({
                 "Training/Score": score,
                 "Training/epsilon": agent.epsilon,
@@ -189,18 +256,16 @@ def run_simulation(env, agent, visualizer):
                 visualizer.total_reward = score
                 visualizer.avg_reward = np.mean(training_rewards[-window_size:]) if len(training_rewards) > window_size else np.mean(training_rewards)
 
-            print(f"Training Episode {episode_count + 1}, Epsilon: {agent.epsilon:.4f}, Score: {score:.4f}, Avg Score: {np.mean(training_rewards[-window_size:]):.4f}")
-            episode_count += 1
+            print(f"Training Episode {episode_count + 1}, Epsilon: {agent.epsilon:.4f}, Score: {score:.4f}, Avg Score: {np.mean(training_rewards[-window_size:]):.4f}, Pattern: {env.pattern_name}")
 
         # Validation phase
         saved_epsilon = agent.epsilon
-        agent.epsilon = 0  # Disabilita exploration durante validation
-        
+        agent.epsilon = 0   # Greedy policy for validation: no exploration
         validation_scores = []
         for _ in range(validation_episodes):
-            state = env.reset(leader_actions)
+            leader_actions, pattern_name = pattern_generator.generate_pattern(return_name=True)
+            state = env.reset(leader_actions, pattern_name)
             score = 0
-            
             for timestep in range(num_timesteps):
                 action = agent.select_action(state)
                 next_state, reward, done, _ = env.step(action)
@@ -213,6 +278,9 @@ def run_simulation(env, agent, visualizer):
         val_avg_score = np.mean(validation_scores)
         val_std_score = np.std(validation_scores)
         validation_rewards.append(val_avg_score)
+
+        agent.update_scheduler(val_avg_score)
+        agent.epsilon = saved_epsilon
         
         wandb.log({
             "Validation/Average Score": val_avg_score,
@@ -220,29 +288,32 @@ def run_simulation(env, agent, visualizer):
         }, step=global_step)
         
         print(f"Validation after episode {episode_count}: Avg Score: {val_avg_score:.4f} ± {val_std_score:.4f}")
-        
-        agent.epsilon = saved_epsilon
 
 if __name__ == "__main__":
     wandb.login()
     wandb.init(project="PlatoonControl", config=config, name=run_name)
 
-    # Setup Environment e Agente
+    pattern_generator = LeaderPatternGenerator(num_timesteps, T, acc_max)
+    leader_actions, pattern_name = pattern_generator.generate_pattern(return_name=True)
+    rewards_history = []
+    global_step = 0
+
+    # Setup Environment
     env = EnvPlatoon(num_vehicles, vehicles_length, num_timesteps, T, h, tau, ep_max, ep_max_nominal,
                      ev_max, ev_max_nominal, acc_min, acc_max, u_min, u_max, a, b, c, reward_threshold,
-                     lambd, env_gamma, r, leader_min_speed, leader_max_speed, min_safe_distance, collision_penalty)
+                     lambd, env_gamma, r, leader_min_speed, leader_max_speed, pattern_name, min_safe_distance, collision_penalty)
     visualizer = PlatooningVisualizer(env)
 
-    # Inizializzazione agente (Q-Learning o DQN)
+    # Agent initialization (Q-Learning or DQN)
     if TABULAR_QL:
         agent = TabularQAgent(state_bins, action_size, env.u_min, env.u_max, lr, agent_gamma, epsilon, eps_decay, min_epsilon)
     else:
         agent = DQNAgent(state_size, hidden_size, action_size, u_min, u_max, lr, agent_gamma, soft_update_tau, epsilon, eps_decay,
-                         min_epsilon, ep_max_nominal, ev_max_nominal, acc_min, acc_max, buffer_size, batch_size, device,
+                         min_epsilon, ep_max_nominal, ev_max_nominal, acc_min, acc_max, max_grad_norm, buffer_size, batch_size, device,
                          discrete_actions)
     
     simulation_done = threading.Event()
-    sim_thread = threading.Thread(target=run_simulation, args=(env, agent, visualizer))
+    sim_thread = threading.Thread(target = run_simulation, args = (env, agent, visualizer, pattern_generator))
     sim_thread.start()
 
     def update_task(task):
@@ -250,12 +321,10 @@ if __name__ == "__main__":
             return task.done
         return task.cont
 
-    # Avvio visualizzatore
     visualizer.taskMgr.add(update_task, "UpdateTask")
     visualizer.accept("p", visualizer.toggle_pause)
     visualizer.run()
 
-    # Cleanup
     sim_thread.join()
     visualizer.stop_visualizing()
     wandb.finish()
