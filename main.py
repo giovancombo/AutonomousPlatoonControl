@@ -1,3 +1,12 @@
+def set_seeds(seed):
+    import random
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
 import numpy as np
 import torch
 import threading
@@ -42,21 +51,21 @@ leader_min_speed = 50       # Minimum initial leader velocity in km/h
 leader_max_speed = 50       # Maximum initial leader velocity in km/h
 
 state_size = 3
-hidden_size = [512, 256]                                # Hidden layer sizes for the DQN
+hidden_size = [1024, 512]                                # Hidden layer sizes for the DQN
 discrete_actions = True                                 # True for discretized actions, False for continuous actions
 action_size = 1 if not discrete_actions else 50         # Size of the action space
 state_bins = (10, 10, 10)                               # Size of the state space bins (only for Tabular Q-Learning)
 
-lr = 1e-3                   # Learning rate
+lr = 8e-4                   # Learning rate
 agent_gamma = 0.99          # Discount factor for future rewards
 soft_update_tau = 0.01      # Soft Update coefficient for the Target Network
 max_grad_norm = 1.0         # Gradient Clipping Norm
 
 epsilon = 1.0               # Initial epsilon for ε-greedy strategy
-eps_decay = 0.9995          # Decay rate for epsilon
+eps_decay = 0.9996          # Decay rate for epsilon
 min_epsilon = 0.08          # Minimum epsilon value
 
-buffer_size = 200000        # Size of the experience replay buffer
+buffer_size = 400000        # Size of the experience replay buffer
 batch_size = 512
 update_freq = 100           # Frequency of the Target Q-Network update
 
@@ -115,7 +124,7 @@ run_name = "DQN" if not TABULAR_QL else "TAB"
 run_name = run_name + f"_speed{leader_max_speed}_{num_timesteps}steps_{str(time.time())[-4:]}"
 
 class LeaderPatternGenerator:
-    def __init__(self, num_timesteps, T, acc_max=2.6):
+    def __init__(self, num_timesteps, T, acc_max=2.6):        
         self.num_timesteps = num_timesteps
         self.T = T
         self.acc_max = acc_max
@@ -205,7 +214,7 @@ def run_simulation(env, agent, visualizer, pattern_generator):
             if visualize_episode:
                 visualizer.reset_episode(episode_count)
             
-            for timestep in range(num_timesteps):
+            for _ in range(num_timesteps):
                 action = agent.select_action(state)
                 next_state, reward, done, _ = env.step(action)
                 score += reward
@@ -224,7 +233,7 @@ def run_simulation(env, agent, visualizer, pattern_generator):
                     agent.tab_update(discrete_state, action, reward, discrete_next_state, done)
                 else:
                     agent.store_transition(state, action, reward, next_state, done)
-                    if timestep % update_freq == 0:
+                    if global_step % update_freq == 0:
                         agent.update()
 
                 if visualize_episode:
@@ -256,7 +265,7 @@ def run_simulation(env, agent, visualizer, pattern_generator):
                 visualizer.total_reward = score
                 visualizer.avg_reward = np.mean(training_rewards[-window_size:]) if len(training_rewards) > window_size else np.mean(training_rewards)
 
-            print(f"Training Episode {episode_count + 1}, Epsilon: {agent.epsilon:.4f}, Score: {score:.4f}, Avg Score: {np.mean(training_rewards[-window_size:]):.4f}, Pattern: {env.pattern_name}")
+            print(f"Training Episode {episode_count + 1}, Steps: {env.collision_step if env.collision_step is not None else episode_step}, Epsilon: {agent.epsilon:.4f}, Score: {score:.4f}, Avg Score: {np.mean(training_rewards[-window_size:]):.4f}, Pattern: {env.pattern_name}")
 
         # Validation phase
         saved_epsilon = agent.epsilon
@@ -290,8 +299,11 @@ def run_simulation(env, agent, visualizer, pattern_generator):
         print(f"Validation after episode {episode_count}: Avg Score: {val_avg_score:.4f} ± {val_std_score:.4f}")
 
 if __name__ == "__main__":
+    SEED = 1492
+    set_seeds(SEED)
+
     wandb.login()
-    wandb.init(project="PlatoonControl", config=config, name=run_name)
+    wandb_run = wandb.init(project="PlatoonControl", config=config, name=run_name)
 
     pattern_generator = LeaderPatternGenerator(num_timesteps, T, acc_max)
     leader_actions, pattern_name = pattern_generator.generate_pattern(return_name=True)
@@ -302,6 +314,7 @@ if __name__ == "__main__":
     env = EnvPlatoon(num_vehicles, vehicles_length, num_timesteps, T, h, tau, ep_max, ep_max_nominal,
                      ev_max, ev_max_nominal, acc_min, acc_max, u_min, u_max, a, b, c, reward_threshold,
                      lambd, env_gamma, r, leader_min_speed, leader_max_speed, pattern_name, min_safe_distance, collision_penalty)
+    env.seed(SEED)
     visualizer = PlatooningVisualizer(env)
 
     # Agent initialization (Q-Learning or DQN)
@@ -328,3 +341,4 @@ if __name__ == "__main__":
     sim_thread.join()
     visualizer.stop_visualizing()
     wandb.finish()
+    wandb_run.finish()

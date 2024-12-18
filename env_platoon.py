@@ -7,7 +7,7 @@ class EnvPlatoon:
 
         assert r > min_safe_distance, "Standstill distance must be greater than minimum safe distance"
         assert ep_max > 0, "Maximum position gap must be positive"
-
+        
         # Platoon params
         self.num_vehicles = num_vehicles
         self.vehicles_length = vehicles_length
