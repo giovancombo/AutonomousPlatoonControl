@@ -10,12 +10,14 @@ class DeepQNetwork(nn.Module):
         super().__init__()
         self.fc1 = nn.Linear(state_size, hidden_size[0])
         self.fc2 = nn.Linear(hidden_size[0], hidden_size[1])
-        self.fc3 = nn.Linear(hidden_size[1], action_size)
+        #self.fc3 = nn.Linear(hidden_size[1], hidden_size[2])
+        self.fc4 = nn.Linear(hidden_size[1], action_size)
 
     def forward(self, x):
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))
-        return self.fc3(x)
+        #x = torch.relu(self.fc3(x))
+        return self.fc4(x)
 
 class DQNAgent:
     def __init__(self, state_size, hidden_size, action_size, u_min, u_max, lr, gamma, soft_update_tau, epsilon,
@@ -106,7 +108,10 @@ class DQNAgent:
             actions_index = ((actions - self.u_min) / (self.u_max - self.u_min) * (self.action_size - 1)).long()
             current_q_values = current_q_values.gather(1, actions_index)
             with torch.no_grad():
-                next_q_values = self.target_q_network(next_states).max(1)[0].unsqueeze(1)
+                # DQN: next_q_values = self.target_q_network(next_states).max(1)[0].unsqueeze(1)
+                # Double DQN
+                next_actions = self.q_network(next_states).argmax(1)
+                next_q_values = self.target_q_network(next_states).gather(1, next_actions.unsqueeze(1))
         else:
             current_q_values = current_q_values.squeeze(1)
             with torch.no_grad():
@@ -154,11 +159,14 @@ class TabularQAgent:
         self.min_epsilon = min_epsilon
         self.discrete_actions = np.linspace(u_min, u_max, num_actions)
         
-        # Q-table initialization to zeros
-        self.q_table = np.zeros(self.state_bins + (self.num_actions,))
-
+        # Q-table initialization to zeros or tiny random values
+        #self.q_table = np.zeros(self.state_bins + (self.num_actions,))
+        self.q_table = np.random.uniform(low = -0.1, high = 0.1, size = self.state_bins + (self.num_actions,))
+    
     def select_action(self, state):
         """Selects an action using an ε-greedy strategy"""
+        state = tuple(map(int, state))
+
         if np.random.random() < self.epsilon:
             action_index = np.random.randint(0, self.num_actions)
         else:
@@ -167,16 +175,19 @@ class TabularQAgent:
 
     def tab_update(self, state, action, reward, next_state, done):
         """Updates the Q-table using the Bellman Equation"""
+        state = tuple(map(int, state))
+        next_state = tuple(map(int, next_state))
+
         action_index = np.abs(self.discrete_actions - action).argmin()
         current_q = self.q_table[state + (action_index,)]
 
         if not done:
-            max_next_q = np.max(self.q_table[next_state])
-            new_q = current_q + self.lr * (reward + self.gamma * max_next_q - current_q)
+            next_max_q = np.max(self.q_table[next_state])
+            target_q = reward + self.gamma * next_max_q
         else:
-            new_q = current_q + self.lr * (reward - current_q)
-        
-        self.q_table[state + (action_index,)] = new_q
+            target_q = reward
+
+        self.q_table[state + (action_index,)] += self.lr * (target_q - current_q)
 
     def decay_epsilon(self):
         """Decays epsilon according to the decay rate"""

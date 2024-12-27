@@ -17,8 +17,8 @@ from env_platoon import EnvPlatoon
 from visualizer import PlatooningVisualizer
 from agent import DQNAgent, TabularQAgent
 
-TABULAR_QL = False          # True to use Tabular Q-Learning, False to use DQL
-num_episodes = 10000
+TABULAR_QL = True          # True to use Tabular Q-Learning, False to use DQL
+num_episodes = 15000
 num_timesteps = 100         # Number of timesteps per episode
 
 num_vehicles = 2
@@ -51,26 +51,26 @@ leader_min_speed = 50       # Minimum initial leader velocity in km/h
 leader_max_speed = 50       # Maximum initial leader velocity in km/h
 
 state_size = 3
-hidden_size = [1024, 512]                                # Hidden layer sizes for the DQN
+hidden_size = [256, 128]                                # Hidden layer sizes for the DQN
 discrete_actions = True                                 # True for discretized actions, False for continuous actions
-action_size = 1 if not discrete_actions else 50         # Size of the action space
+action_size = 1 if not discrete_actions else 10         # Size of the action space
 state_bins = (10, 10, 10)                               # Size of the state space bins (only for Tabular Q-Learning)
 
-lr = 8e-4                   # Learning rate
-agent_gamma = 0.99          # Discount factor for future rewards
+lr = 1e-1                   # Learning rate
+agent_gamma = 0.95          # Discount factor for future rewards
 soft_update_tau = 0.01      # Soft Update coefficient for the Target Network
 max_grad_norm = 1.0         # Gradient Clipping Norm
 
 epsilon = 1.0               # Initial epsilon for ε-greedy strategy
-eps_decay = 0.9996          # Decay rate for epsilon
-min_epsilon = 0.08          # Minimum epsilon value
+eps_decay = 0.9995          # Decay rate for epsilon
+min_epsilon = 0.02          # Minimum epsilon value
 
-buffer_size = 400000        # Size of the experience replay buffer
+buffer_size = 300000        # Size of the experience replay buffer
 batch_size = 512
-update_freq = 100           # Frequency of the Target Q-Network update
+update_freq = 80           # Frequency of the Target Q-Network update
 
 window_size = 100           # Size of the window for calculating the average score
-visualization_freq = 10000  # Frequency of visualization of episodes
+visualization_freq = 20000  # Frequency of visualization of episodes
 log_freq = 200              # Frequency of logging states to WandB
 
 validation_freq = 25
@@ -215,7 +215,11 @@ def run_simulation(env, agent, visualizer, pattern_generator):
                 visualizer.reset_episode(episode_count)
             
             for _ in range(num_timesteps):
-                action = agent.select_action(state)
+                if TABULAR_QL:
+                    discrete_state = env.discretize_state(state, agent.state_bins)
+                    action = agent.select_action(discrete_state)
+                else:
+                    action = agent.select_action(state)
                 next_state, reward, done, _ = env.step(action)
                 score += reward
 
@@ -228,7 +232,6 @@ def run_simulation(env, agent, visualizer, pattern_generator):
                 
                 # Training updates
                 if TABULAR_QL:
-                    discrete_state = env.discretize_state(state, agent.state_bins)
                     discrete_next_state = env.discretize_state(next_state, agent.state_bins)
                     agent.tab_update(discrete_state, action, reward, discrete_next_state, done)
                 else:
@@ -269,14 +272,18 @@ def run_simulation(env, agent, visualizer, pattern_generator):
 
         # Validation phase
         saved_epsilon = agent.epsilon
-        agent.epsilon = 0   # Greedy policy for validation: no exploration
+        agent.epsilon = 0       # Greedy policy for validation: no exploration
         validation_scores = []
         for _ in range(validation_episodes):
             leader_actions, pattern_name = pattern_generator.generate_pattern(return_name=True)
             state = env.reset(leader_actions, pattern_name)
             score = 0
-            for timestep in range(num_timesteps):
-                action = agent.select_action(state)
+            for _ in range(num_timesteps):
+                if TABULAR_QL:
+                    discrete_state = env.discretize_state(state, agent.state_bins)
+                    action = agent.select_action(discrete_state)
+                else:
+                    action = agent.select_action(state)
                 next_state, reward, done, _ = env.step(action)
                 score += reward
                 if done:
@@ -288,7 +295,7 @@ def run_simulation(env, agent, visualizer, pattern_generator):
         val_std_score = np.std(validation_scores)
         validation_rewards.append(val_avg_score)
 
-        agent.update_scheduler(val_avg_score)
+        #agent.update_scheduler(val_avg_score)
         agent.epsilon = saved_epsilon
         
         wandb.log({

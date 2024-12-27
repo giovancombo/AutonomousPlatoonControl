@@ -144,13 +144,20 @@ class EnvPlatoon:
     def discretize_state(self, state, num_bins):
         """Discretizes state for Tabular Q-Learning"""
         ep, ev, acc = state
+
+        ep = np.clip(ep, -self.ep_max, self.ep_max)
+        ev = np.clip(ev, -self.ev_max, self.ev_max)
+        acc = np.clip(acc, self.acc_min, self.acc_max)
+
         ep_bins = np.linspace(-self.ep_max, self.ep_max, num_bins[0])
         ev_bins = np.linspace(-self.ev_max, self.ev_max, num_bins[1])
         acc_bins = np.linspace(self.acc_min, self.acc_max, num_bins[2])
 
-        return (np.digitize(ep, ep_bins), 
-                np.digitize(ev, ev_bins), 
-                np.digitize(acc, acc_bins))
+        ep_idx = min(num_bins[0]-1, np.digitize(ep, ep_bins)-1)
+        ev_idx = min(num_bins[1]-1, np.digitize(ev, ev_bins)-1)
+        acc_idx = min(num_bins[2]-1, np.digitize(acc, acc_bins)-1)
+
+        return (int(ep_idx), int(ev_idx), int(acc_idx))
 
     def render(self, mode='human'):
         print(f"Current state: {self.state}")
