@@ -1,4 +1,4 @@
-# Autonomous Platoon Control with Reinforcement Learning
+# Autonomous Platoon Control with Q-Learning
 
 This work was developed as a Project Work for the Autonomous Agents and Intelligent Robotics course, taught by Professor Giorgio Battistelli, as part of the Master's Degree in Artificial Intelligence at the University of Florence, Italy.
 
