@@ -1,98 +1,98 @@
 # Autonomous Platoon Control with Reinforcement Learning
 
-Questo lavoro nasce come Project Work del corso di Autonomous Agents and Intelligent Robotics, tenuto dal professor Giorgio Battistelli, nell'ambito del corso di laurea magistrale in Intelligenza Artificiale all'Università degli Studi di Firenze, Italia.
+This work was developed as a Project Work for the Autonomous Agents and Intelligent Robotics course, taught by Professor Giorgio Battistelli, as part of the Master's Degree in Artificial Intelligence at the University of Florence, Italy.
 
-Obiettivo principale è la valutazione e il confronto di algoritmi di Reinforcement Learning per la risoluzione di un problema di *Autonomous Platoon Control*, conducendo la parziale ricostruzione, su piccola scala, dei risultati sperimentali ottenuti dal seguente paper di riferimento:
+The main objective is to evaluate and compare different Reinforcement Learning algorithms for solving an *Autonomous Platoon Control* problem by partially reproducing, on a smaller scale, the experimental results obtained in the following reference paper:
 
 > [Autonomous Platoon Control with Integrated Deep Reinforcement Learning and Dynamic Programming](https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/paper.pdf), Tong Liu, Lei Lei, Kan Zheng, Kuan Zhang; 2022.
 
 ## 1 - Introduction
 
-L'*Autonomous Platoon Control* è un task di elevata importanza per il futuro dei sistemi di trasporto intelligenti. Attraverso la coordinazione automatizzata di veicoli in plotone, è possibile ottimizzare il flusso del traffico, ridurre il consumo di carburante e migliorare la sicurezza stradale. La sfida principale consiste nel mantenere una distanza ottimale tra un sistema di veicoli in coda mentre questi si adattano alle variazioni di velocità del leader.
+*Autonomous Platoon Control* is a highly important task for the future of intelligent transportation systems. Through automated coordination of vehicles in platoon formation, it is possible to optimize traffic flow, reduce fuel consumption, and improve road safety. The main challenge is maintaining an optimal distance between a system of queued vehicles while they adapt to the leader's speed variations.
 
-Il setting del seguente problema è stato ripreso totalmente da quello implementato nel paper di riferimento, con l'unica semplificazione data dalla presenza di un *singolo* veicolo agente, e un singolo altro veicolo che lo precede, il leader. Tutti i veicoli seguono una **dinamica del primo ordine**:
+The setup of this problem follows exactly the one implemented in the reference paper, with the only simplification being the presence of a *single* agent vehicle and a single preceding vehicle, the leader. All vehicles follow a **first-order dynamics**:
 
 $$\dot{p}_i(t) = v_i(t)$$
 $$\dot{v}_i(t) = acc_i(t)$$
 $$\dot{acc}_i(t) = -\frac{1}{\tau_i}acc_i(t) + \frac{1}{\tau_i}u_i(t)$$
 
-dove $\tau_i$ rappresenta la costante di tempo che modella il ritardo nella risposta del sistema di controllo del veicolo. Questo parametro è cruciale in quanto rappresenta l'inerzia del sistema nel rispondere ai comandi di accelerazione, influenzando direttamente la stabilità e la reattività del controllo.
+where $\tau_i$ represents the time constant that models the delay in the vehicle's control system response. This parameter is crucial as it represents the system's inertia in responding to acceleration commands, directly affecting the control's stability and responsiveness.
 
-Per prevenire divergenze ed esplosioni irrealistiche di accelerazioni che potrebbero compromettere l'addestramento dell'agente, vengono imposti dei vincoli ai valori assumibili dall'accelerazione dell'agente e dall'azione:
+To prevent divergences and unrealistic acceleration spikes that could compromise the agent's training, constraints are imposed on the possible values for the agent's acceleration and action:
 
 $$acc_{min} \leq acc_i(t) \leq acc_{max}$$
 $$u_{min} \leq u_i(t) \leq u_{max}$$
 
-#### Desired headway
+### Desired headway
 
-Il successo del task di controllo del plotone dipende fortemente dal mantenimento di una corretta distanza tra i veicoli. Nel paper di riferimento, si definisce **headway** la distanza *bumper-to-bumper* tra due veicoli consecutivi:
+The success of the platoon control task strongly depends on maintaining the correct distance between vehicles. In the reference paper, **headway** is defined as the *bumper-to-bumper* distance between two consecutive vehicles:
 
 $$d_i(t) = p_{i-1}(t) - p_i(t) - L_{i-1}$$
 
-dove $L_{i-1}$ rappresenta la lunghezza del veicolo che precede il veicolo $i$. Per semplicità, consideriamo veicoli aventi tutti la medesima lunghezza.
+where $L_{i-1}$ represents the length of the vehicle preceding vehicle $i$. For simplicity, we consider all vehicles to have the same length.
 
-In qualsiasi istante di tempo $t$, ogni veicolo che segue il leader possiede una propria headway desiderata dal veicolo che lo precede:
+At any time instant $t$, each vehicle following the leader has its own desired headway from the preceding vehicle:
 
 $$d_{r,i}(t) = r_i + h_iv_i(t)$$
 
-dove $r_i$ rappresenta la distanza di sicurezza che un veicolo, da fermo, deve mantenere dal precedente; e dove $h_i$ rappresenta la costante di tempo data dal tempo che il veicolo impiegherebbe a raggiungere (collidere con) il veicolo precedente mantenendo una velocità costante. Questo approccio di spacing policy basato sul time headway contribuisce significativamente alla stabilità del sistema: al crescere della velocità, aumenta proporzionalmente anche la distanza di sicurezza desiderata, garantendo maggiore spazio di frenata e quindi maggiore sicurezza.
+where $r_i$ represents the safety distance that a stationary vehicle must maintain from the preceding one; and where $h_i$ represents the time constant given by the time it would take for the vehicle to reach (collide with) the preceding vehicle while maintaining a constant speed. This time-headway-based spacing policy significantly contributes to system stability: as speed increases, the desired safety distance increases proportionally, ensuring greater braking distance and therefore improved safety.
 
-Il controllo ottimale del plotone si raggiunge nel momento in cui ogni veicolo riesce ad adeguare la propria dinamica di moto in modo da mantenere nel tempo la distanza desiderata dal veicolo che lo precede. Di conseguenza, il *Platoon Control* può essere facilmente reso un problema di minimizzazione imponendo come obiettivo la minimizzazione, da parte dell'agente, di due valori di **errore**, uno sulla distanza corretta da raggiungere rispetto al veicolo precedente, e uno sulla velocità corretta da mantenere affinché tale distanza desiderata non sia solo raggiunta, ma mantenuta nel tempo.
+Optimal platoon control is achieved when each vehicle manages to adjust its motion dynamics to maintain the desired distance from the preceding vehicle over time. Consequently, *Platoon Control* can be easily transformed into a minimization problem by setting the objective as the minimization, by the agent, of two **error** values: one for achieving the correct distance from the preceding vehicle, and one for maintaining the correct speed to ensure this desired distance is not only reached but maintained over time.
 
 $$e_{p,i}(t) = d_i(t) - d_{r,i}(t)$$
 $$e_{v,i}(t) = v_{i-1}(t) - v_i(t)$$
 
-#### State and Action Space
+### State and Action Space
 
-Lo state space si compone, ad ogni timestep $k$, di tre valori: $\{e_{p,i}^k, e_{v,i}^k, acc_i^k\}$. L'errore di posizione ($e_{p,i}^k$) e l'errore di velocità ($e_{v,i}^k$) forniscono all'agente informazioni dirette sugli obiettivi da raggiungere, mentre l'accelerazione corrente ($acc_i^k$) permette all'agente di considerare l'inerzia del sistema nel processo decisionale. Per l'utilizzo nella rete neurale, questi stati vengono normalizzati rispetto ai loro valori massimi nominali, garantendo un input uniforme e ben condizionato per l'apprendimento.
+The state space consists, at each timestep $k$, of three values: ${e_{p,i}^k, e_{v,i}^k, acc_i^k}$. The position error ($e_{p,i}^k$) and velocity error ($e_{v,i}^k$) provide the agent with direct information about the objectives to achieve, while the current acceleration ($acc_i^k$) allows the agent to consider system inertia in the decision-making process. For use in the neural network, these states are normalized with respect to their nominal maximum values, ensuring a uniform and well-conditioned input for learning.
 
-L'action space si compone di un unico valore: $u_i^k \in [u_{min}, u_{max}]$.
+The action space consists of a single value: $u_i^k \in [u_{min}, u_{max}]$.
 
-#### Dynamics
+### Dynamics
 
-Il sistema evolve secondo due modelli dinamici discreti distinti per il leader e il follower:
+The system evolves according to two distinct discrete dynamic models for the leader and follower:
 
 **Leader**: $$x_{0, k+1} = A_0x_{0,k} + B_0u_{0,k}$$
 
 **Follower i**: $$x_{i, k+1} = A_ix_{i,k} + B_iu_{i,k} + C_iacc_{i-1,k}$$
 
-Per il leader, l'evoluzione dipende solo dal suo stato attuale e dall'input di controllo. Per il follower, invece, l'evoluzione dipende dal proprio stato, dal proprio input di controllo e dall'accelerazione del veicolo che lo precede. Questa dipendenza dall'accelerazione del predecessore permette al follower di anticipare le variazioni di velocità del veicolo che lo precede, e rendere così più stabile il sistema.
+For the leader, the evolution depends only on its current state and control input. For the follower, however, the evolution depends on its own state, its own control input, and the acceleration of the preceding vehicle. This dependence on the predecessor's acceleration allows the follower to anticipate speed variations of the preceding vehicle, thus making the system more stable.
 
-#### Reward system
+### Reward system
 
-Viene implementata una funzione di reward *Huber-like* $R(S_i^k, u_i^k)$. La scelta di questa particolare funzione di reward combina i vantaggi di una funzione lineare e di una quadratica: oltre una certa soglia (negativa) di reward di transizione di stato, si passa dal reward quadratico a quello assoluto. Questo approccio ibrido permette di gestire meglio sia gli errori grandi (attraverso la componente lineare che è meno sensibile agli outliers) che quelli piccoli (attraverso la componente quadratica che fornisce un gradiente più preciso per l'ottimizzazione fine).
+A *Huber-like* reward function $R(S_i^k, u_i^k)$ is implemented. The choice of this particular reward function combines the advantages of both linear and quadratic functions: beyond a certain (negative) threshold of state transition reward, it switches from quadratic to absolute reward. This hybrid approach allows better handling of both large errors (through the linear component which is less sensitive to outliers) and small errors (through the quadratic component which provides a more precise gradient for fine optimization).
 
 $$r_{abs} = -(|\frac{e_{p,i}^k}{e_{p,max}^{nom}}| + a|\frac{e_{v,i}^k}{e_{v,max}^{nom}}| + b|\frac{u_i^k}{u_{max}}| + c|\frac{j_i^k}{2acc_{max}/T}|)$$
 
 $$r_{qua} = -\lambda{(e_{p,i}^k)^2 + a(e_{v,i}^k)^2 + b(u_i^k)^2 + c(j_i^kT)^2)}$$
 
-I parametri $a$, $b$ e $c$ nelle funzioni di reward pesano l'importanza relativa dei diversi termini:
+The parameters $a$, $b$, and $c$ in the reward functions weight the relative importance of different terms:
 
-- $a$ bilancia l'importanza dell'errore di velocità rispetto all'errore di posizione
-- $b$ penalizza l'utilizzo di input di controllo troppo aggressivi, promuovendo un comportamento più "smooth"
-- $c$ penalizza variazioni brusche di accelerazione (jerk), contribuendo al comfort di guida
+- $a$ balances the importance of velocity error relative to position error
+- $b$ penalizes overly aggressive control inputs, promoting smoother behavior
+- $c$ penalizes sudden acceleration changes (jerk), contributing to driving comfort
 
-$R(S_i^k, u_i^k) = r_{abs}$ se $r_{abs} < \epsilon$, altrimenti $R(S_i^k, u_i^k) = r_{qua}$
+$R(S_i^k, u_i^k) = r_{abs}$ if $r_{abs} < \epsilon$, otherwise $R(S_i^k, u_i^k) = r_{qua}$
 
-Definito l'**expected cumulative reward** $J_{\pi_i} = E_{\pi_i}[\sum_{k=1}^K \gamma^{k-1}R(S_i^k, u_i^k)]$, l'obiettivo ultimo del problema è quello di trovare una *policy* $\pi^*$ che **massimizza** $J_{\pi_i}$:
+Given the **expected cumulative reward** $J_{\pi_i} = E_{\pi_i}[\sum_{k=1}^K \gamma^{k-1}R(S_i^k, u_i^k)]$, the ultimate goal of the problem is to find a *policy* $\pi^*$ that **maximizes** $J_{\pi_i}$:
 
 $$\pi^* = argmax_{\pi_i}J_{\pi_i}$$
 
 ## 2 - Method
 
-Il paper di riferimento propone un approccio integrato che combina Deep Reinforcement Learning e Dynamic Programming, utilizzando un algoritmo chiamato FH-DDPG-SS. Questo metodo si basa su DDPG (Deep Deterministic Policy Gradient) ed è progettato per gestire un sistema multi-agente complesso con numerosi veicoli in plotone.
+The reference paper proposes an integrated approach combining Deep Reinforcement Learning and Dynamic Programming, using an algorithm called FH-DDPG-SS. This method is based on DDPG (Deep Deterministic Policy Gradient) and is designed to handle a complex multi-agent system with multiple vehicles in platoon.
 
-In questo lavoro, è stato implementato un setting semplificato *a singolo agente*, nel quale l'agente deve adeguare la propria dinamica di modo a quella, imposta a priori, di un solo altro veicolo leader. Pertanto, ci si trova in un contesto dato da due soli veicoli, di cui uno è l'agente stesso. L'agente viene addestrato utilizzando due differenti algoritmi di **Q-Learning**, le cui performance saranno confrontate:
+In this work, we implemented a simplified *single-agent* environment, where the agent must adjust its dynamics to match those of a single leading vehicle, which are set in advance. Therefore, we have a context with only two vehicles, one of which is the agent itself. The agent is trained using two different **Q-Learning** algorithms, whose performances will be compared:
 
-- **Tabular Q-Learning**: Il Q-Learning tabellare rappresenta l'approccio più "classico" al Reinforcement Learning, in cui la Q-function viene rappresentata esplicitamente come una tabella. Mentre nel DQL lo state space è continuo, nel Tabular Q-Learning lo state space viene quantizzato uniformemente, così come l'action space. La Q-Table, avente un valore per ogni coppia stato-azione possibile, è inizializzata con valori casuali nell'intervallo [-0.1, 0.1], e il suo aggiornamento segue la classica equazione di Bellman:
+- **Tabular Q-Learning**:  This represents the most "classical" approach to Reinforcement Learning, where the Q-function is explicitly represented as a table. While in DQL the state space is continuous, in Tabular Q-Learning both state space and action space are uniformly quantized. The Q-Table, having a value for each possible state-action pair, is initialized with random values in the range [-0.1, 0.1], and its update follows the *Bellman Equation*:
 
 $$Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha[r_t + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t)]$$
 
-dove $Q(s_t, a_t)$ è il valore Q corrente per la coppia stato-azione; $\alpha$ è il learning rate; $r_t$ è il reward immediato; $\gamma$ è il discount factor; $\max_{a} Q(s_{t+1}, a)$ è il massimo valore Q possibile nello stato successivo; $[r_t + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t)]$ rappresenta il TD error.
+where $Q(s_t, a_t)$ is the current Q-value for the state-action pair; $\alpha$ is the learning rate; $r_t$ is the immediate reward; $\gamma$ is the discount factor; $\max_{a} Q(s_{t+1}, a)$ is the maximum possible Q-value in the next state; $[r_t + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t)]$ represents the TD error.
 
-- **Deep Q-Learning (DQL)**: Il Deep Q-Learning estende il classico Q-Learning utilizzando una rete neurale profonda per approssimare la Q-function, rendendo possibile l'utilizzo di uno state space continuo. L'implementazione per questo problema prevede la quantizzazione uniforme dell'action space nell'intervallo $[u_{min}, u_{max}]$; l'utilizzo di un Experience Replay Buffer per memorizzare e campionare le transizioni di stato; una Target Network per stabilizzare l'apprendimento e propagare nel tempo il task originario di platooning; una ε-greedy policy per il bilanciamento tra exploration ed exploitation.
+- **Deep Q-Learning (DQL)**: Deep Q-Learning extends classic Q-Learning by using a deep neural network to approximate the Q-function, making it possible to use a continuous state space. The implementation for this problem includes uniform quantization of the action space in the interval $[u_{min}, u_{max}]$; the use of an Experience Replay Buffer to store and sample state transitions; a Target Network to stabilize learning and propagate the original platooning task over time; and an ε-greedy policy to balance exploration and exploitation.
 
-L'implementazione è stata realizzata in Python utilizzando PyTorch per il DQL e NumPy per il Q-Learning tabellare. Il training è stato monitorato attraverso Weights & Biases.
+The implementation was developed in Python using PyTorch for DQL and NumPy for tabular Q-Learning. Training was monitored through Weights & Biases.
 
 ## 3 - Code
 
