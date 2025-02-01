@@ -76,7 +76,7 @@ $R(S_i^k, u_i^k) = r_{abs}$ if $r_{abs} < \epsilon$, otherwise $R(S_i^k, u_i^k) 
 
 Given the **expected cumulative reward** $J_{\pi_i} = E_{\pi_i}[\sum_{k=1}^K \gamma^{k-1}R(S_i^k, u_i^k)]$, the ultimate goal of the problem is to find a *policy* $\pi^*$ that **maximizes** $J_{\pi_i}$:
 
-$$\pi^* = argmax_{\pi_i}J_{\pi_i}$$
+$$\pi^* = argmax_{\pi_i}(J_{\pi_i})$$
 
 ## 2 - Method
 
@@ -84,11 +84,7 @@ The reference paper proposes an integrated approach combining Deep Reinforcement
 
 In this work, we implemented a simplified *single-agent* environment, where the agent must adjust its dynamics to match those of a single leading vehicle, which are set in advance. Therefore, we have a context with only two vehicles, one of which is the agent itself. The agent is trained using two different **Q-Learning** algorithms, whose performances will be compared:
 
-- **Tabular Q-Learning**:  This represents the most "classical" approach to Reinforcement Learning, where the Q-function is explicitly represented as a table. While in DQL the state space is continuous, in Tabular Q-Learning both state space and action space are uniformly quantized. The Q-Table, having a value for each possible state-action pair, is initialized with random values in the range [-0.1, 0.1], and its update follows the *Bellman Equation*:
-
-$$Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha[r_t + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t)]$$
-
-where $Q(s_t, a_t)$ is the current Q-value for the state-action pair; $\alpha$ is the learning rate; $r_t$ is the immediate reward; $\gamma$ is the discount factor; $\max_{a} Q(s_{t+1}, a)$ is the maximum possible Q-value in the next state; $[r_t + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t)]$ represents the TD error.
+- **Tabular Q-Learning**:  This represents the most "classical" approach to Reinforcement Learning, where the Q-function is explicitly represented as a table. While in DQL the state space is continuous, in Tabular Q-Learning both state space and action space are uniformly quantized. The Q-Table, having a value for each possible state-action pair, is initialized with random values in the range [-0.1, 0.1], and its update follows the *Bellman Equation*: $$Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha[r_t + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t)]$$, where $Q(s_t, a_t)$ is the current Q-value for the state-action pair; $\alpha$ is the learning rate; $r_t$ is the immediate reward; $\gamma$ is the discount factor; $\max_{a} Q(s_{t+1}, a)$ is the maximum possible Q-value in the next state; $[r_t + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t)]$ represents the TD error.
 
 - **Deep Q-Learning (DQL)**: Deep Q-Learning extends classic Q-Learning by using a deep neural network to approximate the Q-function, making it possible to use a continuous state space. The implementation for this problem includes uniform quantization of the action space in the interval $[u_{min}, u_{max}]$; the use of an Experience Replay Buffer to store and sample state transitions; a Target Network to stabilize learning and propagate the original platooning task over time; and an ε-greedy policy to balance exploration and exploitation.
 
