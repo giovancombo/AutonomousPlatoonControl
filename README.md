@@ -96,6 +96,9 @@ The implementation was developed in Python using PyTorch for DQL and NumPy for t
 Spiegazione dei vari attributi e metodi per la creazione dell'ambiente, confrontandoli con l'implementazione visibile nel paper di riferimento.
 Breve spiegazione delle aggiunte che ho deciso di fare nel mio lavoro, legate particolarmente alla possibilità di visualizzare correttamente gli episodi, considerando ogni veicolo non più come un punto ma come un oggetto solido.
 
+- Double Q-Learning vs normale
+- Tabular
+
 ### 3.2 - Visualization
 Spiegazione sommaria di come ho utilizzato Panda3D per visualizzare ogni episodio + piccola guida su come utilizzare e interpretare la visualizzazione.
 
@@ -107,7 +110,11 @@ Spiegazione sommaria di come ho utilizzato Panda3D per visualizzare ogni episodi
 <p align="center"><i>Rendering di episodi utilizzando Panda3D</i></p>
 
 ## 4 - Training
-Setup hardware e software; Iperparametri e range vari. Spiegazione della logica che ho adottato per raccogliere i vari risultati e fare i test.
+
+- Lista degli iperparametri dell'environment usati rimasti fissi
+- Lista degli iperparametri valutati nel training
+
+Iperparametri e range vari. Spiegazione della logica che ho adottato per raccogliere i vari risultati e fare i test.
 
 ## 5 - Results
 Sequenza di plot con relativa spiegazione.
@@ -120,7 +127,7 @@ Sequenza di plot con relativa spiegazione.
 |FH-DDPG|-0.0736|
 |HCFS|-0.0673|
 |FH-DDPG-SS|-0.0600|
-|**QL Tabellare**|?|
+|**Tabular QL**|?|
 |**Deep QL**|-0.1639|
 
 ## 6 - Conclusion
