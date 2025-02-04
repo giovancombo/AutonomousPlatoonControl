@@ -116,8 +116,30 @@ Spiegazione sommaria di come ho utilizzato Panda3D per visualizzare ogni episodi
 
 Iperparametri e range vari. Spiegazione della logica che ho adottato per raccogliere i vari risultati e fare i test.
 
+1) Training con singolo pattern leader: moto rettilineo uniforme
+2) Implementazione di 5 diversi pattern del leader
+3) Implementazione Scheduler, gradient clipping, impostazione seed
+
 ## 5 - Results
 Sequenza di plot con relativa spiegazione.
+
+Risultati:
+1) best run con moto rettilineo uniforme
+2) best 3 run DQN
+3) best DQN vs best TAB
+
+Confronti:
+- DQN action size
+- DQN soft update
+- DQN hidden size
+- DQN epsilon decay
+- DQN buffer size
+- DQN batch size
+- TAB gamma
+- TAB learning rate
+- TAB epsilon decay
+- TAB action size
+- TAB state bins
 
 ### Comparison with paper results
 
@@ -127,8 +149,8 @@ Sequenza di plot con relativa spiegazione.
 |FH-DDPG|-0.0736|
 |HCFS|-0.0673|
 |FH-DDPG-SS|-0.0600|
-|**Tabular QL**|?|
-|**Deep QL**|-0.1639|
+|**Tabular QL**|-0.1221|
+|**Deep QL**|-0.1998|
 
 ## 6 - Conclusion
 Recap generale dell'esperienza, menzionando i risultati ottenuti da ciascun metodo.
