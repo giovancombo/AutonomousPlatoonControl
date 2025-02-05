@@ -164,7 +164,7 @@ It is important to note that the implementation of a visualization system requir
 
 ## 4 - Experimental Results
 
-### Training with only one leader movement pattern
+### Training with only one leader pattern: Uniform Motion
 
 The training experiments were conducted in two main phases. In the first phase, I performed several training sessions with the leader movement pattern fixed at constant velocity (Uniform Motion). This allowed me to validate both the environment and the DQL learning method in a simplified setting, and to learn how modifications of each hyperparameter influence the training performance.
 
@@ -174,7 +174,7 @@ The training experiments were conducted in two main phases. In the first phase, 
 </p>
 <p align="center"><i>Validation average score (over 100 episodes) of the four best DQL agents in a system with single leader pattern.</i></p>
 
-### Training with different leader movement patterns
+### Training with different leader patterns
 
 After reaching a satisfactory training performance in this basic scenario, I proceeded to the second phase where I introduced the seven different leader patterns in order to create a more challenging and diverse platooning task. Throughout this phase, a hyperparameter analysis was conducted in order to identify the optimal configuration for each learning method, compare the performance of different parameter settings, and evaluate the robustness of both approaches under varying initial conditions.
 
