@@ -323,6 +323,6 @@ After reaching a satisfactory training performance in this basic scenario, I pro
 
 ## 5 - Conclusion
 
-This Project Work presented a simplified implementation of an Autonomous Platoon Control environment using two different Q-Learning approaches.
+This Project Work presented a simplified implementation of an Autonomous Platoon Control environment using two different Q-Learning approaches. Comparisons between them and hyperparameters analysis were conducted, leading to interesting key findings about these Reinforcement Learning methods.
 
 Future work could focus on extending the system to handle multiple following vehicles, implementing more sophisticated Reinforcement Learning algorithms such as PPO, and testing the system with real traffic data from the NGSIM dataset.
