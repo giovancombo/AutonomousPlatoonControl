@@ -125,7 +125,7 @@ The `step` function applies first-order dynamics to the agent performing the sta
 
 #### Leader patterns
 
-While the reference paper uses real driving data extracted from the *Next Generation Simulation (NGSIM)* dataset, for the scope of this work I implemented a simple pattern generator that creates diverse but controlled scenarios for testing the agent's behavior. The `LeaderPatternGenerator` class creates five different leader movement patterns that the agent must learn to follow:
+While the reference paper uses real driving data extracted from the *Next Generation Simulation (NGSIM)* dataset, for the scope of this work I implemented a simple pattern generator that creates diverse but controlled scenarios for testing the agent's behavior. The `LeaderPatternGenerator` class creates seven different leader movement patterns that the agent must learn to follow:
 
 - Uniform Motion (constant velocity)
 - Uniformly Accelerated Motion with positive acceleration
@@ -134,6 +134,13 @@ While the reference paper uses real driving data extracted from the *Next Genera
 - Stop-and-Go pattern typical of traffic situations
 - Acceleration-Deceleration sequence
 - Smooth random changes in acceleration
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/panda2.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/panda3.png", width="45%" />
+</p>
+
+<p align="center"><i>Visualization of the different leader patterns.</i></p>
 
 Each pattern is designed to test different aspects of the agent's learning capabilities and its ability to maintain proper distance in various driving scenarios.
 
@@ -158,7 +165,6 @@ Since performance metrics such as the cumulative reward might not provide the be
 
 ## 4 - Training
 
-- Lista degli iperparametri dell'environment usati rimasti fissi
 - Lista degli iperparametri valutati nel training
 
 Iperparametri e range vari. Spiegazione della logica che ho adottato per raccogliere i vari risultati e fare i test.
