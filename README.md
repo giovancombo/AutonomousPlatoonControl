@@ -136,7 +136,7 @@ While the reference paper uses real driving data extracted from the *Next Genera
 - Smooth random changes in acceleration
 
 <p float="left", align="center">
-  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/leader_patterns.png", width="50%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/leader_patterns.png", width="45%" />
 </p>
 <p align="center"><i>Visualization of the different leader patterns.</i></p>
 
@@ -164,6 +164,8 @@ It is important to note that the implementation of a visualization system requir
 
 ## 4 - Experimental Results
 
+### Training with only one leader movement pattern
+
 The training experiments were conducted in two main phases. In the first phase, I performed several training sessions with the leader movement pattern fixed at constant velocity (Uniform Motion). This allowed me to validate both the environment and the DQL learning method in a simplified setting, and to learn how modifications of each hyperparameter influence the training performance.
 
 <p float="left", align="center">
@@ -172,31 +174,20 @@ The training experiments were conducted in two main phases. In the first phase, 
 </p>
 <p align="center"><i>Validation average score (over 100 episodes) of the four best DQL agents in a system with single leader pattern.</i></p>
 
+### Training with different leader movement patterns
+
 After reaching a satisfactory training performance in this basic scenario, I proceeded to the second phase where I introduced the seven different leader patterns in order to create a more challenging and diverse platooning task. Throughout this phase, a hyperparameter analysis was conducted in order to identify the optimal configuration for each learning method, compare the performance of different parameter settings, and evaluate the robustness of both approaches under varying initial conditions.
 
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_2.png", width="45%" />
+</p>
+<p align="center"><i>Validation average score (over 100 episodes) of the three best DQL agents in a system with seven different leader patterns.</i></p>
 
-
-
-
-
-
-Risultati:
-1) best run con moto rettilineo uniforme
-2) best 3 run DQN
-3) best DQN vs best TAB
-
-Confronti:
-- DQN action size
-- DQN soft update
-- DQN hidden size
-- DQN epsilon decay
-- DQN buffer size
-- DQN batch size
-- TAB gamma
-- TAB learning rate
-- TAB epsilon decay
-- TAB action size
-- TAB state bins
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best2tab.png", width="45%" />
+</p>
+<p align="center"><i>Validation average score (over 100 episodes) of the two best Tabular Q-Learning agents compared with the best DQL agent.</i></p>
 
 ### Comparison with paper results
 
@@ -209,5 +200,129 @@ Confronti:
 |**Tabular QL**|-0.1221|
 |**Deep QL**|-0.1998|
 
+### State evolution analysis
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state1000acc.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state1000ep.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state1000ev.png", width="33%" />
+</p>
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state5000acc.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state5000ep.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state5000ev.png", width="33%" />
+</p>
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state7000acc.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state7000ep.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state7000ev.png", width="33%" />
+</p>
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state9000acc.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state9000ep.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state9000ev.png", width="33%" />
+</p>
+<p align="center"><i>State evolution of different training episodes (1000, 5000, 7000, 9000) of the three best DQL agents: $acc$ (left), $e_p$ (center), $e_v$ (right).</i></p>
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state1000acc.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state1000ep.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state1000ev.png", width="33%" />
+</p>
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state5000acc.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state5000ep.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state5000ev.png", width="33%" />
+</p>
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state8000acc.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state8000ep.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state8000ev.png", width="33%" />
+</p>
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state10400acc.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state10400ep.png", width="33%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state10400ev.png", width="33%" />
+</p>
+<p align="center"><i>State evolution of different training episodes (1000, 5000, 8000, 10400) of the two best Tabular Q-Learning agents compared with the best DQL agent: $acc$ (left), $e_p$ (center), $e_v$ (right).</i></p>
+
+### Hyperparameters analysis
+
+#### Action space size
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_actionsize.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_actionsize_2.png", width="45%" />
+</p>
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/tab_actionsize.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/tab_actionsize_2.png", width="45%" />
+</p>
+
+#### Batch size
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_batchsize.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_batchsize_2.png", width="45%" />
+</p>
+
+#### Experience Replay Buffer size
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_buffersize.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_buffersize_2.png", width="45%" />
+</p>
+
+#### Target Network update frequency
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_updatefreq_2.png", width="45%" />
+</p>
+
+#### Epsilon decay factor
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_epsdecay.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_epsdecay_2.png", width="45%" />
+</p>
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/tab_epsdecay.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/tab_epsdecay_2.png", width="45%" />
+</p>
+
+#### Deep Q-Network hidden layers size
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_hiddensize.png", width="45%" />
+</p>
+
+---
+
+#### State space size
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/tab_statebins.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/tab_statebins_2.png", width="45%" />
+</p>
+
+#### Discount factor
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/tab_agentgamma10.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/tab_agentgamma10_2.png", width="45%" />
+</p>
+
+#### Learning rate
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/tab_lr.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/tab_lr_2.png", width="45%" />
+</p>
+
 ## 5 - Conclusion
-Recap generale dell'esperienza, menzionando i risultati ottenuti da ciascun metodo.
+
+This Project Work presented a simplified implementation of an Autonomous Platoon Control environment using two different Q-Learning approaches.
+
+Future work could focus on extending the system to handle multiple following vehicles, implementing more sophisticated Reinforcement Learning algorithms such as PPO, and testing the system with real traffic data from the NGSIM dataset.
