@@ -136,8 +136,7 @@ While the reference paper uses real driving data extracted from the *Next Genera
 - Smooth random changes in acceleration
 
 <p float="left", align="center">
-  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/panda2.png", width="45%" />
-  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/panda3.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/leader_patterns.png", width="50%" />
 </p>
 
 <p align="center"><i>Visualization of the different leader patterns.</i></p>
@@ -163,17 +162,16 @@ Since performance metrics such as the cumulative reward might not provide the be
 
 <p align="center"><i>Rendering of an episode using Panda3D.</i></p>
 
-## 4 - Training
+It is important to note that the implementation of a visualization system required a more realistic approach than one that just considers vehicles as points. Therefore, the equations were modified to account for vehicle lengths, transforming the simple point-to-point distance into a more realistic bumper-to-bumper distance. This distance is measured from the front bumper of the following vehicle to the rear bumper of the leading vehicle, which is essential for accurate collision detection and more realistic platooning behavior. This modification not only enhanced the visualization but also made the simulation more realistic by ensuring that the desired distances maintained by the agent consider the physical dimensions of the vehicles.
 
-- Lista degli iperparametri valutati nel training
+## 4 - Results
 
-Iperparametri e range vari. Spiegazione della logica che ho adottato per raccogliere i vari risultati e fare i test.
+
 
 1) Training con singolo pattern leader: moto rettilineo uniforme
 2) Implementazione di 5 diversi pattern del leader
 3) Implementazione Scheduler, gradient clipping, impostazione seed
 
-## 5 - Results
 Sequenza di plot con relativa spiegazione.
 
 Risultati:
@@ -205,5 +203,5 @@ Confronti:
 |**Tabular QL**|-0.1221|
 |**Deep QL**|-0.1998|
 
-## 6 - Conclusion
+## 5 - Conclusion
 Recap generale dell'esperienza, menzionando i risultati ottenuti da ciascun metodo.
