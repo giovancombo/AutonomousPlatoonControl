@@ -138,7 +138,6 @@ While the reference paper uses real driving data extracted from the *Next Genera
 <p float="left", align="center">
   <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/leader_patterns.png", width="50%" />
 </p>
-
 <p align="center"><i>Visualization of the different leader patterns.</i></p>
 
 Each pattern is designed to test different aspects of the agent's learning capabilities and its ability to maintain proper distance in various driving scenarios.
@@ -159,20 +158,27 @@ Since performance metrics such as the cumulative reward might not provide the be
   <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/panda2.png", width="45%" />
   <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/panda3.png", width="45%" />
 </p>
-
 <p align="center"><i>Rendering of an episode using Panda3D.</i></p>
 
 It is important to note that the implementation of a visualization system required a more realistic approach than one that just considers vehicles as points. Therefore, the equations were modified to account for vehicle lengths, transforming the simple point-to-point distance into a more realistic bumper-to-bumper distance. This distance is measured from the front bumper of the following vehicle to the rear bumper of the leading vehicle, which is essential for accurate collision detection and more realistic platooning behavior. This modification not only enhanced the visualization but also made the simulation more realistic by ensuring that the desired distances maintained by the agent consider the physical dimensions of the vehicles.
 
-## 4 - Results
+## 4 - Experimental Results
+
+The training experiments were conducted in two main phases. In the first phase, I performed several training sessions with the leader movement pattern fixed at constant velocity (Uniform Motion). This allowed me to validate both the environment and the DQL learning method in a simplified setting, and to learn how modifications of each hyperparameter influence the training performance.
+
+<p float="left", align="center">
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_onepattern_best.png", width="45%" />
+  <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/dqn_onepattern_best_2.png", width="45%" />
+</p>
+<p align="center"><i>Validation average score (over 100 episodes) of the four best DQL agents in a system with single leader pattern.</i></p>
+
+After reaching a satisfactory training performance in this basic scenario, I proceeded to the second phase where I introduced the seven different leader patterns in order to create a more challenging and diverse platooning task. Throughout this phase, a hyperparameter analysis was conducted in order to identify the optimal configuration for each learning method, compare the performance of different parameter settings, and evaluate the robustness of both approaches under varying initial conditions.
 
 
 
-1) Training con singolo pattern leader: moto rettilineo uniforme
-2) Implementazione di 5 diversi pattern del leader
-3) Implementazione Scheduler, gradient clipping, impostazione seed
 
-Sequenza di plot con relativa spiegazione.
+
+
 
 Risultati:
 1) best run con moto rettilineo uniforme
