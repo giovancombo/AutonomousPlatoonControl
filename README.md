@@ -88,18 +88,72 @@ In this work, we implemented a simplified *single-agent* environment, where the 
 
 - **Deep Q-Learning (DQL)**: Deep Q-Learning extends classic Q-Learning by using a deep neural network to approximate the Q-function, making it possible to use a continuous state space. The implementation for this problem includes uniform quantization of the action space in the interval $[u_{min}, u_{max}]$; the use of an Experience Replay Buffer to store and sample state transitions; a Target Network to stabilize learning and propagate the original platooning task over time; and an ε-greedy policy to balance exploration and exploitation.
 
-The implementation was developed in Python using PyTorch for DQL and NumPy for tabular Q-Learning. Training was monitored through Weights & Biases.
+The implementation was developed in Python using PyTorch for DQL and NumPy for Tabular Q-Learning. Training was monitored through Weights & Biases.
 
 ## 3 - Code
 
 ### 3.1 - Environment development
+
+`EnvPlatoon` è la classe in cui è implementata la struttura dell'environment di platooning. Si compone di numerosi attributi che definiscono il comportamento specifico del sistema, imponendo limiti e vincoli e dimensionando le variabili presenti nelle equazioni che definiscono la dinamica di ogni veicolo.
+
+La classe si compone di una funzione `reset`, chiamata all'inizio di ogni episodio, che inizializza un particolare pattern d'azione del leader, resetta i reward ed estrae randomicamente uno stato iniziale dell'agente all'interno degli intervalli definiti per ciascun elemento dello stato.
+
+La funzione `step` applica la dinamica di primo ordine all'agente effettuando la transizione di stato: sono calcolate accelerazione, position error and velocity error al successivo timestep, e contestualmente è calcolato il reward tramite la funzione `compute_reward`. Nel paper di riferimento è stata notata l'assenza di un meccanismo che consentisse di penalizzare l'agente nel caso in cui il proprio stato lo portasse a trovarsi a una distanza negativa dal leader, che nella realtà si tradurrebbe in un impatto. Pertanto, per la mia implementazione ho incluso nel calcolo del reward una ulteriore `collision_penalty` dipendente dalla distanza dal leader.
+
+#### Environment attributes
+
+|*Notation*|*Description*|*Value*|
+|:-:|:-:|:-:|
+|$T$|Interval for each timestep|0.1 s|
+|$K$|Total timesteps in each episode|100|
+|$N$|Number of vehicles|2|
+|$\tau_i$|Driveline dynamics time constant|0.1 s|
+|$h_i$|Time gap|1 s|
+|$e_{p,max}$|Maximum initial gap-keeping error|2 m|
+|$e_{v,max}$|Maximum initial velocity error|1.5 m/s|
+|$acc_{min}$|Minimum acceleration|-2.6 m/s^2|
+|$acc_{max}$|Maximum acceleration|2.6 m/s^2|
+|$u_{min}$|Minimum control input|-2.6 m/s^2|
+|$u_{max}$|Maximum control input|2.6 m/s^2|
+|$a$|Reward coefficient for the gap-keeping error term|0.1|
+|$b$|Reward coefficient for the velocity error term|0.1|
+|$c$|Reward coefficient for the jerk term|0.1|
+|$\lambda$|Reward scale|5e-3|
+|$e_{p,max}^{nom}$|Nominal maximum gap-keeping error|15 m|
+|$e_{v,max}^{nom}$|Nominal maximum velocity error|10 m/s|
+|$\varepsilon$|Reward threshold|-0.4483|
+
+#### Leader patterns
+
+Il paper di riferimento non fa alcuna menzione riguardante il tipo di pattern seguito dal leader per determinare le risposte a ogni timestep dell'agente, poiché per l'addestramento si avvale di dati reali estratti dal dataset Next Generation Simulation (NGSIM).
+
+Per lo scopo di questo lavoro, tuttavia, un semplice generatore di pattern è sufficiente. Viene infatti implementata la classe `LeaderPatternGenerator` che crea cinque differenti pattern di movimento del leader su cui l'agente deve imparare una policy:
+
+- Moto Rettilineo Uniforme
+- Moto Rettilineo Uniformemente accelerato con accelerazione positiva
+- Moto Rettilineo Uniformemente accelerato con accelerazione negativa
+- Moto Rettilineo Sinusoidale, a simulare l'andamento del traffico
+- Moto Rettilineo con cambi randomici
+
+### 3.2 - Agent development
+
+La classe `DQNAgent` implementa l'agente che utilizza Deep Q-Learning per l'apprendimento. La `DeepQNetwork` su cui si fondano l'agente e la target network è un semplice Multilayer Perceptron che nell'esperienza è stato testato con uno o due hidden layers. Viene implementato un experience replay buffer di dimensione impostabile.
+
+La selezione dell'azione viene eseguita tramite una trategia $\varepsilon$-*greedy*, con $\varepsilon$ che parte da un valore iniziale e decade durante il training. La target network viene aggiornata tramite un meccanismo di soft update che consente un apprendimento più dolce, garantendo una propagazione efficace durante il training del task principale di platooning senza distorsioni.
+
+La classe `TabularQAgent` segue per l'implementazione dell'agente con Tabular Q-Learning la stessa logica dell'altro metodo, ma anziché avere una target network, la Q-Table è definita semplicemente come un NumPy array, e viene aggiornata tramite l'applicazione dell'equazione di Bellman.
+
+#### Training hyperparameters
+
+
+
+
+#### Leader patterns
+
 Spiegazione dei vari attributi e metodi per la creazione dell'ambiente, confrontandoli con l'implementazione visibile nel paper di riferimento.
 Breve spiegazione delle aggiunte che ho deciso di fare nel mio lavoro, legate particolarmente alla possibilità di visualizzare correttamente gli episodi, considerando ogni veicolo non più come un punto ma come un oggetto solido.
 
-- Double Q-Learning vs normale
-- Tabular
-
-### 3.2 - Visualization
+### 3.3 - Visualization
 Spiegazione sommaria di come ho utilizzato Panda3D per visualizzare ogni episodio + piccola guida su come utilizzare e interpretare la visualizzazione.
 
 <p float="left", align="center">
