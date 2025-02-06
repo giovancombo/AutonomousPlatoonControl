@@ -202,6 +202,8 @@ After reaching a satisfactory training performance in this basic scenario, I pro
 
 ### State evolution analysis
 
+#### Deep Q-Learning agent
+
 <p float="left", align="center">
   <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state1000acc.png", width="33%" />
   <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/best3dqn_state1000ep.png", width="33%" />
@@ -224,6 +226,12 @@ After reaching a satisfactory training performance in this basic scenario, I pro
 </p>
 <p align="center"><i>State evolution of different training episodes (1000, 5000, 7000, 9000) of the three best DQL agents: $acc$ (left), $e_p$ (center), $e_v$ (right).</i></p>
 
+The state evolution across different DQL agent training episodes reveals interesting patterns in the learning process. At episode 1000, there is a clear tendency towards divergence, likely caused by the acceleration converging to zero, leading to no variations in velocity. This results in the agent stabilizing at a speed that is too low to keep pace with the leader, causing the distance to diverge.
+
+At episode 5000 there is better convergence of all three state elements towards zero, although acceleration still shows a noticeable jerk. At episode 7000, while the green run shows oscillations converging to sub-optimal values, the other two runs demonstrate more convincing performance with reduced state oscillations and jerk.
+
+#### Tabular Q-Learning agent
+
 <p float="left", align="center">
   <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state1000acc.png", width="33%" />
   <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state1000ep.png", width="33%" />
@@ -245,6 +253,8 @@ After reaching a satisfactory training performance in this basic scenario, I pro
   <img src="https://github.com/giovancombo/AutonomousPlatoonControl/blob/main/images/besttab_state10400ev.png", width="33%" />
 </p>
 <p align="center"><i>State evolution of different training episodes (1000, 5000, 8000, 10400) of the two best Tabular Q-Learning agents compared with the best DQL agent: $acc$ (left), $e_p$ (center), $e_v$ (right).</i></p>
+
+These Tabular Q-Learning runs follow a similar training trend to the DQL ones. Particularly interesting is episode 10400, characterized by very dense oscillations but contained within a remarkably small range of values. These runs generally performed better, likely due to the relatively small size of both action and state spaces, as they were discretized into 10 bins. This suggests that the discrete approach can achieve more stable and consistent performance compared to the continuous state space approach, despite, or more probably, because of, its simpler structure.
 
 ### Hyperparameters analysis
 
